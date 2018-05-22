@@ -1,0 +1,5 @@
+
+/* TODO: Find a better way to show the all scroll cursor, it doesn't seem possible via .dd-handle etc. */
+.dd {
+  cursor: all-scroll;
+}

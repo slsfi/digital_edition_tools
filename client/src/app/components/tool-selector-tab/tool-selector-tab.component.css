@@ -1,0 +1,9 @@
+.float {
+  margin-top: 10px;
+  float: left;
+  margin-right: 10px;
+}
+
+.bolded {
+  color: green;
+}

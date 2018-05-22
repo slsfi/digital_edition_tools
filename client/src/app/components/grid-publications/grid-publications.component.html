@@ -1,0 +1,12 @@
+<p>
+  <button mat-raised-button (click)="selectAllRows()" i18n>Select all</button>
+  <button mat-raised-button (click)="deselectAllRows()" i18n>Deselect all</button>
+  <button mat-raised-button (click)="test()" i18n>Test</button>
+</p>
+<ag-grid-angular style="width: 500px; height:130px;"
+                 class="ag-theme-balham"
+                 [rowData]="rowData"
+                 [columnDefs]="columnDefs"
+                 [gridOptions]="gridOptions"
+                 (gridReady)="onGridReady($event)">
+</ag-grid-angular>

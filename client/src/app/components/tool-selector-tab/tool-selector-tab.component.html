@@ -1,0 +1,23 @@
+<!--<button (click)="buttonClick($event)" >Load</button><span>{{header}}</span>-->
+<div class="float">
+  <ag-grid-angular style="width: 430px; height:600px;"
+                  class="ag-theme-balham"
+                  [rowData]="occRowData"
+                  [columnDefs]="occColumnDefs"
+                  [gridOptions]="occGridOptions"
+                  (gridReady)="occOnGridReady($event)"
+                  (keydown)="occOnKeyDown($event)"
+                  (selectionChanged)="occOnSelectionChanged($event)">
+  </ag-grid-angular>
+</div>
+<div class="float">
+  <ag-grid-angular style="width: 430px; height:600px;"
+                  class="ag-theme-balham"
+                  [rowData]="datRowData"
+                  [columnDefs]="datColumnDefs"
+                  [gridOptions]="datGridOptions"
+                  (gridReady)="datOnGridReady($event)"
+                  (keydown)="datOnKeyDown($event)"
+                  (cellDoubleClicked)="datOnCellDoubleClicked($event)">
+  </ag-grid-angular>
+</div>

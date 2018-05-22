@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="53129c8a9a95644ed5e4dc7d4987814ad189b8a0" datatype="html">
+        <source>Publisher</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/menu-main/menu-main.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5de9d226db382155f482a557b832da6d63108112" datatype="html">
+        <source>Selector</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/menu-main/menu-main.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="36d096f349f94d278ab6db5dd994f27a18bd69e8" datatype="html">
+        <source>Tagger</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/menu-main/menu-main.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="01aa48ee5888ef591ba3440c6cee5f4263a7a8c6" datatype="html">
+        <source>Facsimiles</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/menu-main/menu-main.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

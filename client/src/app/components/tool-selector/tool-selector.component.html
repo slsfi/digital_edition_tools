@@ -1,0 +1,11 @@
+<button mat-raised-button (click)="fileInput.click()">
+  <span i18n>Load XML File</span>
+  <input #fileInput type="file" multiple accept="{{xmlFileExtensions}}" (change)="onFileInput($event)" style="display:none;" />
+</button>
+<button mat-raised-button (click)="saveFile()" i18n>Save XML File</button>
+<!--<button mat-raised-button (click)="openDialog()">Launch dialog</button>-->
+<mat-tab-group>
+  <mat-tab *ngFor="let c of configurations; let i = index" label="{{c.name}}">
+    <app-tool-selector-tab #selectorTab [header]="'tab_'+(i+1).toString()" [configuration]="configurations[i]"></app-tool-selector-tab>
+  </mat-tab>
+</mat-tab-group>
