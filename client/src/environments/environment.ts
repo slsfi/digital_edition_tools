@@ -7,6 +7,7 @@ export const environment = {
   production: false,
   version: "0.0.1",
   server_url: "localhost:5000",
+  api_url: "http://topelius-m.sls.fi:8000",
   image_logo: "logo.png",
   selector_configurations: [
     {

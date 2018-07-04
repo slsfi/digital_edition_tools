@@ -7,9 +7,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'; 
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, CanActivate } from '@angular/router';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AgGridModule } from 'ag-grid-angular/main';
+
+
 import { AppComponent } from './app.component';
+import { AuthService } from "./services/auth.service";
 import { DataService } from "./services/data.service";
 import { GridPublicationsComponent } from "./components/grid-publications/grid-publications.component";
 import { GridColumnStatusComponent } from "./components/grid-column-status/grid-column-status.component";
@@ -25,20 +29,24 @@ import { ToolTaggerComponent } from './components/tool-tagger/tool-tagger.compon
 import { ToolFacsimilesComponent } from './components/tool-facsimiles/tool-facsimiles.component';
 import { FileDialogComponent } from './components/file-dialog/file-dialog.component';
 import { ToolSelectorTabComponent } from './components/tool-selector-tab/tool-selector-tab.component';
+import { LoginComponent } from './components/login/login.component';
+import { CanActivateViaAuthGuard } from './guards/can-activate-via-auth.guard';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 // Set locale
 registerLocaleData(localeFi, 'fi');
 
 // Define our routes
 const appRoutes: Routes = [
-  { path: 'menu', component: MenuMainComponent },
-  { path: 'publisher', component: ToolPublisherComponent },
-  { path: 'menus', component: ToolMenusComponent },
-  { path: 'selector', component: ToolSelectorComponent },
-  { path: 'tagger', component: ToolTaggerComponent },
-  { path: 'facsimiles', component: ToolFacsimilesComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'menu', component: MenuMainComponent, canActivate: [CanActivateViaAuthGuard] },
+  { path: 'publisher', component: ToolPublisherComponent, canActivate: [CanActivateViaAuthGuard] },
+  { path: 'menus', component: ToolMenusComponent, canActivate: [CanActivateViaAuthGuard] },
+  { path: 'selector', component: ToolSelectorComponent, canActivate: [CanActivateViaAuthGuard] },
+  { path: 'tagger', component: ToolTaggerComponent, canActivate: [CanActivateViaAuthGuard] },
+  { path: 'facsimiles', component: ToolFacsimilesComponent, canActivate: [CanActivateViaAuthGuard]  },
   { path: '',
-    redirectTo: '/menu',
+    redirectTo: '/login',
     pathMatch: 'full'
   }
 ];
@@ -56,7 +64,8 @@ const appRoutes: Routes = [
     ToolTaggerComponent,
     ToolFacsimilesComponent,
     FileDialogComponent,
-    ToolSelectorTabComponent
+    ToolSelectorTabComponent,
+    LoginComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -66,6 +75,7 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
     MatCheckboxModule,
     MatIconModule,
     MatButtonModule,
@@ -78,7 +88,16 @@ const appRoutes: Routes = [
     ),
     AppConfigModule
   ],
-  providers: [DataService],
+  providers: [
+    AuthService,
+    DataService,
+    CanActivateViaAuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { GridColumnRedComponent } from './components/grid-column-red/grid-column-red.component';
+import { GridColumnStatusComponent } from './components/grid-column-status/grid-column-status.component';
 import { AgGridModule } from "ag-grid-angular";
 import { GridPublicationsComponent } from "./components/grid-publications/grid-publications.component";
 
@@ -9,11 +9,11 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         AgGridModule.withComponents(
-            [GridColumnRedComponent]
+            [GridColumnStatusComponent]
         )
       ],
       declarations: [
-        AppComponent, GridPublicationsComponent, GridColumnRedComponent
+        AppComponent, GridPublicationsComponent, GridColumnStatusComponent
       ],
     }).compileComponents();
   }));

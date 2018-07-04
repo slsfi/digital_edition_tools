@@ -1,0 +1,24 @@
+
+<form>
+  
+  <div>{{status}}</div>
+
+  <div class="row">
+    <mat-form-field class="input-wide"><input matInput i18n-placeholder placeholder="Username" [(ngModel)]="username" name="username" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide"><input matInput i18n-placeholder placeholder="Password" [(ngModel)]="password" name="password" type="password" (keyup)="onKeyUp($event)" required/></mat-form-field>
+  </div>
+  <div class="row">
+    <button mat-raised-button (click)="eventLogin()" i18n>Login</button>
+  </div>
+  <div class="row">
+    <button mat-raised-button (click)="eventTest()" i18n>Test</button>
+  </div>
+  <div class="row">
+    <button mat-raised-button (click)="eventRenew()" i18n>Renew</button>
+  </div>
+
+</form>
+
+

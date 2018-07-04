@@ -7,4 +7,5 @@ import * as dropzone from 'dropzone';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
 }

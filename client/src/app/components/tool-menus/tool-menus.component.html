@@ -1,6 +1,11 @@
 <div>
   <button mat-raised-button (click)="eventPopulate()" i18n>Fill table</button>
   <button mat-raised-button (click)="eventNewItem()" i18n>New</button>
+  <button mat-raised-button (click)="fileInput.click()">
+    <span i18n>Load Menu (from json)</span>
+    <input #fileInput type="file" multiple accept=".json" (change)="onFileInput($event)" style="display:none;" />
+  </button>
+  <button mat-raised-button (click)="saveToClient()" i18n>Save menu (json)</button>
 </div>
 <div><p>{{test}}</p></div>
 <div class="container">
@@ -10,20 +15,20 @@
   <form>
 
     <div class="row">
-      <mat-form-field><input matInput i18n-placeholder placeholder="Link" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
-    </div>
-
-    <div class="row">
       <!--<input [(ngModel)]="itemCurrent.type" name="type"/>-->
       <mat-form-field>
         <mat-select i18n-placeholder placeholder="Type" id="type" required [(ngModel)]="itemCurrent.type" name="type">
-          <mat-option *ngFor="let typ of itemCurrent.types; let i = index" [value]="i">{{typ}}</mat-option>
+          <mat-option *ngFor="let typ of itemCurrent.types; let i = index" [value]="typ.id">{{typ.description}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
     <div class="row">
-      <mat-form-field><input matInput i18n-placeholder placeholder="Header" [(ngModel)]="itemCurrent.header" name="header" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+      <mat-form-field><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="itemCurrent.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field><input matInput i18n-placeholder placeholder="URL" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
     </div>
 
   </form>
