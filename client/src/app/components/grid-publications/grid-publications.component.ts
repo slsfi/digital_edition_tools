@@ -54,8 +54,9 @@ export class GridPublicationsComponent {
       let model = this.gridOptions.api.getModel();
       let row = model.getRow(1);
       row.data.isSet = 1;
-      this.gridOptions.api.refreshRows([row]);
-      this.gridOptions.api.refreshView();
+      // refreshCells is not enough when cell renderer is changed
+      //this.gridOptions.api.refreshCells({'rowNodes': [row]});
+      this.gridOptions.api.redrawRows({'rowNodes': [row]});
       //row.updateData({title: "Brev", id: "15", isSet: 1, status: "Published"});
       //alert(row.data.title);
     }

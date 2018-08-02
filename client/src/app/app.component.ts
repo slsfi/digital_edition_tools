@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import * as dropzone from 'dropzone';
 
 @Component({
   selector: 'app-root',

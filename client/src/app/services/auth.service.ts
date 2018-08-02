@@ -20,6 +20,8 @@ export class AuthService {
   private sub: Subscription;
   private accessTokenRenewalInProgress = false;
 
+  public accessToken: BehaviorSubject<string>;
+
   // Array of failed http requests (not currently used)
   cachedRequests: Array<HttpRequest<any>> = [];
 
@@ -37,6 +39,8 @@ export class AuthService {
     this.sub = this.timer.subscribe(t=> {
         this.refreshTokenTick(t);
     });
+    // Create a behaviour subject so components can subscribe to the access token
+    this.accessToken = new BehaviorSubject<string>("");
   }
 
   // GETTERS
@@ -112,6 +116,8 @@ export class AuthService {
         // Access token successfully renewed
         this.user.tokenAccess = data.access_token;
         this.accessTokenRenewalInProgress = false;
+        // Update the behaviour subject for the access token
+        this.accessToken.next(this.user.tokenAccess);
       },
       err => {
         // Something went wrong, go to login page if unauthorized

@@ -11,6 +11,7 @@ import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AgGridModule } from 'ag-grid-angular/main';
 
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
 
 import { AppComponent } from './app.component';
 import { AuthService } from "./services/auth.service";
@@ -46,10 +47,18 @@ const appRoutes: Routes = [
   { path: 'tagger', component: ToolTaggerComponent, canActivate: [CanActivateViaAuthGuard] },
   { path: 'facsimiles', component: ToolFacsimilesComponent, canActivate: [CanActivateViaAuthGuard]  },
   { path: '',
-    redirectTo: '/login',
+    redirectTo: '/menu',
     pathMatch: 'full'
   }
 ];
+
+// Dropzone settings (Dropzone is used when uploading facsimiles)
+/*const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
+  // Change this to your upload POST address:
+   url: environment.api_url,
+   maxFilesize: 50,
+   acceptedFiles: 'image/*'
+ };*/
 
 @NgModule({
   declarations: [
@@ -86,7 +95,8 @@ const appRoutes: Routes = [
     AgGridModule.withComponents(
       [GridColumnStatusComponent]
     ),
-    AppConfigModule
+    AppConfigModule,
+    DropzoneModule
   ],
   providers: [
     AuthService,
@@ -96,7 +106,11 @@ const appRoutes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    }/*,
+    {
+      provide: DROPZONE_CONFIG,
+      useValue: DEFAULT_DROPZONE_CONFIG
+    }*/
   ],
   bootstrap: [AppComponent]
 })

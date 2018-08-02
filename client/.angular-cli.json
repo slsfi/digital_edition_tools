@@ -26,8 +26,7 @@
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
-        "../node_modules/nestable2/jquery.nestable.js",
-        "js/dropzone.js"
+        "../node_modules/nestable2/jquery.nestable.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
