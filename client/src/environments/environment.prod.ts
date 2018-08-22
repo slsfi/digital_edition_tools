@@ -3,7 +3,9 @@ export const environment = {
   version: "0.0.1",
   server_url: "localhost:5000",
   api_url: "http://topelius-m.sls.fi:8000",
+  api_url_path: "digitaledition",
   image_logo: "logo.png",
+  project_name: "topelius",
   selector_configurations: [
     {
       name: "Personer",

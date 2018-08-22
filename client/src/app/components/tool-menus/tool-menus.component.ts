@@ -34,15 +34,21 @@ export class ToolMenusComponent implements OnInit {
     // Create an instance of MenuItem
     this.itemCurrent = new MenuItem();
     // Create json data for nestable
-    let jsonMenu: string = '[{"id":1,"url":1,"type":"link","content":"Ljungblommor","title":"Ljungblommor"},{"id":2,"url":2,"type":"link","content":"En ros","title":"En ros"},{"id":3,"url":3,"type":"heading1","content":"Andra dikter","title":"Andra dikter","children":[{"id":4,"url":4,"type":"link","content":"Våren","title":"Våren"},{"id":5,"url":5,"type":"link","foo":"bar","content":"Hösten","title":"Hösten"}]}]';
+    let jsonMenu: string = '[{"id":1,"url":1,"type":"link","content":"Ljungblommor","text":"Ljungblommor"},{"id":2,"url":2,"type":"link","content":"En ros","text":"En ros"},{"id":3,"url":3,"type":"heading1","content":"Andra dikter","text":"Andra dikter","children":[{"id":4,"url":4,"type":"link","content":"Våren","text":"Våren"},{"id":5,"url":5,"type":"link","foo":"bar","content":"Hösten","text":"Hösten"}]}]';
     // Populate the menu
     this.populateMenu(jsonMenu);
   }
 
   populateMenu(json: string) {
+
+    // Convert json string to an object so it can be parsed
+    let oJson = JSON.parse(json);
+    // Copy the text properties to content properties needed by nestable
+    this.processJsonForLoad(oJson, '1');
+
     // Set options for nestable
     let options = {
-      'json': json,
+      'json': JSON.stringify(oJson),
       // We need to create the callback with an arrow function (=>) to maintain correct scope
       callback: (l,e) => {
         this.callbackItemMoved(l,e);
@@ -66,7 +72,7 @@ export class ToolMenusComponent implements OnInit {
     // Deactivate nestable before reactivation
     $(this.elementSelector).nestable("destroy");
     // Create json data for nestable
-    let jsonMenu: string = '[{"id":1,"url":1,"type":"link","content":"Ljungblommor","title":"Ljungblommor"},{"id":2,"url":2,"type":"link","content":"En ros","title":"En ros"},{"id":3,"url":3,"type":"heading1","content":"Andra dikter","title":"Andra dikter","children":[{"id":4,"url":4,"type":"link","content":"Våren","title":"Våren"},{"id":5,"url":5,"type":"link","foo":"bar","content":"Hösten","title":"Hösten"}]}]';
+    let jsonMenu: string = '[{"url":1,"type":"link","content":"Ljungblommor","text":"Ljungblommor"},{"url":2,"type":"link","content":"En ros","text":"En ros"},{"url":3,"type":"heading1","content":"Andra dikter","text":"Andra dikter","children":[{"url":4,"type":"link","content":"Våren","text":"Våren"},{"url":5,"type":"link","foo":"bar","content":"Hösten","text":"Hösten"}]}]';
     // Populate menu and reactivate nestable
     this.populateMenu(jsonMenu);
   }
@@ -132,12 +138,63 @@ export class ToolMenusComponent implements OnInit {
   }
 
   saveToClient() {
-    // Serialize the menu and stringify it
-    let stringToSave = JSON.stringify($(this.elementSelector).nestable('serialize'));
+    // Get menu as a json object
+    let jsonObj = $(this.elementSelector).nestable('serialize');
+    // Remove the 'id' properties from the json object
+    this.processJsonForSave(jsonObj);
+    // Stringify the json object
+    let stringToSave = JSON.stringify(jsonObj);
     // Create a blob from the string
     const blob = new Blob([stringToSave], { type: 'text/plain' });
     // Save the blob
     saveAs(blob, "menu.json");
+  }
+
+  processJsonForLoad(obj: any, menuItemId: string)
+  {
+    var k;
+    if (obj instanceof Object) 
+    {
+      // Copy 'text' property to a 'content' property
+      if(obj.hasOwnProperty('text'))
+        obj.content = obj.text;
+
+      //if(Array.isArray(obj))
+      //  alert(JSON.stringify(obj));
+
+      // Add an id property
+      obj.id = menuItemId;
+
+      // Recursive call for child objects
+      var i: number = 1;
+      for (k in obj){
+        if (obj.hasOwnProperty(k)){
+          // There seems to be a small issue with an uneccessary level (created for json array) when creating the 
+          // menuItemIds, but it works. The most important is that the ids are unique. When creating new items, a
+          // timestamp will be used as id so that won't create conficts.
+          this.processJsonForLoad( obj[k], menuItemId+i.toString() );  
+        }   
+        i++;          
+      }
+    }
+  }
+
+  processJsonForSave(obj: any)
+  {
+    var k;
+    if (obj instanceof Object) 
+    {
+      // Delete the possible 'id' property
+      if(obj.hasOwnProperty('id'))
+        delete obj.id;
+
+      // Recursive call for child objects
+      for (k in obj){
+        if (obj.hasOwnProperty(k)){
+          this.processJsonForSave( obj[k] );  
+        }                
+      }
+    }
   }
 
 }

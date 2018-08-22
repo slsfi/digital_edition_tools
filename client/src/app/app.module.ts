@@ -17,6 +17,7 @@ import { AppComponent } from './app.component';
 import { AuthService } from "./services/auth.service";
 import { DataService } from "./services/data.service";
 import { GridPublicationsComponent } from "./components/grid-publications/grid-publications.component";
+import { GridDocumentsComponent } from "./components/grid-documents/grid-documents.component";
 import { GridColumnStatusComponent } from "./components/grid-column-status/grid-column-status.component";
 import { MenuMainComponent } from './components/menu-main/menu-main.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -64,6 +65,7 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     GridPublicationsComponent,
+    GridDocumentsComponent,
     GridColumnStatusComponent,
     ToolPublisherComponent,
     MenuMainComponent,

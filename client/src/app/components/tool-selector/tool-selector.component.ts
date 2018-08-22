@@ -53,7 +53,6 @@ export class ToolSelectorComponent implements OnInit {
       this.xmlFile = reader.result;
       // Parse xml string
       this.readXmlString(this.xmlFile);
-      //alert(this.xmlFile);
     }
     // Read the file as text
     reader.readAsText(files.item(0));
@@ -80,7 +79,15 @@ export class ToolSelectorComponent implements OnInit {
 
   }
 
-  saveFile() {
+  onDocumentLoaded(event: string) {
+    // Read contents of file to 'xmlFile'
+    this.xmlFile = event;
+    // Parse xml string
+    this.readXmlString(this.xmlFile);
+    console.info(event);
+  }
+
+  onSaveFileLocal() {
     this.saveToFileSystem();
   }
 

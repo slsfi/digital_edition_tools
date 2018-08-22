@@ -9,6 +9,9 @@
 </div>
 <div><p>{{test}}</p></div>
 <div class="container">
+  <app-grid-publications></app-grid-publications>
+</div>
+<div class="container">
   <div class="dd" id="menu"></div>
 </div>
 <div class="container">
@@ -24,11 +27,11 @@
     </div>
 
     <div class="row">
-      <mat-form-field><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="itemCurrent.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+      <mat-form-field><input matInput i18n-placeholder placeholder="Text" [(ngModel)]="itemCurrent.text" name="text" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
     </div>
 
     <div class="row">
-      <mat-form-field><input matInput i18n-placeholder placeholder="URL" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+      <mat-form-field><input matInput i18n-placeholder placeholder="ID or URL" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
     </div>
 
   </form>
