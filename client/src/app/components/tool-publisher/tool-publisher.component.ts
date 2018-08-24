@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from "../../services/data.service";
+import { DocumentDescriptor, DataService } from "../../services/data.service";
 
 @Component({
   selector: 'app-tool-publisher',
@@ -12,6 +12,10 @@ export class ToolPublisherComponent implements OnInit {
 
   ngOnInit() {
     this.data.changeTool("Publisher");
+  }
+
+  onDocumentLoaded(doc: DocumentDescriptor) {
+    alert(doc.name);
   }
 
 }

@@ -1,6 +1,13 @@
-<div>
+<div class="container-wide">
   <app-grid-publications></app-grid-publications>
 </div>
-<div>
-  <app-tool-facsimiles></app-tool-facsimiles>
+<div class="container-medium">
+  <app-grid-documents 
+      openFileText="Choose Fileygygtygy"
+      [doubleClickToOpenFile]="false"
+      (documentLoaded)="onDocumentLoaded($event)">
+  </app-grid-documents>
 </div>
+<!--<div>
+  <app-tool-facsimiles></app-tool-facsimiles>
+</div>-->
