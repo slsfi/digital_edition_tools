@@ -1,14 +1,15 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
+//import {MatTreeModule} from '@angular/material/tree';
 import {GridColumnStatusComponent} from "../grid-column-status/grid-column-status.component";
 import { DocumentDescriptor, DataService } from "../../services/data.service";
 
-import {GridOptions, RowNode} from "ag-grid/main";
+import {GridOptions, RowNode} from "ag-grid";
 
 @Component({
-    selector: 'app-grid-documents',
-    templateUrl: './grid-documents.component.html'
+    selector: 'app-tree-documents',
+    templateUrl: './tree-documents.component.html'
 })
-export class GridDocumentsComponent {
+export class TreeDocumentsComponent {
 
     gridOptions: GridOptions;
     columnDefs: any[];

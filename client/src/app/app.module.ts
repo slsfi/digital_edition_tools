@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatIconModule } from '@angular/material';
+//import { MatTreeModule } from '@angular/material/tree';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
@@ -9,7 +10,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'; 
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AgGridModule } from 'ag-grid-angular/main';
+import { AgGridModule } from 'ag-grid-angular';
 
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
 
@@ -17,8 +18,8 @@ import { AppComponent } from './app.component';
 import { AuthService } from "./services/auth.service";
 import { DataService } from "./services/data.service";
 import { GridPublicationsComponent } from "./components/grid-publications/grid-publications.component";
-import { GridDocumentsComponent } from "./components/grid-documents/grid-documents.component";
 import { GridColumnStatusComponent } from "./components/grid-column-status/grid-column-status.component";
+import { TreeDocumentsComponent } from "./components/tree-documents/tree-documents.component";
 import { MenuMainComponent } from './components/menu-main/menu-main.component';
 import { HeaderComponent } from './components/header/header.component';
 import { AppConfigModule } from './modules/app-config.module';
@@ -65,8 +66,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     GridPublicationsComponent,
-    GridDocumentsComponent,
     GridColumnStatusComponent,
+    TreeDocumentsComponent,
     ToolPublisherComponent,
     MenuMainComponent,
     HeaderComponent,

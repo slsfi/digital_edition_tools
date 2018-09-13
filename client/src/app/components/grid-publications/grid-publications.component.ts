@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {GridColumnStatusComponent} from "../grid-column-status/grid-column-status.component";
 
-import {GridOptions, RowNode} from "ag-grid/main";
+import {GridOptions, RowNode} from "ag-grid";
 
 @Component({
     selector: 'app-grid-publications',

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {GridOptions, RowNode} from "ag-grid/main";
+import {GridOptions, RowNode} from "ag-grid";
 
 @Component({
   selector: 'app-tool-selector-tab',

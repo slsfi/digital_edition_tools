@@ -9,7 +9,7 @@
   <!--<button mat-raised-button (click)="openDialog()">Launch dialog</button>-->
 </div>
 <div class="container-medium">
-  <app-grid-documents (documentLoaded)="onDocumentLoaded($event)"></app-grid-documents>
+  <app-tree-documents (documentLoaded)="onDocumentLoaded($event)"></app-tree-documents>
 </div>
 <mat-tab-group>
   <mat-tab *ngFor="let c of configurations; let i = index" label="{{c.name}}">

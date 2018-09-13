@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 import {AppComponent} from "../../app.component";
 import {GridPublicationsComponent} from "./grid-publications.component";
 import {AgGridModule} from "ag-grid-angular";
-import {GridColumnStatusComponent} from "../../components/grid-column-status/grid-column-status.component";
+import {GridColumnStatusComponent} from "../grid-column-status/grid-column-status.component";
 
 describe('MyGridApplicationComponent', () => {
     let component: GridPublicationsComponent;

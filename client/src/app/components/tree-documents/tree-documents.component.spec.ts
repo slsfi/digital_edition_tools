@@ -1,13 +1,13 @@
 import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 
 import {AppComponent} from "../../app.component";
-import {GridDocumentsComponent} from "./grid-documents.component";
+import {TreeDocumentsComponent} from "./tree-documents.component";
 import {AgGridModule} from "ag-grid-angular";
-import {GridColumnStatusComponent} from "../../components/grid-column-status/grid-column-status.component";
+import {GridColumnStatusComponent} from "../grid-column-status/grid-column-status.component";
 
 describe('MyGridApplicationComponent', () => {
-    let component: GridDocumentsComponent;
-    let fixture: ComponentFixture<GridDocumentsComponent>;
+    let component: TreeDocumentsComponent;
+    let fixture: ComponentFixture<TreeDocumentsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -17,14 +17,14 @@ describe('MyGridApplicationComponent', () => {
                 )
             ],
             declarations: [
-                AppComponent, GridDocumentsComponent, GridColumnStatusComponent
+                AppComponent, TreeDocumentsComponent, GridColumnStatusComponent
             ],
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(GridDocumentsComponent);
+        fixture = TestBed.createComponent(TreeDocumentsComponent);
         component = fixture.componentInstance;
     });
 
@@ -52,7 +52,7 @@ describe('MyGridApplicationComponent', () => {
 
     it('select all button selects all rows', () => {
         fixture.detectChanges();
-        component.selectAllRows();
+        //component.selectAllRows();
         expect(component.gridOptions.api.getSelectedNodes().length).toEqual(3);
     });
 
