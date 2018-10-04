@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes, CanActivate } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AgGridModule } from 'ag-grid-angular';
+import { TreeModule } from 'ng2-tree';
 
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
 
@@ -99,7 +100,8 @@ const appRoutes: Routes = [
       [GridColumnStatusComponent]
     ),
     AppConfigModule,
-    DropzoneModule
+    DropzoneModule,
+    TreeModule
   ],
   providers: [
     AuthService,

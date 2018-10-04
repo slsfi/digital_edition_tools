@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from "../../services/auth.service";
 import { DataService } from "../../services/data.service";
 
 @Component({
@@ -8,10 +9,14 @@ import { DataService } from "../../services/data.service";
 })
 export class MenuMainComponent implements OnInit {
 
-  constructor(private data: DataService) { }
+  constructor(private auth: AuthService, private data: DataService) { }
 
   ngOnInit() {
     this.data.changeTool("Menu");
+  }
+
+  onLogoutClick() {
+    this.auth.logout();
   }
 
 }

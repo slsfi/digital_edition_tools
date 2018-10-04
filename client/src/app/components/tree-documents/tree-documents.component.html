@@ -1,8 +1,19 @@
 <p>
+  <button mat-raised-button (click)="onRefreshClick()" i18n>Refresh</button>
+  <!--<button mat-raised-button (click)="onTestClick()" i18n>Test</button>
   <button mat-raised-button (click)="toRootFolder()" i18n>To Root Folder</button>
-  <button mat-raised-button (click)="onLoadClick()" [disabled]="!fileSelected" *ngIf="doubleClickToOpenFile" i18n>{{openFileText}}</button>
+  <button mat-raised-button (click)="onLoadClick()" [disabled]="!fileSelected" *ngIf="doubleClickToOpenFile" i18n>{{openFileText}}</button>-->
 </p>
-<ag-grid-angular style="width: 100%; height:500px"
+<div>
+<mat-spinner *ngIf="showSpinner"></mat-spinner>
+<tree 
+    [tree]="tree" 
+    [settings]="treeSettings"
+    (nodeSelected)="handleSelected($event)"
+    #treeComponent>
+</tree>
+</div>
+<!--<ag-grid-angular style="width: 100%; height:500px"
                  class="ag-theme-balham"
                  [rowData]="rowData"
                  [columnDefs]="columnDefs"
@@ -11,4 +22,4 @@
                  (selectionChanged)="onSelectionChanged($event)"
                  (rowClicked)="onRowClick($event)"
                  (rowDoubleClicked)="onRowDoubleClick($event)">
-</ag-grid-angular>
+</ag-grid-angular>-->

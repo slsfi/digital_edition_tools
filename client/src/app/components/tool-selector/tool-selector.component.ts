@@ -61,6 +61,13 @@ export class ToolSelectorComponent implements OnInit {
   }
 
   readXmlString(xmlString: string) {
+
+    // Remove possible BOM from start of string
+    if (xmlString.charCodeAt(0) === 0xFEFF) {
+      xmlString = xmlString.substr(1);
+    }
+
+    // Parse the xml string into a xml dom object
     this.xmlDoc = this.domParser.parseFromString(xmlString,"text/xml");
 
     // Ok
@@ -85,10 +92,14 @@ export class ToolSelectorComponent implements OnInit {
   }
 
   loadDocumentFromServer(doc: DocumentDescriptor) {
-    this.data.getDocument(doc).subscribe(
+    this.data.getDocument(doc, true).subscribe(
       data => { 
-        // TODO: Read the actual returned document here
-        alert(data);
+        // Decode base64 encoded xml file to a string 
+        this.xmlFile = DataService.Base64DecodeUnicode(data.file);
+        // Parse the xml string
+        this.readXmlString(this.xmlFile);
+        // Console
+       //console.info(this.xmlFile);
       },
       err => {
         // Read contents of file to 'xmlFile'

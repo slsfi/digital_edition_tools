@@ -32,9 +32,9 @@ export class ToolFacsimilesComponent implements OnInit {
   ngOnInit() {
     this.data.changeTool("Facsimiles");
     // subcribe to the access token
-    this.subscription = this.auth.accessToken.subscribe(item => {
+    /*this.subscription = this.auth.accessToken.subscribe(item => {
       this.config.headers = {'Authorization': 'Bearer '+item};
-    });
+    });*/
   }
 
 }

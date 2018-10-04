@@ -29,6 +29,12 @@ a {
   width: 500px;  
 }
 
+.height-max-medium {
+  min-height: 200px;
+  max-height: 700px;
+  overflow-y: auto;
+}
+
 .input-wide {
   width: 300px;
 }
@@ -36,4 +42,13 @@ a {
 /* Auto size menu items */
 .dd-handle {
   height: auto;
+}
+
+/* For treeviews */
+.node-value {
+  cursor: pointer;
+}
+
+.mat-progress-spinner {
+  position: absolute !important;
 }

@@ -1,55 +1,74 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
-//import {MatTreeModule} from '@angular/material/tree';
-import {GridColumnStatusComponent} from "../grid-column-status/grid-column-status.component";
+import {Component, Input, Output, EventEmitter, ViewChild, AfterViewInit, ChangeDetectorRef} from "@angular/core";
+import { TreeModel, Ng2TreeSettings } from 'ng2-tree';
 import { DocumentDescriptor, DataService } from "../../services/data.service";
-
-import {GridOptions, RowNode} from "ag-grid";
 
 @Component({
     selector: 'app-tree-documents',
     templateUrl: './tree-documents.component.html'
 })
-export class TreeDocumentsComponent {
+export class TreeDocumentsComponent implements AfterViewInit {
 
-    gridOptions: GridOptions;
-    columnDefs: any[];
-    rowData: any[];
-    treeData: any;
+    public tree: TreeModel;
 
-    pathCurrent: string = "";
-    pathNew: string = "";
-    pathParent: string = "";
+    // There seems to be a bug that will hide all nodes when the have been loaded asynchronously
+    // if hiding the root node when isCollapsedOnInit of the tree is true. So either have isCollapsedOnInit: false
+    // or rootIsVisible: true
+    public treeSettings: Ng2TreeSettings = {
+      rootIsVisible: true
+    };
+
+    //gridOptions: GridOptions;
+    //columnDefs: any[];
+    //rowData: any[];
+    //treeData: any;
+
+    //pathCurrent: string = "";
+    //pathNew: string = "";
+    //pathParent: string = "";
 
     fileSelected: boolean = false;
     openDocument: string = "";
+
+    showSpinner: boolean = true;
+
+    @ViewChild('treeComponent') treeComponent;
 
     @Input() openFileText: string = "Open File";
     @Input() doubleClickToOpenFile: boolean = true;
     @Output() documentLoaded: EventEmitter<DocumentDescriptor> = new EventEmitter<DocumentDescriptor>();
 
-    constructor(private data: DataService) {
+    constructor(private data: DataService, private changeDetector : ChangeDetectorRef) {
 
-      // Get the folder structure
-      this.getTree(this.pathNew);
-
-      this.gridOptions = <GridOptions>{
-        enableSorting: false,
-        rowSelection: "single"
+      this.tree = {
+        value: 'GIT',
+        id: 1,
+        settings: {
+          'static': true,
+          'isCollapsedOnInit': true,
+          'templates': {
+            'node': '<img src="assets/images/folder.png" />',
+            'leaf': '<img src="assets/images/file.png" />'
+          }
+        },
+        children: []
       };
 
-      this.gridOptions.getRowStyle = function(params) {
-        if(params.node.data.type == 'Folder') {
-            return { color: '#008800' }
-        }
-      }
-
-      this.columnDefs = [
-          {headerName: "Name", field: "name"},
-          {headerName: "Type", field: "type"}
-      ];
+      // Get the folder structure
+      //this.getTree(this.pathNew);
     }
 
-    getTree(path: string) {
+    ngOnInit() {
+      setTimeout(() => {
+        this.refreshTree();
+      }, 1000);
+    }
+
+    ngAfterViewInit(): void {
+      //let oopNodeController = this.treeComponent.getController();//getControllerByNodeId(1);
+      //oopNodeController.expand();
+    }
+
+    /*getTree(path: string) {
       // Get "root" folder? In this case we need to send a request to the server
       if(path.length == 0) {
         this.data.getDocumentTree(path).subscribe(
@@ -94,9 +113,9 @@ export class TreeDocumentsComponent {
       else {
         this.fillTree(path);
       }
-    }
+    }*/
 
-    fillTree(path: string) {
+    /*fillTree(path: string) {
       // Create a variable for temporary tree data. Add the default parent folder.
       let tmpRowData = [{"name": "..", "type": "Folder"}];
       // Get object of folder (only supports one level yet, should support multiple levels)
@@ -119,13 +138,13 @@ export class TreeDocumentsComponent {
         }
       }
       this.rowData = tmpRowData;
-    }
+    }*/
 
-    onGridReady(params) {
+    /*onGridReady(params) {
         params.api.sizeColumnsToFit();
-    }
+    }*/
 
-    onSelectionChanged() {
+    /*onSelectionChanged() {
       let rowSelection = this.gridOptions.api.getSelectedRows();
       if(rowSelection.length > 0) {
         if(rowSelection[0].type == "File")
@@ -133,9 +152,9 @@ export class TreeDocumentsComponent {
         else
           this.fileSelected = false;
       }
-    }
+    }*/
 
-    onRowClick(event) {
+    /*onRowClick(event) {
       // Is the clicked item a folder?
       if(event.data.type == "Folder") {
         // Show loading overlay of grid
@@ -165,24 +184,16 @@ export class TreeDocumentsComponent {
           this.documentLoaded.emit(doc);
         }
       }
-    }
+    }*/
 
-    onRowDoubleClick(event) {
+    /*onRowDoubleClick(event) {
       if(this.doubleClickToOpenFile && event.data.type == "File") {
         let doc: DocumentDescriptor = {name: event.data.name, path: this.pathCurrent};
         this.documentLoaded.emit(doc);
       }
-    }
+    }*/
 
-    toRootFolder() {
-      // Clear grid
-      this.rowData = [];
-      // Get root folder (refresh)
-      this.pathNew = "";
-      this.getTree(this.pathNew);
-    }
-
-    onLoadClick() {
+    /*onLoadClick() {
       // Load xml from server
       let rowSelection = this.gridOptions.api.getSelectedRows();
       if(rowSelection.length > 0) {
@@ -191,25 +202,107 @@ export class TreeDocumentsComponent {
           this.documentLoaded.emit(doc);
         }
       }
-    }
-
-    /*selectAllRows() {
-        this.gridOptions.api.selectAll();
-    }
-
-    deselectAllRows() {
-      this.gridOptions.api.deselectAll();
     }*/
 
-    /*test() {
-      let model = this.gridOptions.api.getModel();
-      let row = model.getRow(1);
-      //row.data.isSet = 1;
-      // refreshCells is not enough when cell renderer is changed
-      //this.gridOptions.api.refreshCells({'rowNodes': [row]});
-      this.gridOptions.api.redrawRows({'rowNodes': [row]});
-      //row.updateData({title: "Brev", id: "15", isSet: 1, status: "Published"});
-      //alert(row.data.title);
-    }*/
+    onTestClick() {
+      // This does not work after tree has been updated
+      let oopNodeController = this.treeComponent.getControllerByNodeId(1);
+      oopNodeController.expand();
+    }
+
+    onRefreshClick() {
+      this.refreshTree();
+    }
+
+    refreshTree() {
+      this.showSpinner = true;
+      this.data.getDocumentTree("", true).subscribe(
+        data => { 
+          this.fillTree(data);
+          this.showSpinner = false;
+        },
+        err => {
+        });
+    }
+
+    fillTree(data: any) {
+      // Reset selection variables
+      this.fileSelected = false;
+      this.openDocument = "";
+
+      let tmpTreeData = this.buildTree(data);
+
+      // Create a clone of the tree object
+      let treeTmp: TreeModel = {
+        value: "GIT",
+        id: 1,
+        settings: this.tree.settings,
+        children: tmpTreeData
+      };
+      // Destroy the current tree for garbage collector
+      this.tree = null;
+      // Assign the new tree
+      this.tree = treeTmp;
+      // Expand the root (with a timeout
+      setTimeout(()=>{
+        let oopNodeController = this.treeComponent.getController();
+        oopNodeController.expand();
+      }, 100);
+    }
+
+    buildTree(data: any) {
+      let tmpTreeData = [];
+      for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+          // Check if folder (property not null)
+          if(data[key] != null) {
+            tmpTreeData.push({ 'value': key, 'children': this.buildTree(data[key]) });
+          }
+          // otherwise assume file
+          else {
+            tmpTreeData.push({'value': key});
+          }
+        }
+      }
+      return tmpTreeData;
+    }
+
+    handleSelected(event: any) {
+      if(event.node.children == null) { // file node, leaf with no child nodes
+        this.openDocument = this.getFullPath(event.node, "");
+        this.fileSelected = true;
+        console.info(event.node);
+        let doc: DocumentDescriptor = {name: event.node.value, path: this.getPath(event.node, "")};
+        this.documentLoaded.emit(doc);
+      }
+      else
+        this.fileSelected = false;
+    }
+    
+    // Get path of current file node in tree
+    getPath(treeItem: any, filePath: string): string {
+      if(treeItem.children != null) { // Don't add filename (leaf) to path
+        if(treeItem.parent != null) {// Don't add topmost level
+          if(filePath.length > 0)
+            filePath = treeItem.value + "/" + filePath;
+          else
+            filePath = treeItem.value;
+        }
+      }
+      if(treeItem.parent != null)
+        filePath = this.getPath(treeItem.parent, filePath);
+      return filePath;
+    }
+
+    // Get full path including filename from tree
+    getFullPath(treeItem: any, filePath: string): string {
+      if(filePath.length > 0)
+        filePath = treeItem.value + "/" + filePath;
+      else
+        filePath = treeItem.value;
+      if(treeItem.parent != null)
+        filePath = this.getFullPath(treeItem.parent, filePath);
+      return filePath;
+    }
 }
 

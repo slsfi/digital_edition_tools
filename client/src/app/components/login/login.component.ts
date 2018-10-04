@@ -49,11 +49,8 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  eventTest() {
-    this.doTest();
-  }
 
-  doTest() {
+  /*doTest() {
     this.authService.testAccessToken().subscribe(
       data => { 
         this.status = data.msg; 
@@ -63,10 +60,10 @@ export class LoginComponent implements OnInit {
       },
       () => console.log('Login successful!')
     );
-  }
+  }*/
 
-  eventRenew() {
+  /*eventRenew() {
     this.authService.renewAccessToken();
-  }
+  }*/
 
 }

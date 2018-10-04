@@ -35,7 +35,7 @@ export class AuthService {
     }
     // Create a timer to use for renewing the access token
     //this.timer = Observable.timer(1000,600000); // 10 minutes
-    this.timer = Observable.timer(1000,60000);
+    this.timer = Observable.timer(500,60000);
     this.sub = this.timer.subscribe(t=> {
         this.refreshTokenTick(t);
     });
