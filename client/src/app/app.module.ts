@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatIconModule, MatDialogModule } from '@angular/material';
 //import { MatTreeModule } from '@angular/material/tree';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -36,6 +36,7 @@ import { ToolSelectorTabComponent } from './components/tool-selector-tab/tool-se
 import { LoginComponent } from './components/login/login.component';
 import { CanActivateViaAuthGuard } from './guards/can-activate-via-auth.guard';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { DialogGitComponent } from './components/dialog-git/dialog-git.component';
 
 // Set locale
 registerLocaleData(localeFi, 'fi');
@@ -78,7 +79,8 @@ const appRoutes: Routes = [
     ToolFacsimilesComponent,
     FileDialogComponent,
     ToolSelectorTabComponent,
-    LoginComponent
+    LoginComponent,
+    DialogGitComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -96,6 +98,7 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
     AgGridModule.withComponents(
       [GridColumnStatusComponent]
     ),
@@ -116,6 +119,9 @@ const appRoutes: Routes = [
       provide: DROPZONE_CONFIG,
       useValue: DEFAULT_DROPZONE_CONFIG
     }*/
+  ],
+  entryComponents: [
+    DialogGitComponent
   ],
   bootstrap: [AppComponent]
 })

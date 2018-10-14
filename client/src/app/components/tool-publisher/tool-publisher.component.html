@@ -2,12 +2,15 @@
   <app-grid-publications></app-grid-publications>
 </div>
 <div class="container-medium">
+  <button mat-raised-button (click)="onLoadClick()" i18n>Choose</button>
+</div>
+<!--<div class="container-medium">
   <app-tree-documents 
-      openFileText="Choose Fileygygtygy"
+      openFileText="Choose File"
       [doubleClickToOpenFile]="false"
       (documentLoaded)="onDocumentLoaded($event)">
   </app-tree-documents>
-</div>
+</div>-->
 <!--<div>
   <app-tool-facsimiles></app-tool-facsimiles>
 </div>-->

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { DocumentDescriptor, DataService } from "../../services/data.service";
+import { DialogGitComponent } from '../dialog-git/dialog-git.component';
 
 @Component({
   selector: 'app-tool-publisher',
@@ -8,14 +10,24 @@ import { DocumentDescriptor, DataService } from "../../services/data.service";
 })
 export class ToolPublisherComponent implements OnInit {
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.data.changeTool("Publisher");
   }
 
-  onDocumentLoaded(doc: DocumentDescriptor) {
-    alert(doc.name);
+  onLoadClick() {
+    const dialogRef = this.dialog.open(DialogGitComponent, {
+      width: '700px',
+      data: {name: "", path: ""}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+      if(result !== undefined) 
+        alert(result.path + "/" + result.name);
+    });
   }
 
 }

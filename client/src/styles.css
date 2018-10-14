@@ -51,4 +51,5 @@ a {
 
 .mat-progress-spinner {
   position: absolute !important;
+  z-index: 1;
 }
