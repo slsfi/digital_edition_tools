@@ -1,11 +1,29 @@
-<div class="container-wide">
-  <app-grid-publications></app-grid-publications>
-</div>
-<div class="container-medium">
-  <button mat-raised-button (click)="onLoadClick()" i18n>Choose</button>
+<div class="page-container">
+  <!-- Publications grid -->
+  <div class="container-wide">
+    <app-grid-publications (listLevelChanged)="onListLevelChanged($event)"></app-grid-publications>
+  </div>
+  <!-- Publications -->
+  <div *ngIf="listLevel==Level.publications" class="container-medium-narrow">
+    <div class="box">
+      <div i18n>Reading text</div>
+      <button mat-raised-button (click)="onLoadReadingTextClick()" i18n>Choose</button>
+    </div>
+    <div class="box">
+      <div i18n>Versions</div>
+      <button mat-raised-button (click)="onLoadVersionClick()" i18n>Choose</button>
+    </div>
+    <div class="box">
+      <div i18n>Manuscripts</div>
+      <button mat-raised-button (click)="onLoadManuscriptClick()" i18n>Choose</button>
+    </div>
+  </div>
+  <div *ngIf="listLevel==Level.publications" class="container-medium-narrow">
+    <div i18n>Facsimiles</div>
+  </div>
 </div>
 <!--<div class="container-medium">
-  <app-tree-documents 
+  <app-tree-documents
       openFileText="Choose File"
       [doubleClickToOpenFile]="false"
       (documentLoaded)="onDocumentLoaded($event)">

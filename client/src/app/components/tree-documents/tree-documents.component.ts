@@ -1,33 +1,33 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
-//import {MatTreeModule} from '@angular/material/tree';
-import {GridColumnStatusComponent} from "../grid-column-status/grid-column-status.component";
-import { DocumentDescriptor, DataService } from "../../services/data.service";
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+// import {MatTreeModule} from '@angular/material/tree';
+import {GridColumnStatusComponent} from '../grid-column-status/grid-column-status.component';
+import { DocumentDescriptor, DataService } from '../../services/data.service';
 
-import {GridOptions, RowNode} from "ag-grid";
+import {GridOptions, RowNode} from 'ag-grid';
 
 @Component({
     selector: 'app-tree-documents',
     templateUrl: './tree-documents.component.html'
 })
-export class TreeDocumentsComponent {
+export class TreeDocumentsComponent implements OnInit {
 
     gridOptions: GridOptions;
     columnDefs: any[];
     rowData: any[];
     treeData: any;
 
-    pathCurrent: string = "";
-    pathNew: string = "";
-    pathParent: string = "";
+    pathCurrent: string = '';
+    pathNew: string = '';
+    pathParent: string = '';
 
     fileSelected: boolean = false;
-    openDocument: string = "";
+    openDocument: string = '';
 
     showSpinner: boolean = true;
 
-    @Input() openFileText: string = "Open File";
+    @Input() openFileText: string = 'Open File';
     // Root folder support is not yet implemented
-    @Input() rootFolder: string = "";
+    @Input() rootFolder: string = '';
     @Input() doubleClickToOpenFile: boolean = true;
     @Input() displayCancelButton: boolean = false;
     @Output() documentLoaded: EventEmitter<DocumentDescriptor> = new EventEmitter<DocumentDescriptor>();
@@ -36,18 +36,18 @@ export class TreeDocumentsComponent {
 
       this.gridOptions = <GridOptions>{
         enableSorting: true,
-        rowSelection: "single"
+        rowSelection: 'single'
       };
 
       this.gridOptions.getRowStyle = function(params) {
-        if(params.node.data.type == 'Folder') {
-            return { color: '#008800' }
+        if (params.node.data.type === 'Folder') {
+            return { color: '#008800' };
         }
-      }
+      };
 
       this.columnDefs = [
-          {headerName: "Name", field: "name"},
-          {headerName: "Type", field: "type"}
+          {headerName: 'Name', field: 'name'},
+          {headerName: 'Type', field: 'type'}
       ];
     }
 
@@ -62,12 +62,12 @@ export class TreeDocumentsComponent {
     getTree(path: string) {
       this.showSpinner = true;
       // Get "root" folder? In this case we need to send a request to the server
-      if(path.length == 0) {
-        this.data.getDocumentTree(path, true).subscribe(
-          data => { 
+      if (path.length === 0) {
+        this.data.getDocumentTree(path, false).subscribe(
+          data => {
             this.treeData = data;
             this.showPath(this.pathNew);
-            //alert(data);
+            // alert(data);
           },
           err => {
             // Return root folder (only for testing)
@@ -99,7 +99,7 @@ export class TreeDocumentsComponent {
             // Return com folder (only for testing)
             else {
             }*/
-            console.log(err); 
+            console.log(err);
           }
         );
       }
@@ -172,7 +172,7 @@ export class TreeDocumentsComponent {
           this.showPath(this.pathNew);
           //this.getTree(this.pathNew);
         }
-        
+
       }
       // Assume file
       else {

@@ -8,36 +8,38 @@
   <button mat-raised-button (click)="saveToClient()" i18n>Save menu (json)</button>
 </div>
 <div><p>{{test}}</p></div>
-<div class="container-wide">
-  <app-grid-publications></app-grid-publications>
-</div>
-<div class="container">
-  <div class="dd" id="menu"></div>
-</div>
-<div class="container">
-  <form>
+<div class="page-container">
+  <div class="container-wide">
+    <app-grid-publications></app-grid-publications>
+  </div>
+  <div class="container">
+    <div class="dd" id="menu"></div>
+  </div>
+  <div class="container">
+    <form>
 
-    <div class="row">
-      <!--<input [(ngModel)]="itemCurrent.type" name="type"/>-->
-      <mat-form-field>
-        <mat-select i18n-placeholder placeholder="Type" id="type" required [(ngModel)]="itemCurrent.type" name="type">
-          <mat-option *ngFor="let typ of itemCurrent.types; let i = index" [value]="typ.id">{{typ.description}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="row">
+        <!--<input [(ngModel)]="itemCurrent.type" name="type"/>-->
+        <mat-form-field>
+          <mat-select i18n-placeholder placeholder="Type" id="type" required [(ngModel)]="itemCurrent.type" name="type">
+            <mat-option *ngFor="let typ of itemCurrent.types; let i = index" [value]="typ.id">{{typ.description}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field><input matInput i18n-placeholder placeholder="Text" [(ngModel)]="itemCurrent.text" name="text" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field><input matInput i18n-placeholder placeholder="ID or URL" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+      </div>
+
+    </form>
+    <div>
+      <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventUpdateItem()" i18n>Update</button>
+      <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventDeleteItem()" i18n>Delete</button>
+      <button mat-raised-button *ngIf=itemCurrent.newItem (click)="eventAddItem()" i18n>Add</button>
     </div>
-
-    <div class="row">
-      <mat-form-field><input matInput i18n-placeholder placeholder="Text" [(ngModel)]="itemCurrent.text" name="text" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
-    </div>
-
-    <div class="row">
-      <mat-form-field><input matInput i18n-placeholder placeholder="ID or URL" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
-    </div>
-
-  </form>
-  <div>
-    <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventUpdateItem()" i18n>Update</button>
-    <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventDeleteItem()" i18n>Delete</button>
-    <button mat-raised-button *ngIf=itemCurrent.newItem (click)="eventAddItem()" i18n>Add</button>
   </div>
 </div>

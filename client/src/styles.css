@@ -9,24 +9,52 @@ a {
   text-decoration: none;
 }
 
-.container, .container-medium, .container-wide {
+.page-container {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.container, .container-narrow, .container-medium-narrow, .container-medium, .container-wide {
   font-size: 13px;
-  float: left;
+  display: inline-block;
+  vertical-align: top;
+  /*float: left;*/
   padding: 10px;
   margin: 10px;
+  border-top: 1px solid rgb(0, 0, 0, 0.1);
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 
 .container {
-  width: 300px;  
+  width: 300px;
+}
+
+.container-narrow {
+  width: 200px;
+}
+
+.container-medium-narrow {
+  width: 350px;
 }
 
 .container-medium {
-  width: 400px;  
+  width: 400px;
 }
 
 .container-wide {
-  width: 500px;  
+  width: 500px;
+}
+
+.container-auto {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.box {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid rgb(0, 0, 0, 0.1);
 }
 
 .height-max-medium {
@@ -49,7 +77,17 @@ a {
   cursor: pointer;
 }
 
+/* Material overrides */
 .mat-progress-spinner {
   position: absolute !important;
   z-index: 1;
+}
+
+.mat-raised-button {
+  min-width: 20px !important;
+}
+
+/* Grid overrides */
+.ag-theme-balham .ag-root {
+  border: 1px solid rgb(213, 220, 224);
 }

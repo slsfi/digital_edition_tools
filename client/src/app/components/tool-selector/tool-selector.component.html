@@ -8,12 +8,16 @@
   <button mat-raised-button (click)="onSaveFileLocal()" i18n>Save to Computer</button>
   <!--<button mat-raised-button (click)="openDialog()">Launch dialog</button>-->
 </div>
-<div class="container-medium height-max-medium">
-  <app-tree-documents [rootFolder]="xml" (documentLoaded)="onDocumentLoaded($event)"></app-tree-documents>
+<div class="page-container">
+  <div class="container-medium height-max-medium">
+    <app-tree-documents [rootFolder]="xml" (documentLoaded)="onDocumentLoaded($event)"></app-tree-documents>
+  </div>
+  <mat-spinner *ngIf="showSpinner"></mat-spinner>
+  <div class="container-auto">
+    <mat-tab-group>
+      <mat-tab *ngFor="let c of configurations; let i = index" label="{{c.name}}">
+        <app-tool-selector-tab #selectorTab [header]="'tab_'+(i+1).toString()" [configuration]="configurations[i]"></app-tool-selector-tab>
+      </mat-tab>
+    </mat-tab-group>
 </div>
-<mat-spinner *ngIf="showSpinner"></mat-spinner>
-<mat-tab-group>
-  <mat-tab *ngFor="let c of configurations; let i = index" label="{{c.name}}">
-    <app-tool-selector-tab #selectorTab [header]="'tab_'+(i+1).toString()" [configuration]="configurations[i]"></app-tool-selector-tab>
-  </mat-tab>
-</mat-tab-group>
+</div>

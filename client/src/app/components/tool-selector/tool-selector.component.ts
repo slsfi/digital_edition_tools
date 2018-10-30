@@ -26,36 +26,36 @@ export class ToolSelectorComponent implements OnInit {
 
   @ViewChildren('selectorTab') selectorTabs:QueryList<ToolSelectorTabComponent>;
   // For testing viewchildren only
-  //testString: string = "Oh yes indeed!";
+  // testString: string = "Oh yes indeed!";
 
   constructor(private data: DataService) { }
 
   ngOnInit() {
     // Change active tool
-    this.data.changeTool("Selector");
-    
-    let xml_string: string = "<tei><note>Kommentar</note><p>This <placeName>Helsinki</placeName> <del>unpure</del><placeName>Larsmo</placeName><add>pure</add> <placeName>Umeå</placeName>gold<rs>Vasa</rs></p></tei>";
+    this.data.changeTool('Selector');
 
-    //this.readXmlString(xml_string);
+    let xml_string: string = '<tei><note>Kommentar</note><p>This <placeName>Helsinki</placeName> <del>unpure</del><placeName>Larsmo</placeName><add>pure</add> <placeName>Umeå</placeName>gold<rs>Vasa</rs></p></tei>';
+
+    // this.readXmlString(xml_string);
 
   }
 
   ngAfterViewInit() {
     // Do something with the child tabs
-    //this.selectorTabs.forEach((child) => { child.header = this.testString; });
+    // this.selectorTabs.forEach((child) => { child.header = this.testString; });
   }
 
   onFileInput(event: any) {
     // Get the list of selected files
-    let files: FileList = event.target.files;
+    const files: FileList = event.target.files;
     // Create a file reader and create a callback for the file read
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = () => {
       // Read contents of file to 'xmlFile'
       this.xmlFile = reader.result;
       // Parse xml string
       this.readXmlString(this.xmlFile);
-    }
+    };
     // Read the file as text
     reader.readAsText(files.item(0));
     // Reset value of file input so same file(s) can be selected again
@@ -70,13 +70,13 @@ export class ToolSelectorComponent implements OnInit {
     }
 
     // Parse the xml string into a xml dom object
-    this.xmlDoc = this.domParser.parseFromString(xmlString,"text/xml");
+    this.xmlDoc = this.domParser.parseFromString(xmlString,'text/xml');
 
     // Ok
-    //let xp : XPathResult = this.xmlDoc.evaluate('//placeName', this.xmlDoc.documentElement, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    // let xp : XPathResult = this.xmlDoc.evaluate('//placeName', this.xmlDoc.documentElement, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
-    this.selectorTabs.forEach((child) => { 
-      //child.xmlNodes = this.xmlNodes; 
+    this.selectorTabs.forEach((child) => {
+      //child.xmlNodes = this.xmlNodes;
       child.datLoadOccurences(this.xmlDoc);
     });
 
@@ -98,14 +98,14 @@ export class ToolSelectorComponent implements OnInit {
   }
 
   loadDocumentFromServer(doc: DocumentDescriptor) {
-    this.data.getDocument(doc, true).subscribe(
-      data => { 
-        // Decode base64 encoded xml file to a string 
+    this.data.getDocument(doc, false).subscribe(
+      data => {
+        // Decode base64 encoded xml file to a string
         this.xmlFile = DataService.Base64DecodeUnicode(data.file);
         // Parse the xml string
         this.readXmlString(this.xmlFile);
         // Console
-       //console.info(this.xmlFile);
+       // console.info(this.xmlFile);
       },
       err => {
         this.showSpinner = false;
