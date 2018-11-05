@@ -1,7 +1,9 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import { MatDialog } from '@angular/material';
 import {GridColumnStatusComponent} from '../grid-column-status/grid-column-status.component';
 import { environment } from '../../../environments/environment.prod';
-import { DataService } from '../../services/data.service';
+import { DataService, ProjectDescriptor } from '../../services/data.service';
+import { DialogProjectComponent } from '../dialog-project/dialog-project.component';
 
 import {GridOptions, RowNode} from 'ag-grid';
 import { identifierName } from '@angular/compiler';
@@ -19,24 +21,37 @@ export class GridPublicationsComponent implements OnInit {
   columnDefs: any[];
   rowData: any[];
 
+  projectEdited: ProjectDescriptor;
+  //publicationCollectionEdited: PublicationCollectionDescriptor;
+  //publicationEdited: PublicationDescriptor;
+
   @Output() listLevelChanged: EventEmitter<ListLevel> = new EventEmitter<ListLevel>();
 
-  constructor(private data: DataService) {
+  constructor(private data: DataService, public dialog: MatDialog) {
+    
+    // Set up the grid
     this.gridOptions = <GridOptions>{
       enableSorting: true,
       rowSelection: 'multiple'
     };
 
+    // Set a callback for row style (green text if published)
     this.gridOptions.getRowStyle = function(params) {
-      if (params.node.data.flagPublished == 1)
+      if (params.node.data.published == 1)
         return { color: '#0d6e00' };
     };
 
+    // Set callback so rows can be found with the getRowNode function
+    this.gridOptions.getRowNodeId = function(data) {
+      return data.id;
+    };
+
+    // Grid columns
     this.columnDefs = [
       {headerName: 'Title', field: 'title', width: 200, checkboxSelection: true},
       {headerName: 'Id', field: 'id', width: 70},
-      {headerName: 'flagPublished', field: 'flagPublished', hide: true},
-      {headerName: 'Published', field: 'published', width: 90}
+      {headerName: 'PublishedHidden', field: 'published', hide: true},
+      {headerName: 'Published', field: 'publishedText', width: 90}
     ];
     // {headerName: 'Published', field: 'published', width: 200, cellRendererFramework: GridColumnStatusComponent}
 
@@ -84,7 +99,7 @@ export class GridPublicationsComponent implements OnInit {
         this.listLevel = ListLevel.projects;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'flagPublished': data[i].published, 'published': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'publishedText': (data[i].published ? 'Yes' : 'No')});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -108,7 +123,7 @@ export class GridPublicationsComponent implements OnInit {
         ];
         var tmpTreeData = [];
         for(var i=0; i<tmpData.length; i++) {
-          tmpTreeData.push({'title': tmpData[i].id.toString(), 'id': tmpData[i].id, 'flagPublished': tmpData[i].published, 'published': (tmpData[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': tmpData[i].id.toString(), 'id': tmpData[i].id, 'published': tmpData[i].published, 'publishedText': (tmpData[i].published ? 'Yes' : 'No')});
         }
         this.rowData = tmpTreeData;*/
       }
@@ -121,7 +136,7 @@ export class GridPublicationsComponent implements OnInit {
         this.listLevel = ListLevel.publicationCollections;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'flagPublished': data[i].published, 'published': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'publishedText': (data[i].published ? 'Yes' : 'No')});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -138,7 +153,7 @@ export class GridPublicationsComponent implements OnInit {
         this.listLevel = ListLevel.publications;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'flagPublished': data[i].published, 'published': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'publishedText': (data[i].published ? 'Yes' : 'No')});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -169,19 +184,119 @@ export class GridPublicationsComponent implements OnInit {
   }
 
   onAddClick() {
-    // Add
+    // Open an edit dialog with empty data
+    switch(this.listLevel) {
+      case ListLevel.projects:
+        this.showProjectDialog({} as any);
+        break;
+      case ListLevel.publicationCollections:
+        // publicationCollection
+        break;
+      case ListLevel.publications:
+        // publication:
+        break;
+    }
   }
 
   onEditClick() {
-    // Edit
+    // Get selected rows
     const selRows = this.gridOptions.api.getSelectedRows();
-    console.log(selRows);
-    if(selRows.length == 1)
-      alert('One row selected!');
+    // Check that (only) one row is selected
+    if(selRows.length == 1) {
+      switch(this.listLevel) {
+        case ListLevel.projects:
+          const project: ProjectDescriptor = {id: selRows[0].id, title: selRows[0].title, published: selRows[0].published};
+          this.showProjectDialog(project);
+          break;
+        case ListLevel.publicationCollections:
+          // publicationCollection
+          break;
+        case ListLevel.publications:
+          // publication:
+          break;
+      }
+    }
+    else
+      alert('You need to select (only) one row to edit!');
   }
 
   onRemoveClick() {
     // Edit
+  }
+
+  showProjectDialog(project: ProjectDescriptor) {
+    // Show the dialog
+    const dialogRef = this.dialog.open(DialogProjectComponent, {
+      width: '700px',
+      data: project
+    });
+    // Subscribe to dialog closed event
+    dialogRef.afterClosed().subscribe(result => {
+      // If title is undefined, then user cancelled the dialog
+      if(result.title !== undefined) { 
+        // Keep track of edited project, this will be used if server request is successful
+        this.projectEdited = result;
+        // id is defined, means that a project has been edited
+        if(result.id !== undefined) { 
+          this.editProject(result);
+          //let rowNode = this.gridOptions.api.getRowNode(result.id);
+          //rowNode.setData(this.createProjectGridData(result));
+        }
+        // Id is not defined, add project
+        else {
+          this.addProject(result);
+          //let rowDataItem = this.createProjectGridData(result);
+          //this.gridOptions.api.updateRowData({add: [rowDataItem]});
+        }
+      }
+    });
+  }
+
+  // Add a new project
+  addProject(project: ProjectDescriptor) {
+    // Send a request to the server
+    this.data.addProject(project).subscribe(
+      // Reqest succeeded
+      data => {
+        // Set project id from returned data
+        this.projectEdited.id = data.project_id;
+        // Create a grid row item from the project data
+        const rowDataItem = this.createProjectGridData(this.projectEdited);
+        // Add the new project row to the grid
+        this.gridOptions.api.updateRowData({add: [rowDataItem]});
+        // Print data to console
+        console.info(data);
+      },
+      // Request failed
+      err => {
+        console.info(err);
+      }
+    );
+  }
+
+  // Edit a project
+  editProject(project: ProjectDescriptor) {
+    // Send a request to the server
+    this.data.editProject(project).subscribe(
+      // Request succeeded
+      data => {
+        // Get the row node with the project id of the edited project
+        let rowNode = this.gridOptions.api.getRowNode(this.projectEdited.id.toString());
+        // Set the new project row data
+        rowNode.setData(this.createProjectGridData(this.projectEdited));
+        // Print data to console
+        console.info(data);
+      },
+      // Request failed
+      err => {
+        //this.showSpinner = false;
+      }
+    );
+  }
+
+  createProjectGridData(project: ProjectDescriptor): any {
+    let newData = {'title': project.title, 'id': project.id, 'published': project.published, 'publishedText': (project.published ? 'Yes' : 'No')};
+    return newData;
   }
 
   test() {

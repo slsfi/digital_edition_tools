@@ -9,10 +9,7 @@ import { DocumentDescriptor } from '../../services/data.service';
 })
 export class DialogGitComponent implements OnInit {
 
-  constructor(
-    public dialogRef: MatDialogRef<DialogGitComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DocumentDescriptor) {
-    
+  constructor( public dialogRef: MatDialogRef<DialogGitComponent>, @Inject(MAT_DIALOG_DATA) public data: DocumentDescriptor) {
   }
 
   ngOnInit() {

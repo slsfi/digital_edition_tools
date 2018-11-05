@@ -1,0 +1,10 @@
+<div>
+  <p i18n>{{header}}</p>
+  <div class="row">
+    <mat-form-field><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="project.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+  </div>
+  <div class="row">
+    <button mat-raised-button (click)="onOKClick()" i18n>OK</button>
+    <button mat-raised-button (click)="onCancelClick()" i18n>Cancel</button>
+  </div>
+</div>

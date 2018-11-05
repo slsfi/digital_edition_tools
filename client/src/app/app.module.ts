@@ -37,6 +37,7 @@ import { LoginComponent } from './components/login/login.component';
 import { CanActivateViaAuthGuard } from './guards/can-activate-via-auth.guard';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DialogGitComponent } from './components/dialog-git/dialog-git.component';
+import { DialogProjectComponent } from './components/dialog-project/dialog-project.component';
 
 // Set locale
 registerLocaleData(localeFi, 'fi');
@@ -80,7 +81,8 @@ const appRoutes: Routes = [
     FileDialogComponent,
     ToolSelectorTabComponent,
     LoginComponent,
-    DialogGitComponent
+    DialogGitComponent,
+    DialogProjectComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -121,7 +123,8 @@ const appRoutes: Routes = [
     }*/
   ],
   entryComponents: [
-    DialogGitComponent
+    DialogGitComponent,
+    DialogProjectComponent
   ],
   bootstrap: [AppComponent]
 })

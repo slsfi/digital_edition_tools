@@ -35,6 +35,14 @@ export class DataService {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/projects/');
   }
 
+  addProject(project: ProjectDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/projects/new/', {'title': project.title});
+  }
+
+  editProject(project: ProjectDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/projects/' + project.id + '/edit/', {'name': project.title});
+  }
+
   getPublicationCollections(projectName: string): Observable<any>  {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication_collection/list/');
@@ -92,4 +100,10 @@ export class DataService {
 export interface DocumentDescriptor {
   name: string;
   path: string;
+}
+
+export interface ProjectDescriptor {
+  id: number;
+  title: string;
+  published: boolean;
 }
