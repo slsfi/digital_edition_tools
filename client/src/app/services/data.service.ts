@@ -36,7 +36,7 @@ export class DataService {
   }
 
   addProject(project: ProjectDescriptor): Observable<any> {
-    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/projects/new/', {'title': project.title});
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/projects/new/', {'name': project.title});
   }
 
   editProject(project: ProjectDescriptor): Observable<any> {
