@@ -1,0 +1,20 @@
+<p>
+  <button mat-raised-button (click)="onRefreshClick()" i18n>Refresh</button>
+  <button mat-raised-button (click)="onLoadClick()" [disabled]="!fileSelected" *ngIf="doubleClickToOpenFile" i18n>{{openFileText}}</button>
+  <button mat-raised-button (click)="onCancelClick()" *ngIf="displayCancelButton" i18n>Cancel</button>
+</p>
+<p>/{{pathCurrent}}</p>
+<div>
+  <mat-spinner *ngIf="showSpinner"></mat-spinner>
+  <ag-grid-angular 
+    style="width: 100%; height:500px"
+    class="ag-theme-balham"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    [gridOptions]="gridOptions"
+    (gridReady)="onGridReady($event)"
+    (selectionChanged)="onSelectionChanged($event)"
+    (rowClicked)="onRowClick($event)"
+    (rowDoubleClicked)="onRowDoubleClick($event)">
+  </ag-grid-angular>
+</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { DocumentDescriptor, DataService } from "../../services/data.service";
-import { ListLevel } from "../grid-publications/grid-publications.component";
+import { DataItemDescriptor, DataItemType, DataService } from "../../services/data.service";
+//import { ListLevel } from "../grid-publications/grid-publications.component";
 import { DialogGitComponent } from '../dialog-git/dialog-git.component';
 
 @Component({
@@ -12,8 +12,12 @@ import { DialogGitComponent } from '../dialog-git/dialog-git.component';
 export class ToolPublisherComponent implements OnInit {
 
   textType: TextType = TextType.None;
-  public Level: any = ListLevel;
-  listLevel: ListLevel = ListLevel.projects;
+  public Level: any = DataItemType;
+  listLevel: DataItemType = DataItemType.Project;
+
+  rowDataManuscripts: any = [];
+  rowDataVersions: any = [];
+  rowDataFacsimiles: any = [];
 
   constructor(private data: DataService, public dialog: MatDialog) { }
 
@@ -21,8 +25,33 @@ export class ToolPublisherComponent implements OnInit {
     this.data.changeTool("Publisher");
   }
 
-  onListLevelChanged(level: ListLevel) {
+  onListLevelChanged(level: DataItemType) {
     this.listLevel = level;
+  }
+
+  onPublicationOpened(publication: DataItemDescriptor) {
+    // Get versions
+    this.data.getVersions(this.data.projectName, this.data.publicationCollection, this.data.publication).subscribe(
+      data => {
+        let versionsData = [];
+        for (var i = 0; i < data.variations.length; i++) {
+          versionsData.push( {'id': data.variations[i].id, 'title': data.variations[i].name, 'filename': data.variations[i].original_filename} );
+        }
+        this.rowDataVersions = versionsData;
+      },
+      err => { console.info(err); }
+    );
+    // Get manuscripts
+    this.data.getManuscripts(this.data.projectName, this.data.publicationCollection, this.data.publication).subscribe(
+      data => {
+        let manuscriptsData = [];
+        for (var i = 0; i < data.manuscripts.length; i++) {
+          manuscriptsData.push( {'id': data.manuscripts[i].id, 'title': data.manuscripts[i].name, 'filename': data.manuscripts[i].original_filename} );
+        }
+        this.rowDataManuscripts = manuscriptsData;
+      },
+      err => { console.info(err); }
+    );
   }
 
   onLoadReadingTextClick() {

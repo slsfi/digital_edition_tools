@@ -10,7 +10,6 @@ export const environment = {
   api_url: 'http://dockerhost-ext02.sls.fi:8000',
   api_url_path: 'digitaledition',
   image_logo: 'logo.png',
-  project_name: 'topelius',
   publisher_configuration: {
     show_remove: true
   },

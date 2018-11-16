@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatIconModule, MatDialogModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatIconModule, MatDialogModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material';
 //import { MatTreeModule } from '@angular/material/tree';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -20,7 +20,7 @@ import { AuthService } from "./services/auth.service";
 import { DataService } from "./services/data.service";
 import { GridPublicationsComponent } from "./components/grid-publications/grid-publications.component";
 import { GridColumnStatusComponent } from "./components/grid-column-status/grid-column-status.component";
-import { TreeDocumentsComponent } from "./components/tree-documents/tree-documents.component";
+import { GridDocumentsComponent } from "./components/grid-documents/grid-documents.component";
 import { MenuMainComponent } from './components/menu-main/menu-main.component';
 import { HeaderComponent } from './components/header/header.component';
 import { AppConfigModule } from './modules/app-config.module';
@@ -37,7 +37,10 @@ import { LoginComponent } from './components/login/login.component';
 import { CanActivateViaAuthGuard } from './guards/can-activate-via-auth.guard';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DialogGitComponent } from './components/dialog-git/dialog-git.component';
-import { DialogProjectComponent } from './components/dialog-project/dialog-project.component';
+import { DialogDataComponent } from './components/dialog-data/dialog-data.component';
+import { DialogPublicationCollectionComponent } from './components/dialog-publication-collection/dialog-publication-collection.component';
+import { GridFacsimilesComponent } from './components/grid-facsimiles/grid-facsimiles.component';
+import { GridTextsComponent } from './components/grid-texts/grid-texts.component';
 
 // Set locale
 registerLocaleData(localeFi, 'fi');
@@ -70,7 +73,7 @@ const appRoutes: Routes = [
     AppComponent,
     GridPublicationsComponent,
     GridColumnStatusComponent,
-    TreeDocumentsComponent,
+    GridDocumentsComponent,
     ToolPublisherComponent,
     MenuMainComponent,
     HeaderComponent,
@@ -82,7 +85,10 @@ const appRoutes: Routes = [
     ToolSelectorTabComponent,
     LoginComponent,
     DialogGitComponent,
-    DialogProjectComponent
+    DialogDataComponent,
+    DialogPublicationCollectionComponent,
+    GridFacsimilesComponent,
+    GridTextsComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -101,6 +107,8 @@ const appRoutes: Routes = [
     MatInputModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     AgGridModule.withComponents(
       [GridColumnStatusComponent]
     ),
@@ -116,7 +124,12 @@ const appRoutes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }/*,
+    },
+    {
+      provide: MAT_DATE_LOCALE, 
+      useValue: 'fi-FI'
+    },
+    /*,
     {
       provide: DROPZONE_CONFIG,
       useValue: DEFAULT_DROPZONE_CONFIG
@@ -124,7 +137,7 @@ const appRoutes: Routes = [
   ],
   entryComponents: [
     DialogGitComponent,
-    DialogProjectComponent
+    DialogDataComponent
   ],
   bootstrap: [AppComponent]
 })

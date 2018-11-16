@@ -5,10 +5,10 @@ import { DocumentDescriptor, DataService } from '../../services/data.service';
 import {GridOptions, RowNode} from 'ag-grid';
 
 @Component({
-    selector: 'app-tree-documents',
-    templateUrl: './tree-documents.component.html'
+    selector: 'app-grid-documents',
+    templateUrl: './grid-documents.component.html'
 })
-export class TreeDocumentsComponent implements OnInit {
+export class GridDocumentsComponent implements OnInit {
 
   gridOptions: GridOptions;
   columnDefs: any[];

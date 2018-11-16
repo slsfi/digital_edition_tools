@@ -54,7 +54,14 @@ a {
 .box {
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid rgb(0, 0, 0, 0.1);
+  border: 1px solid rgb(0, 0, 0, 0.05);
+}
+
+.box-header {
+  background-color: rgb(240, 240, 245);
+  font-size: 1.1em;
+  margin: 0px;
+  padding: 5px;
 }
 
 .height-max-medium {
@@ -84,6 +91,7 @@ a {
 }
 
 .mat-raised-button {
+  line-height: 28px !important;
   min-width: 20px !important;
 }
 

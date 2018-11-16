@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogProjectComponent } from './dialog-project.component';
+import { GridFacsimilesComponent } from './grid-facsimiles.component';
 
-describe('DialogProjectComponent', () => {
-  let component: DialogProjectComponent;
-  let fixture: ComponentFixture<DialogProjectComponent>;
+describe('GridFacsimilesComponent', () => {
+  let component: GridFacsimilesComponent;
+  let fixture: ComponentFixture<GridFacsimilesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DialogProjectComponent ]
+      declarations: [ GridFacsimilesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DialogProjectComponent);
+    fixture = TestBed.createComponent(GridFacsimilesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

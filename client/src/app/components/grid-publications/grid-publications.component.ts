@@ -2,8 +2,8 @@ import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import {GridColumnStatusComponent} from '../grid-column-status/grid-column-status.component';
 import { environment } from '../../../environments/environment.prod';
-import { DataService, ProjectDescriptor } from '../../services/data.service';
-import { DialogProjectComponent } from '../dialog-project/dialog-project.component';
+import { DataService, DataItemType, DataItemDescriptor } from '../../services/data.service';
+import { DialogDataComponent } from '../dialog-data/dialog-data.component';
 
 import {GridOptions, RowNode} from 'ag-grid';
 import { identifierName } from '@angular/compiler';
@@ -15,17 +15,18 @@ import { identifierName } from '@angular/compiler';
 export class GridPublicationsComponent implements OnInit {
 
   showRemove: boolean = environment.publisher_configuration.show_remove;
-  listLevel: ListLevel = ListLevel.projects;
+  listLevel: DataItemType = DataItemType.Project;
 
   gridOptions: GridOptions;
   columnDefs: any[];
   rowData: any[];
 
-  projectEdited: ProjectDescriptor;
+  dataItemEdited: DataItemDescriptor;
   //publicationCollectionEdited: PublicationCollectionDescriptor;
   //publicationEdited: PublicationDescriptor;
 
-  @Output() listLevelChanged: EventEmitter<ListLevel> = new EventEmitter<ListLevel>();
+  @Output() listLevelChanged: EventEmitter<DataItemType> = new EventEmitter<DataItemType>();
+  @Output() publicationOpened: EventEmitter<DataItemDescriptor> = new EventEmitter<DataItemDescriptor>();
 
   constructor(private data: DataService, public dialog: MatDialog) {
     
@@ -51,7 +52,8 @@ export class GridPublicationsComponent implements OnInit {
       {headerName: 'Title', field: 'title', width: 200, checkboxSelection: true},
       {headerName: 'Id', field: 'id', width: 70},
       {headerName: 'PublishedHidden', field: 'published', hide: true},
-      {headerName: 'Published', field: 'publishedText', width: 90}
+      {headerName: 'DatePublishedExternally', field: 'date', hide: true},
+      {headerName: 'Published', field: 'publishedText', width: 90},
     ];
     // {headerName: 'Published', field: 'published', width: 200, cellRendererFramework: GridColumnStatusComponent}
 
@@ -79,27 +81,32 @@ export class GridPublicationsComponent implements OnInit {
 
   onRowDoubleClick(event: any) {
     switch(this.listLevel) {
-      case ListLevel.projects:
+      case DataItemType.Project:
         // Set active project
         this.data.projectName = event.data.title;
         // List all publication collections for the project
         this.listPublicationCollections(event.data.title);
         break;
-      case ListLevel.publicationCollections:
+      case DataItemType.PublicationCollection:
         // Set active publication Collection
         this.data.publicationCollection = event.data.id;
         this.listPublications(this.data.projectName, event.data.id);
         break;
+      case DataItemType.Publication:
+        // Open publication
+        this.data.publication = event.data.id;
+        const publication: DataItemDescriptor = {type: DataItemType.Publication, id: event.data.id};
+        this.publicationOpened.emit(publication);
     }
   }
 
   listProjects() {
     this.data.getProjects().subscribe(
       data => {
-        this.listLevel = ListLevel.projects;
+        this.listLevel = DataItemType.Project;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'publishedText': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No')});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -133,10 +140,10 @@ export class GridPublicationsComponent implements OnInit {
   listPublicationCollections(projectName: string) {
     this.data.getPublicationCollections(projectName).subscribe(
       data => {
-        this.listLevel = ListLevel.publicationCollections;
+        this.listLevel = DataItemType.PublicationCollection;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'publishedText': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No')});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -150,10 +157,10 @@ export class GridPublicationsComponent implements OnInit {
   listPublications(projectName: string, id: number) {
     this.data.getPublications(projectName, id).subscribe(
       data => {
-        this.listLevel = ListLevel.publications;
+        this.listLevel = DataItemType.Publication;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'publishedText': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No')});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -174,10 +181,10 @@ export class GridPublicationsComponent implements OnInit {
 
   onParentClick() {
     switch(this.listLevel) {
-      case ListLevel.publicationCollections:
+      case DataItemType.PublicationCollection:
         this.listProjects();
         break;
-      case ListLevel.publications:
+      case DataItemType.Publication:
         this.listPublicationCollections(this.data.projectName);
         break;
     }
@@ -185,17 +192,8 @@ export class GridPublicationsComponent implements OnInit {
 
   onAddClick() {
     // Open an edit dialog with empty data
-    switch(this.listLevel) {
-      case ListLevel.projects:
-        this.showProjectDialog({} as any);
-        break;
-      case ListLevel.publicationCollections:
-        // publicationCollection
-        break;
-      case ListLevel.publications:
-        // publication:
-        break;
-    }
+    const dataEmpty: DataItemDescriptor = {type: this.listLevel};
+    this.showDataDialog(dataEmpty);
   }
 
   onEditClick() {
@@ -203,18 +201,8 @@ export class GridPublicationsComponent implements OnInit {
     const selRows = this.gridOptions.api.getSelectedRows();
     // Check that (only) one row is selected
     if(selRows.length == 1) {
-      switch(this.listLevel) {
-        case ListLevel.projects:
-          const project: ProjectDescriptor = {id: selRows[0].id, title: selRows[0].title, published: selRows[0].published};
-          this.showProjectDialog(project);
-          break;
-        case ListLevel.publicationCollections:
-          // publicationCollection
-          break;
-        case ListLevel.publications:
-          // publication:
-          break;
-      }
+      const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id, title: selRows[0].title, date: selRows[0].date, published: selRows[0].published};
+      this.showDataDialog(dataItem);
     }
     else
       alert('You need to select (only) one row to edit!');
@@ -224,79 +212,132 @@ export class GridPublicationsComponent implements OnInit {
     // Edit
   }
 
-  showProjectDialog(project: ProjectDescriptor) {
+  showDataDialog(dataItem: DataItemDescriptor) {
     // Show the dialog
-    const dialogRef = this.dialog.open(DialogProjectComponent, {
+    const dialogRef = this.dialog.open(DialogDataComponent, {
       width: '700px',
-      data: project
+      data: dataItem
     });
     // Subscribe to dialog closed event
     dialogRef.afterClosed().subscribe(result => {
       // If title is undefined, then user cancelled the dialog
       if(result.title !== undefined) { 
-        // Keep track of edited project, this will be used if server request is successful
-        this.projectEdited = result;
-        // id is defined, means that a project has been edited
-        if(result.id !== undefined) { 
-          this.editProject(result);
-          //let rowNode = this.gridOptions.api.getRowNode(result.id);
-          //rowNode.setData(this.createProjectGridData(result));
-        }
-        // Id is not defined, add project
-        else {
-          this.addProject(result);
-          //let rowDataItem = this.createProjectGridData(result);
-          //this.gridOptions.api.updateRowData({add: [rowDataItem]});
-        }
+        // Keep track of edited item, this will be used if server request is successful
+        this.dataItemEdited = result;
+        // id is defined, means that an item has been edited
+        if(result.id !== undefined)
+          this.editItem(result);
+        // Id is not defined, add item
+        else
+          this.addItem(result);
       }
     });
   }
 
-  // Add a new project
-  addProject(project: ProjectDescriptor) {
-    // Send a request to the server
-    this.data.addProject(project).subscribe(
-      // Reqest succeeded
-      data => {
-        // Set project id from returned data
-        this.projectEdited.id = data.project_id;
-        // Create a grid row item from the project data
-        const rowDataItem = this.createProjectGridData(this.projectEdited);
-        // Add the new project row to the grid
-        this.gridOptions.api.updateRowData({add: [rowDataItem]});
-        // Print data to console
-        console.info(data);
-      },
-      // Request failed
-      err => {
-        console.info(err);
-      }
-    );
+  addItem(dataItem: DataItemDescriptor) {
+    switch(dataItem.type) {
+      case DataItemType.Project:
+        this.data.addProject(dataItem).subscribe(
+          data => {
+            // Set id from returned data
+            this.dataItemEdited.id = data.project_id;
+            // Add row
+            this.addRow(data);
+          },
+          err => { console.info(err); }
+        );
+        break;
+
+      case DataItemType.PublicationCollection:
+        this.data.addPublicationCollection(this.data.projectName, dataItem).subscribe(
+          data => {
+            // Set id from returned data
+            this.dataItemEdited.id = data.collection_id;
+            // Add row
+            this.addRow(data);
+          },
+          err => { console.info(err); }
+        );
+        break;
+
+      case DataItemType.Publication:
+        this.data.addPublication(this.data.projectName, this.data.publicationCollection, dataItem).subscribe(
+          data => {
+            // Set id from returned data
+            this.dataItemEdited.id = data.publication_id;
+            // Add row
+            this.addRow(data);
+          },
+          err => { console.info(err); }
+        );
+        break;
+    }
   }
 
-  // Edit a project
-  editProject(project: ProjectDescriptor) {
-    // Send a request to the server
-    this.data.editProject(project).subscribe(
-      // Request succeeded
-      data => {
-        // Get the row node with the project id of the edited project
-        let rowNode = this.gridOptions.api.getRowNode(this.projectEdited.id.toString());
-        // Set the new project row data
-        rowNode.setData(this.createProjectGridData(this.projectEdited));
-        // Print data to console
-        console.info(data);
-      },
-      // Request failed
-      err => {
-        //this.showSpinner = false;
-      }
-    );
+  // Edit an item
+  editItem(dataItem: DataItemDescriptor) {
+    switch(dataItem.type) {
+      case DataItemType.Project:
+        this.data.editProject(dataItem).subscribe(
+          data => {
+            this.editRow(data);
+          },
+          err => { console.info(err); }
+        );
+        break;
+
+      case DataItemType.PublicationCollection:
+        this.data.editPublicationCollection(this.data.projectName, dataItem).subscribe(
+        data => {
+          this.editRow(data);
+        },
+        err => { console.info(err); }
+      );
+        break;
+      
+      case DataItemType.Publication:
+        this.data.editPublication(this.data.projectName, this.data.publicationCollection, dataItem).subscribe(
+          data => {
+            this.editRow(data);
+          },
+          err => { console.info(err); }
+        );
+        break;
+    }
   }
 
-  createProjectGridData(project: ProjectDescriptor): any {
-    let newData = {'title': project.title, 'id': project.id, 'published': project.published, 'publishedText': (project.published ? 'Yes' : 'No')};
+  addRow(data: any) {
+    // Create a grid row item from the project data
+    const rowDataItem = this.createGridData(this.dataItemEdited);
+    // Add the new project row to the grid
+    this.gridOptions.api.updateRowData({add: [rowDataItem]});
+    // Print data to console
+    console.info(data);
+  }
+
+  editRow(data: any) {
+    // Get the row node with the id of the edited item
+    let rowNode = this.gridOptions.api.getRowNode(this.dataItemEdited.id.toString());
+    // Set the new item row data
+    rowNode.setData(this.createGridData(this.dataItemEdited));
+    // Print data to console
+    console.info(data);
+  }
+
+  createGridData(dataItem: DataItemDescriptor): any {
+    let newData = {'title': dataItem.title, 'id': dataItem.id, 'published': dataItem.published, 'date': dataItem.date, 'publishedText': (dataItem.published ? 'Yes' : 'No')};
     return newData;
+  }
+
+  onTestClick() {
+    this.data.getSubjects().subscribe(
+      data => {
+        console.info(data);
+      },
+      err => { 
+        console.info(err); 
+      }
+    );
   }
 
   test() {
@@ -309,11 +350,5 @@ export class GridPublicationsComponent implements OnInit {
     // row.updateData({title: "Brev", id: "15", flag: 1, published: "Published"});
     // alert(row.data.title);
   }
-}
-
-export enum ListLevel {
-  projects,
-  publicationCollections,
-  publications
 }
 

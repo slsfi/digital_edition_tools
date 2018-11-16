@@ -10,7 +10,7 @@
 </div>
 <div class="page-container">
   <div class="container-medium height-max-medium">
-    <app-tree-documents [rootFolder]="xml" (documentLoaded)="onDocumentLoaded($event)"></app-tree-documents>
+    <app-grid-documents [rootFolder]="xml" (documentLoaded)="onDocumentLoaded($event)"></app-grid-documents>
   </div>
   <mat-spinner *ngIf="showSpinner"></mat-spinner>
   <div class="container-auto">

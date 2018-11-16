@@ -1,13 +1,13 @@
 import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 
 import {AppComponent} from "../../app.component";
-import {TreeDocumentsComponent} from "./tree-documents.component";
+import {GridDocumentsComponent} from "./grid-documents.component";
 import {AgGridModule} from "ag-grid-angular";
 import {GridColumnStatusComponent} from "../grid-column-status/grid-column-status.component";
 
 describe('MyGridApplicationComponent', () => {
-    let component: TreeDocumentsComponent;
-    let fixture: ComponentFixture<TreeDocumentsComponent>;
+    let component: GridDocumentsComponent;
+    let fixture: ComponentFixture<GridDocumentsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -17,14 +17,14 @@ describe('MyGridApplicationComponent', () => {
                 )
             ],
             declarations: [
-                AppComponent, TreeDocumentsComponent, GridColumnStatusComponent
+                AppComponent, GridDocumentsComponent, GridColumnStatusComponent
             ],
         })
             .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TreeDocumentsComponent);
+        fixture = TestBed.createComponent(GridDocumentsComponent);
         component = fixture.componentInstance;
     });
 

@@ -1,25 +1,29 @@
 <div class="page-container">
   <!-- Publications grid -->
   <div class="container-wide">
-    <app-grid-publications (listLevelChanged)="onListLevelChanged($event)"></app-grid-publications>
+    <app-grid-publications 
+      (listLevelChanged)="onListLevelChanged($event)"
+      (publicationOpened)="onPublicationOpened($event)">
+    </app-grid-publications>
   </div>
   <!-- Publications -->
-  <div *ngIf="listLevel==Level.publications" class="container-medium-narrow">
+  <div *ngIf="listLevel==Level.Publication" class="container-medium-narrow">
+    <div class="box-header" i18n>Reading text</div>
     <div class="box">
-      <div i18n>Reading text</div>
-      <button mat-raised-button (click)="onLoadReadingTextClick()" i18n>Choose</button>
+      <p>{{readingText}}</p>
+      <div><button mat-raised-button (click)="onLoadReadingTextClick()" i18n><img src="assets/images/file.png" /></button></div>
     </div>
+    <div class="box-header" i18n>Versions</div>
     <div class="box">
-      <div i18n>Versions</div>
-      <button mat-raised-button (click)="onLoadVersionClick()" i18n>Choose</button>
+      <div><app-grid-texts [rowData]="rowDataVersions"></app-grid-texts></div>
     </div>
+    <div class="box-header" i18n>Manuscripts</div>
     <div class="box">
-      <div i18n>Manuscripts</div>
-      <button mat-raised-button (click)="onLoadManuscriptClick()" i18n>Choose</button>
+      <div><app-grid-texts [rowData]="rowDataManuscripts"></app-grid-texts></div>
     </div>
   </div>
-  <div *ngIf="listLevel==Level.publications" class="container-medium-narrow">
-    <div i18n>Facsimiles</div>
+  <div *ngIf="listLevel==Level.Publication" class="container-medium-narrow">
+    <div class="box-header" i18n>Facsimiles</div>
   </div>
 </div>
 <!--<div class="container-medium">
