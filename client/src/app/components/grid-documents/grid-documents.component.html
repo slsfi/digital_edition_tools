@@ -1,11 +1,12 @@
 <p>
-  <button mat-raised-button (click)="onRefreshClick()" i18n>Refresh</button>
+  <button mat-raised-button (click)="onRefreshClick()"><img src="assets/images/refresh.png" /></button>
   <button mat-raised-button (click)="onLoadClick()" [disabled]="!fileSelected" *ngIf="doubleClickToOpenFile" i18n>{{openFileText}}</button>
   <button mat-raised-button (click)="onCancelClick()" *ngIf="displayCancelButton" i18n>Cancel</button>
+  <!-- TODO: Remove this one -->
+  <button mat-raised-button (click)="onDummyClick()" (click)="onDummyClick()">Dummy file</button>
 </p>
 <p>/{{pathCurrent}}</p>
 <div>
-  <mat-spinner *ngIf="showSpinner"></mat-spinner>
   <ag-grid-angular 
     style="width: 100%; height:500px"
     class="ag-theme-balham"

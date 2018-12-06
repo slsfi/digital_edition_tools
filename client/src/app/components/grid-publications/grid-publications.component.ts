@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { MatDialog } from '@angular/material';
 import {GridColumnStatusComponent} from '../grid-column-status/grid-column-status.component';
 import { environment } from '../../../environments/environment.prod';
@@ -22,10 +22,11 @@ export class GridPublicationsComponent implements OnInit {
   rowData: any[];
 
   dataItemEdited: DataItemDescriptor;
-  //publicationCollectionEdited: PublicationCollectionDescriptor;
-  //publicationEdited: PublicationDescriptor;
 
+  @Input() editMode: boolean = false; 
   @Output() listLevelChanged: EventEmitter<DataItemType> = new EventEmitter<DataItemType>();
+  @Output() selectionChanged: EventEmitter<any> = new EventEmitter<any>();
+  @Output() publicationCollectionOpened: EventEmitter<DataItemDescriptor> = new EventEmitter<DataItemDescriptor>();
   @Output() publicationOpened: EventEmitter<DataItemDescriptor> = new EventEmitter<DataItemDescriptor>();
 
   constructor(private data: DataService, public dialog: MatDialog) {
@@ -33,12 +34,13 @@ export class GridPublicationsComponent implements OnInit {
     // Set up the grid
     this.gridOptions = <GridOptions>{
       enableSorting: true,
-      rowSelection: 'multiple'
+      rowSelection: 'multiple',
+      overlayLoadingTemplate: '<span><div class="spinner"></div></span>'
     };
 
     // Set a callback for row style (green text if published)
     this.gridOptions.getRowStyle = function(params) {
-      if (params.node.data.published == 1)
+      if (params.node.data.published >= 1)
         return { color: '#0d6e00' };
     };
 
@@ -55,24 +57,34 @@ export class GridPublicationsComponent implements OnInit {
       {headerName: 'DatePublishedExternally', field: 'date', hide: true},
       {headerName: 'Published', field: 'publishedText', width: 90},
     ];
-    // {headerName: 'Published', field: 'published', width: 200, cellRendererFramework: GridColumnStatusComponent}
-
-    /*this.rowData = [
-      {title: 'Ljungblommor', id: '1', flag: 1, published: 'Not published'},
-      {title: 'Brev', id: '15', flag: 0, published: 'Published'},
-      {title: 'Finland framställt i teckningar', id: '14', flag: 1, published: 'Not published'}
-    ];*/
   }
   ngOnInit() {
-    this.listProjects();
+    
   }
 
   onGridReady(params) {
-    // params.api.sizeColumnsToFit();
+    this.listProjects();
   }
 
   onSelectionChanged(event: any) {
-
+    this.selectionChanged.emit(event);
+    var selectedRows = this.gridOptions.api.getSelectedRows();
+    if(selectedRows.length == 1) {
+      switch(this.listLevel) {
+        // Open Publication Collection
+        case DataItemType.PublicationCollection:
+          this.data.publicationCollection = selectedRows[0].id;
+          const publicationCollection: DataItemDescriptor = {type: DataItemType.PublicationCollection, id: selectedRows[0].id};
+          this.publicationCollectionOpened.emit(publicationCollection);
+          break;
+        // Open Publication
+        case DataItemType.Publication:
+          this.data.publication = selectedRows[0].id;
+          const publication: DataItemDescriptor = {type: DataItemType.Publication, id: selectedRows[0].id};
+          this.publicationOpened.emit(publication);
+          break;
+      }
+    }
   }
 
   onRowClick(event: any) {
@@ -94,13 +106,14 @@ export class GridPublicationsComponent implements OnInit {
         break;
       case DataItemType.Publication:
         // Open publication
-        this.data.publication = event.data.id;
+        /*this.data.publication = event.data.id;
         const publication: DataItemDescriptor = {type: DataItemType.Publication, id: event.data.id};
-        this.publicationOpened.emit(publication);
+        this.publicationOpened.emit(publication);*/
     }
   }
 
   listProjects() {
+    this.gridOptions.api.showLoadingOverlay();
     this.data.getProjects().subscribe(
       data => {
         this.listLevel = DataItemType.Project;
@@ -111,39 +124,18 @@ export class GridPublicationsComponent implements OnInit {
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
       },
-      err => {
-        /*const tmpData = [
-          {
-            "id": 1,
-            "project_id": 1,
-            "publicationCollectionIntroduction_id": 4,
-            "publicationCollectionTitle_id": 23,
-            "published": true
-          },
-          {
-            "id": 2,
-            "project_id": 1,
-            "publicationCollectionIntroduction_id": 6,
-            "publicationCollectionTitle_id": 2,
-            "published": true
-          }
-        ];
-        var tmpTreeData = [];
-        for(var i=0; i<tmpData.length; i++) {
-          tmpTreeData.push({'title': tmpData[i].id.toString(), 'id': tmpData[i].id, 'published': tmpData[i].published, 'publishedText': (tmpData[i].published ? 'Yes' : 'No')});
-        }
-        this.rowData = tmpTreeData;*/
-      }
+      err => { }
     );
   }
 
   listPublicationCollections(projectName: string) {
+    this.gridOptions.api.showLoadingOverlay();
     this.data.getPublicationCollections(projectName).subscribe(
       data => {
         this.listLevel = DataItemType.PublicationCollection;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': data[i].date_published_externally, 'publishedText': (data[i].published ? 'Yes' : 'No')});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -155,6 +147,7 @@ export class GridPublicationsComponent implements OnInit {
   }
 
   listPublications(projectName: string, id: number) {
+    this.gridOptions.api.showLoadingOverlay();
     this.data.getPublications(projectName, id).subscribe(
       data => {
         this.listLevel = DataItemType.Publication;
@@ -181,6 +174,9 @@ export class GridPublicationsComponent implements OnInit {
 
   onParentClick() {
     switch(this.listLevel) {
+      case DataItemType.Project:
+        this.listProjects();
+        break;
       case DataItemType.PublicationCollection:
         this.listProjects();
         break;
@@ -209,7 +205,7 @@ export class GridPublicationsComponent implements OnInit {
   }
 
   onRemoveClick() {
-    // Edit
+    // Remove row
   }
 
   showDataDialog(dataItem: DataItemDescriptor) {

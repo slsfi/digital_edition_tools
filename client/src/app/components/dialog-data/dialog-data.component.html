@@ -3,7 +3,7 @@
   <div class="row">
     <mat-form-field><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="showDate">
     <mat-form-field><input matInput [matDatepicker]="picker" placeholder="Publication Date" [(ngModel)]="dataItem.date" name="date"/>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker></mat-form-field>

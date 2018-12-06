@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatIconModule, MatDialogModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material';
 //import { MatTreeModule } from '@angular/material/tree';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -41,6 +40,8 @@ import { DialogDataComponent } from './components/dialog-data/dialog-data.compon
 import { DialogPublicationCollectionComponent } from './components/dialog-publication-collection/dialog-publication-collection.component';
 import { GridFacsimilesComponent } from './components/grid-facsimiles/grid-facsimiles.component';
 import { GridTextsComponent } from './components/grid-texts/grid-texts.component';
+import { DialogFacsimileCollectionComponent } from './components/dialog-facsimile-collection/dialog-facsimile-collection.component';
+import { DialogFacsimileComponent } from './components/dialog-facsimile/dialog-facsimile.component';
 
 // Set locale
 registerLocaleData(localeFi, 'fi');
@@ -88,7 +89,9 @@ const appRoutes: Routes = [
     DialogDataComponent,
     DialogPublicationCollectionComponent,
     GridFacsimilesComponent,
-    GridTextsComponent
+    GridTextsComponent,
+    DialogFacsimileCollectionComponent,
+    DialogFacsimileComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -105,7 +108,6 @@ const appRoutes: Routes = [
     MatTabsModule,
     MatSelectModule,
     MatInputModule,
-    MatProgressSpinnerModule,
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -137,7 +139,9 @@ const appRoutes: Routes = [
   ],
   entryComponents: [
     DialogGitComponent,
-    DialogDataComponent
+    DialogDataComponent,
+    DialogFacsimileCollectionComponent,
+    DialogFacsimileComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,14 @@
+<p>
+  <mat-form-field>
+    <mat-select placeholder="Project" [(ngModel)]="currentProjectName" (change)="selectProject($event)">
+      <mat-option *ngFor="let project of projects" [value]="project.title">
+        {{project.title}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</p>
 <p><a mat-raised-button routerLink="/publisher" i18n>Publisher</a></p>
 <p><a mat-raised-button routerLink="/menus" i18n>Menus</a></p>
 <p><a mat-raised-button routerLink="/selector" i18n>Selector</a></p>
-<p><a mat-raised-button routerLink="/facsimiles" i18n>Facsimiles</a></p>
+<p><a mat-raised-button routerLink="/facsimiles" i18n></a></p>
 <p><a mat-raised-button (click)="onLogoutClick()" i18n>Log out</a></p>

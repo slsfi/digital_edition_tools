@@ -19,7 +19,7 @@ export class ToolSelectorComponent implements OnInit {
   xmlNodes: Node[] = [];
   domParser = new DOMParser();
 
-  showSpinner: boolean = false;
+  //showSpinner: boolean = false;
 
   xmlFileExtensions: string = environment.xml_file_extensions;
   xmlFile: string;
@@ -51,8 +51,12 @@ export class ToolSelectorComponent implements OnInit {
     // Create a file reader and create a callback for the file read
     const reader = new FileReader();
     reader.onload = () => {
+      // Show overlays for occurence grids
+      this.selectorTabs.forEach((child) => {
+        child.showLoadingOverlay();
+      });
       // Read contents of file to 'xmlFile'
-      this.xmlFile = reader.result;
+      this.xmlFile = reader.result.toString();
       // Parse xml string
       this.readXmlString(this.xmlFile);
     };
@@ -76,7 +80,6 @@ export class ToolSelectorComponent implements OnInit {
     // let xp : XPathResult = this.xmlDoc.evaluate('//placeName', this.xmlDoc.documentElement, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
     this.selectorTabs.forEach((child) => {
-      //child.xmlNodes = this.xmlNodes;
       child.datLoadOccurences(this.xmlDoc);
     });
 
@@ -85,19 +88,22 @@ export class ToolSelectorComponent implements OnInit {
     }*/
 
     // Hide spinner
-    this.showSpinner = false;
+    //this.showSpinner = false;
 
     //alert(this.xmlDoc.documentElement.innerHTML);
 
   }
 
   onDocumentLoaded(doc: DocumentDescriptor) {
-    this.showSpinner = true;
+    ///this.showSpinner = true;
     // Fetch the document from the server
     this.loadDocumentFromServer(doc);
   }
 
   loadDocumentFromServer(doc: DocumentDescriptor) {
+    this.selectorTabs.forEach((child) => {
+      child.showLoadingOverlay();
+    });
     this.data.getDocument(doc, false).subscribe(
       data => {
         // Decode base64 encoded xml file to a string
@@ -107,9 +113,7 @@ export class ToolSelectorComponent implements OnInit {
         // Console
        // console.info(this.xmlFile);
       },
-      err => {
-        this.showSpinner = false;
-      }
+      err => { }
     );
   }
 

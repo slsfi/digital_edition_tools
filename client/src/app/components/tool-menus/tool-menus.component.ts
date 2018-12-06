@@ -127,7 +127,7 @@ export class ToolMenusComponent implements OnInit {
       // Deactivate nestable before reactivation
       $(this.elementSelector).nestable("destroy");
       // Create json data for nestable
-      let jsonMenu: string = reader.result;
+      let jsonMenu: string = reader.result.toString();
       // Populate menu and reactivate nestable
       this.populateMenu(jsonMenu);
     }

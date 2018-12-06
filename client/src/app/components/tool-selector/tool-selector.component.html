@@ -12,7 +12,6 @@
   <div class="container-medium height-max-medium">
     <app-grid-documents [rootFolder]="xml" (documentLoaded)="onDocumentLoaded($event)"></app-grid-documents>
   </div>
-  <mat-spinner *ngIf="showSpinner"></mat-spinner>
   <div class="container-auto">
     <mat-tab-group>
       <mat-tab *ngFor="let c of configurations; let i = index" label="{{c.name}}">
