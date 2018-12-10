@@ -53,12 +53,12 @@ a {
 
 .box {
   margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid rgb(0, 0, 0, 0.05);
+  padding: 0px;
 }
 
 .box-header {
   background-color: rgb(240, 240, 245);
+  border-bottom: 1px solid rgb(220, 220, 220);
   font-size: 1.1em;
   margin: 0px;
   padding: 5px;
@@ -72,6 +72,23 @@ a {
 
 .input-wide {
   width: 300px;
+}
+
+.input-wide2 {
+  width: 650px;
+}
+
+.text-field {
+  margin-top: 5px;
+  background-color: rgb(247, 247, 247);
+  min-height: 20px;
+  padding: 3px;
+}
+
+#header {
+  position: absolute;
+  top: 7px;
+  left: 460px;
 }
 
 /* Auto size menu items */

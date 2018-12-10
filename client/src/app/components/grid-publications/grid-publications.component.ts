@@ -1,12 +1,9 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import {GridColumnStatusComponent} from '../grid-column-status/grid-column-status.component';
 import { environment } from '../../../environments/environment.prod';
 import { DataService, DataItemType, DataItemDescriptor } from '../../services/data.service';
 import { DialogDataComponent } from '../dialog-data/dialog-data.component';
-
-import {GridOptions, RowNode} from 'ag-grid';
-import { identifierName } from '@angular/compiler';
+import { GridOptions } from 'ag-grid';
 
 @Component({
   selector: 'app-grid-publications',
@@ -15,7 +12,7 @@ import { identifierName } from '@angular/compiler';
 export class GridPublicationsComponent implements OnInit {
 
   showRemove: boolean = environment.publisher_configuration.show_remove;
-  listLevel: DataItemType = DataItemType.Project;
+  listLevel: DataItemType = DataItemType.PublicationCollection;
 
   gridOptions: GridOptions;
   columnDefs: any[];
@@ -56,6 +53,7 @@ export class GridPublicationsComponent implements OnInit {
       {headerName: 'PublishedHidden', field: 'published', hide: true},
       {headerName: 'DatePublishedExternally', field: 'date', hide: true},
       {headerName: 'Published', field: 'publishedText', width: 90},
+      {headerName: 'Genre', field: 'genre', hide: true}
     ];
   }
   ngOnInit() {
@@ -63,7 +61,10 @@ export class GridPublicationsComponent implements OnInit {
   }
 
   onGridReady(params) {
-    this.listProjects();
+    if(this.listLevel == DataItemType.Project)
+      this.listProjects();
+    else if(this.listLevel == DataItemType.PublicationCollection)
+      this.listPublicationCollections(this.data.projectName);
   }
 
   onSelectionChanged(event: any) {
@@ -74,13 +75,13 @@ export class GridPublicationsComponent implements OnInit {
         // Open Publication Collection
         case DataItemType.PublicationCollection:
           this.data.publicationCollection = selectedRows[0].id;
-          const publicationCollection: DataItemDescriptor = {type: DataItemType.PublicationCollection, id: selectedRows[0].id};
+          const publicationCollection: DataItemDescriptor = {type: DataItemType.PublicationCollection, id: selectedRows[0].id,title: selectedRows[0].title};
           this.publicationCollectionOpened.emit(publicationCollection);
           break;
         // Open Publication
         case DataItemType.Publication:
           this.data.publication = selectedRows[0].id;
-          const publication: DataItemDescriptor = {type: DataItemType.Publication, id: selectedRows[0].id};
+          const publication: DataItemDescriptor = {type: DataItemType.Publication, id: selectedRows[0].id, title: selectedRows[0].title};
           this.publicationOpened.emit(publication);
           break;
       }
@@ -119,7 +120,7 @@ export class GridPublicationsComponent implements OnInit {
         this.listLevel = DataItemType.Project;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No'), genre: ''});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -135,7 +136,7 @@ export class GridPublicationsComponent implements OnInit {
         this.listLevel = DataItemType.PublicationCollection;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': data[i].date_published_externally, 'publishedText': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': data[i].date_published_externally, 'publishedText': (data[i].published ? 'Yes' : 'No'), genre: ''});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -153,7 +154,7 @@ export class GridPublicationsComponent implements OnInit {
         this.listLevel = DataItemType.Publication;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No')});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No'), genre: data[i].genre});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -178,7 +179,9 @@ export class GridPublicationsComponent implements OnInit {
         this.listProjects();
         break;
       case DataItemType.PublicationCollection:
-        this.listProjects();
+        this.listPublicationCollections(this.data.projectName);
+        // Uncomment following and comment line above to allow browsing projects
+        // this.listProjects();
         break;
       case DataItemType.Publication:
         this.listPublicationCollections(this.data.projectName);
@@ -197,7 +200,7 @@ export class GridPublicationsComponent implements OnInit {
     const selRows = this.gridOptions.api.getSelectedRows();
     // Check that (only) one row is selected
     if(selRows.length == 1) {
-      const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id, title: selRows[0].title, date: selRows[0].date, published: selRows[0].published};
+      const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id, title: selRows[0].title, date: selRows[0].date, published: selRows[0].published, genre: selRows[0].genre};
       this.showDataDialog(dataItem);
     }
     else
@@ -292,7 +295,7 @@ export class GridPublicationsComponent implements OnInit {
         break;
       
       case DataItemType.Publication:
-        this.data.editPublication(this.data.projectName, this.data.publicationCollection, dataItem).subscribe(
+        this.data.editPublication(this.data.projectName, dataItem).subscribe(
           data => {
             this.editRow(data);
           },
@@ -307,8 +310,6 @@ export class GridPublicationsComponent implements OnInit {
     const rowDataItem = this.createGridData(this.dataItemEdited);
     // Add the new project row to the grid
     this.gridOptions.api.updateRowData({add: [rowDataItem]});
-    // Print data to console
-    console.info(data);
   }
 
   editRow(data: any) {
@@ -316,12 +317,10 @@ export class GridPublicationsComponent implements OnInit {
     let rowNode = this.gridOptions.api.getRowNode(this.dataItemEdited.id.toString());
     // Set the new item row data
     rowNode.setData(this.createGridData(this.dataItemEdited));
-    // Print data to console
-    console.info(data);
   }
 
   createGridData(dataItem: DataItemDescriptor): any {
-    let newData = {'title': dataItem.title, 'id': dataItem.id, 'published': dataItem.published, 'date': dataItem.date, 'publishedText': (dataItem.published ? 'Yes' : 'No')};
+    let newData = {'title': dataItem.title, 'id': dataItem.id, 'published': dataItem.published, 'date': dataItem.date, 'publishedText': (dataItem.published ? 'Yes' : 'No'), 'genre': dataItem.genre};
     return newData;
   }
 

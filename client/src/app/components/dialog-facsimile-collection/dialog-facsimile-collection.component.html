@@ -1,3 +1,22 @@
-<p>
-  dialog-facsimile-collection works!
-</p>
+<div>
+  <p i18n>{{header}}</p>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Description" [(ngModel)]="dataItem.description" name="description" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Path" [(ngModel)]="dataItem.folderPath" name="path" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field><input matInput i18n-placeholder placeholder="Page count" [(ngModel)]="dataItem.numberOfPages" name="numberOfPages" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field><input matInput i18n-placeholder placeholder="Start page number" [(ngModel)]="dataItem.startPageNumber" name="startPageNumber" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <button mat-raised-button (click)="onOKClick()" i18n>OK</button>
+    <button mat-raised-button (click)="onCancelClick()" i18n>Cancel</button>
+  </div>
+</div>

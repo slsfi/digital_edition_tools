@@ -1,3 +1,13 @@
-<p>
-  dialog-facsimile works!
-</p>
+<div>
+  <p i18n>{{header}}</p>
+  <div class="row">
+    <div i18n>Title:<br/>{{dataItem.title}}</div>
+  </div>
+  <div class="row">
+    <mat-form-field><input matInput i18n-placeholder placeholder="Page" [(ngModel)]="dataItem.page" name="page" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <button mat-raised-button (click)="onOKClick()" i18n>OK</button>
+    <button mat-raised-button (click)="onCancelClick()" i18n>Cancel</button>
+  </div>
+</div>

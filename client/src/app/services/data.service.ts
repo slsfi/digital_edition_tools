@@ -13,6 +13,8 @@ export class DataService {
 
   private toolSource = new BehaviorSubject<string>('menu');
   currentToolObservable = this.toolSource.asObservable();
+  private headerSource = new BehaviorSubject<string>('');
+  public headerObservable = this.headerSource.asObservable();
   api_url = environment.api_url;
   api_url_path = environment.api_url_path;
   private projectSource = new BehaviorSubject<string>(environment.project_default);
@@ -32,12 +34,25 @@ export class DataService {
     }).join(''));
   }
 
-  constructor(private http: HttpClient) { }
-
-  changeTool(tool: string) {
-    this.toolSource.next(tool);
+  constructor(private http: HttpClient) { 
+    // Check if project name is in local storage (browser)
+    if(localStorage.getItem("projectName")) {
+      this.projectName = localStorage.getItem("projectName");
+      this.projectSource.next(this.projectName);
+    }
   }
 
+  // ---------------------------------------
+  // BehaviorSubject methods (to automatically update headers etc.)
+  // ---------------------------------------
+  changeTool(tool: string) {
+    this.toolSource.next(tool);
+    this.headerSource.next('');
+  }
+
+  changeHeader(header: string) {
+    this.headerSource.next(header);
+  }
 
   // ---------------------------------------
   // Projects
@@ -59,6 +74,8 @@ export class DataService {
     // Set projectName and observable
     this.projectName = projectName;
     this.projectSource.next(projectName);
+    // Set local storage variable for next session
+    localStorage.setItem("projectName", this.projectName);
     // Clear documents (git)
     this.dataDocuments = undefined;
     // Reset any other variables here that are project dependant
@@ -81,6 +98,14 @@ export class DataService {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication_collection/' + collection.id + '/edit/', {'name': collection.title, 'datePublishedExternally': collection.date});
   }
 
+  setPublicationCollectionTitle(projectName: string, collection: DataItemDescriptor) {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication_collection/' + collection.id + '/title/edit/', {'filename': collection.fileName});
+  }
+
+  setPublicationCollectionIntro(projectName: string, collection: DataItemDescriptor) {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication_collection/' + collection.id + '/intro/edit/', {'filename': collection.fileName});
+  }
+
 
   // ---------------------------------------
   // Publications
@@ -91,12 +116,29 @@ export class DataService {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication_collection/' + publicationCollection.toString() + '/publications/');
   }
 
-  addPublication(projectName: string, publicationCollection: number, publication: DataItemDescriptor): Observable<any> {
-    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/publication_collection/' + publicationCollection.toString() + '/publications/new/', {'name': publication.title});
+  getPublication(projectName: string, publication: number ): Observable<any>  {
+    // Send the request to the server
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication.toString() + '/');
   }
 
-  editPublication(projectName: string, publicationCollection: number, publication: DataItemDescriptor): Observable<any> {
-    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication.id.toString() + '/edit/', {'title': publication.title});
+  addPublication(projectName: string, publicationCollection: number, publication: DataItemDescriptor): Observable<any> {
+    let data = {};
+    if(publication.title !== undefined)
+      data['name'] = publication.title;
+    if(publication.genre !== undefined)
+      data['genre'] = publication.genre;
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/publication_collection/' + publicationCollection.toString() + '/publications/new/', data);
+  }
+
+  editPublication(projectName: string, publication: DataItemDescriptor): Observable<any> {
+    let data = {};
+    if(publication.title !== undefined)
+      data['title'] = publication.title;
+    if(publication.genre !== undefined)
+      data['genre'] = publication.genre;
+    if(publication.fileName !== undefined)
+      data['filename'] = publication.fileName;
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication.id.toString() + '/edit/', data);
   }
 
 
@@ -124,6 +166,14 @@ export class DataService {
   // Facsimiles
   // ---------------------------------------
 
+  addFacsimileCollection(projectName: string, collection: FacsimileCollectionDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/facsimile_collection/new/', collection);
+  }
+
+  editFacsimileCollection(projectName: string, collection: FacsimileCollectionDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/facsimile_collection/' + collection.id + '/edit/', collection);
+  }
+
   getFacsimileCollections(projectName: string): Observable<any> {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/facsimile_collection/list/');
   }
@@ -131,9 +181,6 @@ export class DataService {
   getFacsimiles(projectName: string, publication: number): Observable<any> {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication + '/facsimiles/');
   }
-
-
-  ///digitaledition/{project}/text/{c_id}/{p_id}/ms
 
 
   // ---------------------------------------
@@ -232,7 +279,24 @@ export interface DataItemDescriptor {
   date?: string;
   published?: boolean;
   genre?: string;
+  fileName?: string;
   data?: any;
+}
+
+export interface FacsimileCollectionDescriptor {
+  id?: number;
+  title?: string;
+  description?: string;
+  folderPath?: string;
+  numberOfPages?: number;
+  startPageNumber?: number;
+}
+
+export interface FacsimileDescriptor {
+  id?: number;
+  facsimileCollectionId?: number;
+  title?: string;
+  page?: number;
 }
 
 export interface PublicationCollectionDescriptor {

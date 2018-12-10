@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataItemType, DataItemDescriptor } from '../../services/data.service';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-dialog-data',
@@ -10,6 +11,8 @@ import { DataItemType, DataItemDescriptor } from '../../services/data.service';
 export class DialogDataComponent implements OnInit {
 
   header: string = '';
+  genres = environment.genres;
+  showGenre: boolean = false;
   showDate: boolean = false;
   dataItemEmpty: DataItemDescriptor = {} as any;
 
@@ -30,6 +33,7 @@ export class DialogDataComponent implements OnInit {
     }
     else if(this.dataItem.type == DataItemType.Publication) {
       this.header += 'Publication';
+      this.showGenre = true;
     }
   }
 
