@@ -143,6 +143,24 @@ export class DataService {
 
 
   // ---------------------------------------
+  // Versions
+  // ---------------------------------------
+
+  getVersions(projectName: string, publicationCollection: number, publication: number): Observable<any>  {
+    // Send the request to the server
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/text/' + publicationCollection.toString() + '/' + publication.toString() + '/var/');
+  }
+
+  addVersion(projectName: string, publication: number, version: DataItemDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/publication/' + publication.toString() + '/versions/new/', version);
+  }
+
+  editVersion(projectName: string, version: DataItemDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + version.id.toString() + '/edit/', version);
+  }
+
+
+  // ---------------------------------------
   // Manuscripts
   // ---------------------------------------
 
@@ -151,14 +169,12 @@ export class DataService {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/text/' + publicationCollection.toString() + '/' + publication.toString() + '/ms/');
   }
 
+  addManuscript(projectName: string, publication: number, manuscript: DataItemDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/publication/' + publication.toString() + '/manuscripts/new/', manuscript);
+  }
 
-  // ---------------------------------------
-  // Versions
-  // ---------------------------------------
-
-  getVersions(projectName: string, publicationCollection: number, publication: number): Observable<any>  {
-    // Send the request to the server
-    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/text/' + publicationCollection.toString() + '/' + publication.toString() + '/var/');
+  editManuscript(projectName: string, manuscript: DataItemDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/manuscripts/' + manuscript.id.toString() + '/edit/', manuscript);
   }
 
 
@@ -180,6 +196,14 @@ export class DataService {
 
   getFacsimiles(projectName: string, publication: number): Observable<any> {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication + '/facsimiles/');
+  }
+
+  addFacsimile(projectName: string, publication: number, facsimile: FacsimileDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/facsimile_collection/new/', facsimile);
+  }
+
+  editFacsimile(projectName: string, publication: number, facsimile: FacsimileDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/facsimile_collection/' + facsimile.id + '/edit/', facsimile);
   }
 
 
@@ -268,13 +292,14 @@ export enum DataItemType {
   Project,
   PublicationCollection,
   Publication,
-  FacsimileCollection,
-  Facsimile
+  Version,
+  Manuscript
 }
 
 export interface DataItemDescriptor {
   type: DataItemType;
   id?: number;
+  idLinked?: number;
   title?: string;
   date?: string;
   published?: boolean;
@@ -309,4 +334,26 @@ export interface PublicationDescriptor {
   id: number;
   title: string;
   published: boolean;
+}
+
+export interface SubjectDescriptor {
+  id?: number;
+  dateBorn?: string;
+  dateDeceased?: string;
+  description?: string;
+  firstName?: string;
+  fullName?: string;
+  lastName?: string;
+  legacyXMLId?: string;
+  preposition?: string;
+  type?: string;
+}
+
+export interface LocationDescriptor {
+  id?: number;
+  name?: string;
+  description?: string;
+  latitude?: string;
+  longitude?: string;
+  legacyXMLId?: string;
 }

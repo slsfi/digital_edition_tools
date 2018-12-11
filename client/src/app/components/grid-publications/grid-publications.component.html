@@ -1,5 +1,5 @@
 <p>
-  <button mat-raised-button (click)="onParentClick()" title="Parent" i18n><img src="assets/images/parent.png" /></button>
+  <button *ngIf="listLevelLocked==false" mat-raised-button (click)="onParentClick()" title="Parent" i18n><img src="assets/images/parent.png" /></button>
   <button *ngIf="editMode" mat-raised-button (click)="selectAllRows()" title="Select All" i18n><img src="assets/images/select_all.png" /></button>
   <button *ngIf="editMode" mat-raised-button (click)="deselectAllRows()" title="Deselect All" i18n><img src="assets/images/deselect_all.png" /></button>
   <button *ngIf="editMode" mat-raised-button (click)="onAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>

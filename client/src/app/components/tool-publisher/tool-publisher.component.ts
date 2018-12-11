@@ -15,7 +15,7 @@ export class ToolPublisherComponent implements OnInit {
 
   stringNA = '[N/A]';
   textType: TextType = TextType.None;
-  public Level: any = DataItemType;
+  public dataItemTypes: any = DataItemType;
   listLevel: DataItemType = DataItemType.Project;
   showPublicationGUI: boolean = false;
   showPublicationCollectionGUI: boolean = false;

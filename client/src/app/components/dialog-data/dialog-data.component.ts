@@ -24,16 +24,24 @@ export class DialogDataComponent implements OnInit {
     else
       this.header = 'New ';
     // Then check type of data
-    if(this.dataItem.type == DataItemType.Project) {
-      this.header += 'Project';
-    }
-    else if(this.dataItem.type == DataItemType.PublicationCollection) {
-      this.header += 'Collection';
-      this.showDate = true;
-    }
-    else if(this.dataItem.type == DataItemType.Publication) {
-      this.header += 'Publication';
-      this.showGenre = true;
+    switch(this.dataItem.type) {
+      case DataItemType.Project:
+        this.header += 'Project';
+        break;
+      case DataItemType.PublicationCollection:
+        this.header += 'Collection';
+        this.showDate = true;
+        break;
+      case DataItemType.Publication:
+        this.header += 'Publication';
+        this.showGenre = true;
+        break;
+      case DataItemType.Version:
+        this.header += 'Version';
+        break;
+      case DataItemType.Manuscript:
+        this.header += 'Manuscript';
+        break;
     }
   }
 

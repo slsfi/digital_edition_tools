@@ -13,15 +13,14 @@
   (gridReady)="onFCGridReady($event)">
 </ag-grid-angular>
 <p>
-  <button mat-raised-button (click)="onAddFClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
-  <button mat-raised-button (click)="onRemoveFClick()" *ngIf="showRemove" title="Remove" i18n><img src="assets/images/remove.png" /></button>
-  <button mat-raised-button (click)="onEditFClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
+  <button mat-raised-button (click)="onFAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
+  <button mat-raised-button (click)="onFRemoveClick()" *ngIf="showRemove" title="Remove" i18n><img src="assets/images/remove.png" /></button>
+  <button mat-raised-button (click)="onFEditClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
 </p>
 <ag-grid-angular 
   style="width: 100%; height:160px"
   class="ag-theme-balham"
   [rowData]="rowDataF"
   [columnDefs]="columnDefsF"
-  [gridOptions]="gridOptionsF"
-  (gridReady)="onFGridReady($event)">
+  [gridOptions]="gridOptionsF">
 </ag-grid-angular>

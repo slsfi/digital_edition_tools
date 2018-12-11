@@ -1,7 +1,7 @@
 <div>
   <p i18n>{{header}}</p>
   <div class="row">
-    <mat-form-field><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
   </div>
   <div class="row" *ngIf="showGenre">
     <mat-form-field>

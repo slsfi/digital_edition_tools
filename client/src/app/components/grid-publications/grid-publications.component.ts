@@ -12,8 +12,7 @@ import { GridOptions } from 'ag-grid';
 export class GridPublicationsComponent implements OnInit {
 
   showRemove: boolean = environment.publisher_configuration.show_remove;
-  listLevel: DataItemType = DataItemType.PublicationCollection;
-
+  
   gridOptions: GridOptions;
   columnDefs: any[];
   rowData: any[];
@@ -21,6 +20,8 @@ export class GridPublicationsComponent implements OnInit {
   dataItemEdited: DataItemDescriptor;
 
   @Input() editMode: boolean = false; 
+  @Input() listLevel: DataItemType = DataItemType.PublicationCollection;
+  @Input() listLevelLocked: boolean = false;
   @Output() listLevelChanged: EventEmitter<DataItemType> = new EventEmitter<DataItemType>();
   @Output() selectionChanged: EventEmitter<any> = new EventEmitter<any>();
   @Output() publicationCollectionOpened: EventEmitter<DataItemDescriptor> = new EventEmitter<DataItemDescriptor>();
