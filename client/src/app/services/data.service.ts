@@ -175,7 +175,7 @@ export class DataService {
   }
 
   editVersion(projectName: string, version: DataItemDescriptor): Observable<any> {
-    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + version.id.toString() + '/edit/', version);
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/versions/' + version.id.toString() + '/edit/', version);
   }
 
 
@@ -217,8 +217,8 @@ export class DataService {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication + '/facsimiles/');
   }
 
-  linkFacsimile(projectName: string, publication: number, facsimile: FacsimileDescriptor): Observable<any> {
-    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/facsimile_collection/' + publication + '/link/', facsimile);
+  linkFacsimile(projectName: string, facsimile: FacsimileDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/facsimile_collection/' + facsimile.facsimile_collection_id + '/link/', facsimile);
   }
 
   /*editFacsimile(projectName: string, publication: number, facsimile: FacsimileDescriptor): Observable<any> {
@@ -324,7 +324,7 @@ export interface DataItemDescriptor {
   published?: number;
   genre?: string;
   fileName?: string;
-  sortOrder?: string;
+  sort_order?: number;
   data?: any;
 }
 
@@ -364,12 +364,13 @@ export interface FacsimileCollectionDescriptor {
 export interface FacsimileDescriptor {
   id?: number;
   type?: DataItemType;
-  facsimileCollectionId?: number;
-  versionId?: number; 
-  manuscriptId?: number;
+  facsimile_collection_id?: number;
+  publication_id?: number;
+  version_id?: number; 
+  manuscript_id?: number;
   title?: string;
   page?: number;
-  sortOrder?: number;
+  sort_order?: number;
 }
 
 export interface PublicationCollectionDescriptor {

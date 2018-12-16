@@ -45,8 +45,7 @@ export class GridTextsComponent implements OnInit {
     this.columnDefs = [
       {headerName: 'Title', field: 'title', width: 230, rowDrag: true},
       {headerName: 'Id', field: 'id', hide: true},
-      {headerName: 'Filename', field: 'filename', width: 400},
-      {headerName: 'SortOrder', field: 'sortOrder', width: 50}
+      {headerName: 'Filename', field: 'filename', width: 400}
     ];
 
   }
@@ -62,12 +61,19 @@ export class GridTextsComponent implements OnInit {
     this.gridOptions.api.forEachNodeAfterFilterAndSort( (node) => {
       switch(this.dataType) {
         case DataItemType.Version:
-          console.info(node);
-          //this.data.editVersion(
+          let version: DataItemDescriptor = {type: DataItemType.Version, id: node.data.id, sort_order: node.childIndex+1};
+          this.data.editVersion(this.data.projectName, version).subscribe(
+            data => { },
+            err => { console.info(err); }
+          );
           break;
         
         case DataItemType.Manuscript:
-          console.info(node);
+          let manuscript: DataItemDescriptor = {type: DataItemType.Manuscript, id: node.data.id, sort_order: node.childIndex+1};
+          this.data.editManuscript(this.data.projectName, manuscript).subscribe(
+            data => { },
+            err => { console.info(err); }
+          );
           break;
       }
     });
@@ -156,6 +162,7 @@ export class GridTextsComponent implements OnInit {
   }
 
   addItem(dataItem: DataItemDescriptor) {
+    dataItem.sort_order = this.gridOptions.api.getDisplayedRowCount()+1;
     switch(dataItem.type) {
       case DataItemType.Version:
         this.data.addVersion(this.data.projectName, this.data.publication, dataItem).subscribe(

@@ -14,7 +14,7 @@
   </div>
   <div class="row margin-bottom" *ngIf="dataItem.type==facsimileType.Version">
     <mat-form-field>
-      <mat-select placeholder="Version" [(ngModel)]="dataItem.versionId">
+      <mat-select placeholder="Version" [(ngModel)]="dataItem.version_id">
         <mat-option *ngFor="let version of versions" [value]="version.id">
           {{version.name}}
         </mat-option>
@@ -23,7 +23,7 @@
   </div>
   <div class="row margin-bottom" *ngIf="dataItem.type==facsimileType.Manuscript">
     <mat-form-field>
-      <mat-select placeholder="Manuscript" [(ngModel)]="dataItem.manuscriptId">
+      <mat-select placeholder="Manuscript" [(ngModel)]="dataItem.manuscript_id">
         <mat-option *ngFor="let manuscript of manuscripts" [value]="manuscript.id">
           {{manuscript.name}}
         </mat-option>

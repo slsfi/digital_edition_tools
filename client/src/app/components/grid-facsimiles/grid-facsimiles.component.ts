@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { GridOptions, RowNode } from 'ag-grid';
-import { DataService, FacsimileCollectionDescriptor, FacsimileDescriptor } from "../../services/data.service";
+import { DataService, DataItemType, FacsimileCollectionDescriptor, FacsimileDescriptor } from "../../services/data.service";
 import { DialogFacsimileCollectionComponent } from '../dialog-facsimile-collection/dialog-facsimile-collection.component';
 import { DialogFacsimileComponent } from '../dialog-facsimile/dialog-facsimile.component';
 
@@ -277,7 +277,7 @@ export class GridFacsimilesComponent implements OnInit {
     // Check that (only) one row is selected
     if(selRows.length == 1) {
       // Open an facsimil dialog with empty data
-      const dataEmpty: FacsimileDescriptor = {title: selRows[0].title};
+      const dataEmpty: FacsimileDescriptor = {title: selRows[0].title, facsimile_collection_id: selRows[0].id, publication_id: this.data.publication};
       this.showFacsimileDialog(dataEmpty);
     }
   }
@@ -289,7 +289,7 @@ export class GridFacsimilesComponent implements OnInit {
     // Check that (only) one row is selected
     if(selRows.length == 1) {
       // Create a FacsimileDescriptor item from the row data
-      const dataItem: FacsimileDescriptor = {id: selRows[0].id, facsimileCollectionId: selRows[0].collectionId, title: selRows[0].title, page: selRows[0].page};
+      const dataItem: FacsimileDescriptor = {id: selRows[0].id, facsimile_collection_id: selRows[0].collectionId, title: selRows[0].title, page: selRows[0].page};
       // Show the dialog
       this.showFacsimileDialog(dataItem);
     }
@@ -324,8 +324,24 @@ export class GridFacsimilesComponent implements OnInit {
 
   // Add a facsimile (called when facsimile dialog is closed)
   addF(dataItem: FacsimileDescriptor) {
+    // Remove redundant ids
+    dataItem.type = parseInt(dataItem.type); // Convert type to id (for enum)
+    //dataItem.version_id = undefined;
+    //dataItem.manuscript_id = undefined;
+    switch(dataItem.type) {
+      case DataItemType.Publication:
+        dataItem.version_id = undefined;
+        dataItem.manuscript_id = undefined;
+        break;
+      case DataItemType.Manuscript:
+        dataItem.version_id = undefined;
+        break;
+      case DataItemType.Version:
+        dataItem.manuscript_id = undefined;
+        break;
+    }
     // Send request to the server
-    this.data.linkFacsimile(this.data.projectName, this.data.publication, dataItem).subscribe(
+    this.data.linkFacsimile(this.data.projectName, dataItem).subscribe(
       data => {
         // Set id of edited data from returned data
         this.facsimileEdited.id = data.row.id;
@@ -341,7 +357,7 @@ export class GridFacsimilesComponent implements OnInit {
   // Edit a facsimile (called when facsimile dialog is closed)
   editF(dataItem: FacsimileDescriptor) {
     // Send the request to the server
-    this.data.linkFacsimile(this.data.projectName, this.data.publication, dataItem).subscribe(
+    this.data.linkFacsimile(this.data.projectName, dataItem).subscribe(
       data => {
         // Get the row node with the id of the edited item
         const rowNode = this.gridOptionsF.api.getRowNode(this.facsimileEdited.id.toString());
@@ -354,7 +370,7 @@ export class GridFacsimilesComponent implements OnInit {
 
   // Create facsimile grid data row (when row added or edited)
   createFGridData(dataItem: FacsimileDescriptor) {
-    const newData: any = {'id': dataItem.id, 'title': dataItem.title, 'page': dataItem.page, 'collectionId': dataItem.facsimileCollectionId};
+    const newData: any = {'id': dataItem.id, 'title': dataItem.title, 'page': dataItem.page, 'collectionId': dataItem.facsimile_collection_id};
     return newData;
   }
 

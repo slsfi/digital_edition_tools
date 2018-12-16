@@ -42,7 +42,6 @@ export class DialogFacsimileComponent implements OnInit {
   }
 
   onOKClick() {
-    console.info(this.dataItem);
     // Return the edited project data
     this.dialogRef.close(this.dataItem);
   }
