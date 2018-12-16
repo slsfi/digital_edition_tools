@@ -5,12 +5,13 @@
   <button mat-raised-button (click)="onFCEditClick()" title="Edit"><img src="assets/images/edit.png" /></button>
 </p>
 <ag-grid-angular 
-  style="width: 100%; height:300px"
+  style="width: 100%; height:350px"
   class="ag-theme-balham"
   [rowData]="rowDataFC"
   [columnDefs]="columnDefsFC"
   [gridOptions]="gridOptionsFC"
-  (gridReady)="onFCGridReady($event)">
+  (gridReady)="onFCGridReady($event)"
+  (keydown)="onFCKeyDown($event)">
 </ag-grid-angular>
 <p>
   <button mat-raised-button (click)="onFAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>

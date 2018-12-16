@@ -1,15 +1,15 @@
-<div>
-  <!--<button mat-raised-button (click)="loadFileServer()" i18n>Load from Server</button>
-  <button mat-raised-button (click)="saveFileServer()" i18n>Save to Server</button>-->
-  <button mat-raised-button (click)="fileInput.click()">
-    <span i18n>Load from Computer</span>
-    <input #fileInput type="file" multiple accept="{{xmlFileExtensions}}" (change)="onFileInput($event)" style="display:none;" />
-  </button>
-  <button mat-raised-button (click)="onSaveFileLocal()" i18n>Save to Computer</button>
-  <!--<button mat-raised-button (click)="openDialog()">Launch dialog</button>-->
-</div>
 <div class="page-container">
-  <div class="container-medium height-max-medium">
+  <div class="container-medium-narrow height-max-medium">
+    <div>
+      <!--<button mat-raised-button (click)="loadFileServer()" i18n>Load from Server</button>
+      <button mat-raised-button (click)="saveFileServer()" i18n>Save to Server</button>-->
+      <button mat-raised-button (click)="fileInput.click()">
+        <span i18n>Load from Computer</span>
+        <input #fileInput type="file" multiple accept="{{xmlFileExtensions}}" (change)="onFileInput($event)" style="display:none;" />
+      </button>
+      <button mat-raised-button (click)="onSaveFileLocal()" i18n>Save to Computer</button>
+      <!--<button mat-raised-button (click)="openDialog()">Launch dialog</button>-->
+    </div>
     <app-grid-documents [rootFolder]="xml" (documentLoaded)="onDocumentLoaded($event)"></app-grid-documents>
   </div>
   <div class="container-auto">

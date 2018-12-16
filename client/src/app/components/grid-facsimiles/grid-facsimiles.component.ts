@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { GridOptions } from 'ag-grid';
+import { GridOptions, RowNode } from 'ag-grid';
 import { DataService, FacsimileCollectionDescriptor, FacsimileDescriptor } from "../../services/data.service";
 import { DialogFacsimileCollectionComponent } from '../dialog-facsimile-collection/dialog-facsimile-collection.component';
 import { DialogFacsimileComponent } from '../dialog-facsimile/dialog-facsimile.component';
@@ -14,6 +14,12 @@ export class GridFacsimilesComponent implements OnInit {
 
   gridOptionsFC: GridOptions;
   columnDefsFC: any[];
+  seachStringTimeoutFC: any = null;
+  searchStringFC: string = "";
+  rowFoundFC: boolean = false;
+  focusRowFC: number = -1;
+
+
   gridOptionsF: GridOptions;
   columnDefsF: any[];
   showRemove: boolean = false;
@@ -114,6 +120,50 @@ export class GridFacsimilesComponent implements OnInit {
     }
   }
 
+  // Key pressed when facsimile collections grid is in focus
+  onFCKeyDown(event: KeyboardEvent) {
+    // Check for printable character (excluding space)
+    if(event.key.length === 1 && event.key !== ' ') {
+      // Add letter/symbol to search string
+      this.searchStringFC += event.key.toLowerCase();
+      // Set datRowFound to false to enable search
+      this.rowFoundFC = false;
+      // Select first node with search criteria
+      this.gridOptionsFC.api.forEachNodeAfterFilterAndSort( (node) => {
+        // Skip if row with criteria has already been found
+        if(!this.rowFoundFC) {
+          if(node.data.title !== null && node.data.title.toLowerCase().startsWith(this.searchStringFC) ) {
+            // Select and show node
+            this.gotoNodeFC(node, true, false);
+          }
+        }
+      });
+      // Clear previous timeout
+      clearTimeout(this.seachStringTimeoutFC);
+      // Clear search string after a second
+      this.seachStringTimeoutFC = setTimeout(() => {
+        this.searchStringFC="";
+      }, 1000);
+    }
+  }
+
+  gotoNodeFC(node: RowNode, focus: boolean, select: boolean) {
+    // Ensure row is visible
+    this.gridOptionsFC.api.ensureIndexVisible(node.rowIndex, 'middle');
+    // Select row
+    if(select)
+      node.setSelected(true);
+    // For some reason, focus is lost if we set focused cell directly after ensureIndexVisible, we need to use a timeout instead
+    if(focus) {
+      this.focusRowFC = node.rowIndex;
+      setTimeout(() => {
+        this.gridOptionsFC.api.setFocusedCell(this.focusRowFC, this.columnDefsFC[0].field);
+      }, 50);
+    }
+    // "Hack" to quit searching after first row with criteria is found, there is no functionality to exit forEachNode prematurely.
+    this.rowFoundFC = true;
+  }
+
   // Get all facsimile collections from the server and fill the facsimile collection grid
   getFacsimileCollections(forceRefresh: boolean) {
     // Show the spinning wheel of the grid
@@ -127,6 +177,8 @@ export class GridFacsimilesComponent implements OnInit {
           this.data.dataFacsimileCollections = data;
           // Fill the grid
           this.populateFacsimileCollections(data);
+          // Sort the data
+          this.sortFacsimileCollectionGrid();
         },
         err => { console.info(err); }
       );
@@ -145,6 +197,14 @@ export class GridFacsimilesComponent implements OnInit {
     }
     // Set the new grid data
     this.rowDataFC = fcData;
+  }
+
+  // Sort the facsimile collections grid alphabetically
+  sortFacsimileCollectionGrid() {
+    var sort = [
+      {colId: 'title', sort: 'asc'}
+    ];
+    this.gridOptionsFC.api.setSortModel(sort);
   }
 
   // Show facsimile collection dialog (called when add / edit is clicked)
@@ -265,7 +325,7 @@ export class GridFacsimilesComponent implements OnInit {
   // Add a facsimile (called when facsimile dialog is closed)
   addF(dataItem: FacsimileDescriptor) {
     // Send request to the server
-    this.data.addFacsimile(this.data.projectName, this.data.publication, dataItem).subscribe(
+    this.data.linkFacsimile(this.data.projectName, this.data.publication, dataItem).subscribe(
       data => {
         // Set id of edited data from returned data
         this.facsimileEdited.id = data.row.id;
@@ -281,7 +341,7 @@ export class GridFacsimilesComponent implements OnInit {
   // Edit a facsimile (called when facsimile dialog is closed)
   editF(dataItem: FacsimileDescriptor) {
     // Send the request to the server
-    this.data.editFacsimile(this.data.projectName, this.data.publication, dataItem).subscribe(
+    this.data.linkFacsimile(this.data.projectName, this.data.publication, dataItem).subscribe(
       data => {
         // Get the row node with the id of the edited item
         const rowNode = this.gridOptionsF.api.getRowNode(this.facsimileEdited.id.toString());

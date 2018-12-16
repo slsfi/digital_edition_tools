@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataItemType, DataItemDescriptor } from '../../services/data.service';
 import { environment } from '../../../environments/environment.prod';
 
@@ -12,8 +12,10 @@ export class DialogDataComponent implements OnInit {
 
   header: string = '';
   genres = environment.genres;
+  publishedLevels = environment.published_levels;
   showGenre: boolean = false;
   showDate: boolean = false;
+  showPublished: boolean = true;
   dataItemEmpty: DataItemDescriptor = {} as any;
 
   constructor( public dialogRef: MatDialogRef<DialogDataComponent>, @Inject(MAT_DIALOG_DATA) public dataItem: DataItemDescriptor ) {

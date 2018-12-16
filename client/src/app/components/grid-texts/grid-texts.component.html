@@ -5,10 +5,11 @@
   <button mat-raised-button (click)="onLinkFileClick()" title="Link file" i18n><img src="assets/images/file.png" /></button>
 </p>
 <ag-grid-angular 
-  style="width: 100%; height:130px"
+  style="width: 100%; height:170px"
   class="ag-theme-balham"
   [rowData]="rowData"
   [columnDefs]="columnDefs"
   [gridOptions]="gridOptions"
-  (gridReady)="onGridReady($event)">
+  (gridReady)="onGridReady($event)"
+  (rowDragEnd)="onRowDragEnd($event)">
 </ag-grid-angular>

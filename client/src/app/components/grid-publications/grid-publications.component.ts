@@ -32,14 +32,16 @@ export class GridPublicationsComponent implements OnInit {
     // Set up the grid
     this.gridOptions = <GridOptions>{
       enableSorting: true,
-      rowSelection: 'multiple',
+      rowSelection: 'single',
       overlayLoadingTemplate: '<span><div class="spinner"></div></span>'
     };
 
     // Set a callback for row style (green text if published)
     this.gridOptions.getRowStyle = function(params) {
-      if (params.node.data.published >= 1)
+      if (params.node.data.published == 2) // Published externally
         return { color: '#0d6e00' };
+      else if (params.node.data.published == 1) // Published internally 
+        return { color: '#4e5bb9' };
     };
 
     // Set callback so rows can be found with the getRowNode function
@@ -121,7 +123,7 @@ export class GridPublicationsComponent implements OnInit {
         this.listLevel = DataItemType.Project;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No'), genre: ''});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': this.data.getPublishedLevelText(data[i].published), genre: ''});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -137,7 +139,7 @@ export class GridPublicationsComponent implements OnInit {
         this.listLevel = DataItemType.PublicationCollection;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': data[i].date_published_externally, 'publishedText': (data[i].published ? 'Yes' : 'No'), genre: ''});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': data[i].date_published_externally, 'publishedText': this.data.getPublishedLevelText(data[i].published), genre: ''});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -155,7 +157,7 @@ export class GridPublicationsComponent implements OnInit {
         this.listLevel = DataItemType.Publication;
         var tmpTreeData = [];
         for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': (data[i].published ? 'Yes' : 'No'), genre: data[i].genre});
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': this.data.getPublishedLevelText(data[i].published), genre: data[i].genre});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -321,7 +323,7 @@ export class GridPublicationsComponent implements OnInit {
   }
 
   createGridData(dataItem: DataItemDescriptor): any {
-    let newData = {'title': dataItem.title, 'id': dataItem.id, 'published': dataItem.published, 'date': dataItem.date, 'publishedText': (dataItem.published ? 'Yes' : 'No'), 'genre': dataItem.genre};
+    let newData = {'title': dataItem.title, 'id': dataItem.id, 'published': dataItem.published, 'date': dataItem.date, 'publishedText': this.data.getPublishedLevelText(dataItem.published), 'genre': dataItem.genre};
     return newData;
   }
 

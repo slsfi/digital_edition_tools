@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatIconModule, MatDialogModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatRadioModule, MatIconModule, MatDialogModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material';
 //import { MatTreeModule } from '@angular/material/tree';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
@@ -42,6 +42,8 @@ import { GridFacsimilesComponent } from './components/grid-facsimiles/grid-facsi
 import { GridTextsComponent } from './components/grid-texts/grid-texts.component';
 import { DialogFacsimileCollectionComponent } from './components/dialog-facsimile-collection/dialog-facsimile-collection.component';
 import { DialogFacsimileComponent } from './components/dialog-facsimile/dialog-facsimile.component';
+import { DialogLocationComponent } from './components/dialog-location/dialog-location.component';
+import { DialogSubjectComponent } from './components/dialog-subject/dialog-subject.component';
 
 // Set locale
 registerLocaleData(localeFi, 'fi');
@@ -91,7 +93,9 @@ const appRoutes: Routes = [
     GridFacsimilesComponent,
     GridTextsComponent,
     DialogFacsimileCollectionComponent,
-    DialogFacsimileComponent
+    DialogFacsimileComponent,
+    DialogLocationComponent,
+    DialogSubjectComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -103,6 +107,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     MatCheckboxModule,
+    MatRadioModule,
     MatIconModule,
     MatButtonModule,
     MatTabsModule,
@@ -141,7 +146,9 @@ const appRoutes: Routes = [
     DialogGitComponent,
     DialogDataComponent,
     DialogFacsimileCollectionComponent,
-    DialogFacsimileComponent
+    DialogFacsimileComponent,
+    DialogLocationComponent,
+    DialogSubjectComponent
   ],
   bootstrap: [AppComponent]
 })

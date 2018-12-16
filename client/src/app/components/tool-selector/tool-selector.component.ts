@@ -25,19 +25,12 @@ export class ToolSelectorComponent implements OnInit {
   xmlFile: string;
 
   @ViewChildren('selectorTab') selectorTabs:QueryList<ToolSelectorTabComponent>;
-  // For testing viewchildren only
-  // testString: string = "Oh yes indeed!";
 
   constructor(private data: DataService) { }
 
   ngOnInit() {
     // Change active tool
     this.data.changeTool('Selector');
-
-    let xml_string: string = '<tei><note>Kommentar</note><p>This <placeName>Helsinki</placeName> <del>unpure</del><placeName>Larsmo</placeName><add>pure</add> <placeName>Umeå</placeName>gold<rs>Vasa</rs></p></tei>';
-
-    // this.readXmlString(xml_string);
-
   }
 
   ngAfterViewInit() {
@@ -87,11 +80,6 @@ export class ToolSelectorComponent implements OnInit {
       alert(n.textContent);
     }*/
 
-    // Hide spinner
-    //this.showSpinner = false;
-
-    //alert(this.xmlDoc.documentElement.innerHTML);
-
   }
 
   onDocumentLoaded(doc: DocumentDescriptor) {
@@ -103,6 +91,7 @@ export class ToolSelectorComponent implements OnInit {
   loadDocumentFromServer(doc: DocumentDescriptor) {
     this.selectorTabs.forEach((child) => {
       child.showLoadingOverlay();
+      child.fileName = doc.path + '/' + doc.name;
     });
     this.data.getDocument(doc, false).subscribe(
       data => {

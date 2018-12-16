@@ -1,0 +1,28 @@
+<div>
+  <p i18n>{{header}}</p>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Name" [(ngModel)]="dataItem.name" name="name" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Description" [(ngModel)]="dataItem.description" name="description" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Country" [(ngModel)]="dataItem.country" name="country" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Region" [(ngModel)]="dataItem.regoin" name="region" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="City" [(ngModel)]="dataItem.city" name="city" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Longitude" [(ngModel)]="dataItem.longitude" name="longitude" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Latitude" [(ngModel)]="dataItem.latitude" name="latitude" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <button mat-raised-button (click)="onOKClick()" i18n>OK</button>
+    <button mat-raised-button (click)="onCancelClick()" i18n>Cancel</button>
+  </div>
+</div>

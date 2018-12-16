@@ -1,12 +1,12 @@
 <p>
   <button *ngIf="listLevelLocked==false" mat-raised-button (click)="onParentClick()" title="Parent" i18n><img src="assets/images/parent.png" /></button>
-  <button *ngIf="editMode" mat-raised-button (click)="selectAllRows()" title="Select All" i18n><img src="assets/images/select_all.png" /></button>
-  <button *ngIf="editMode" mat-raised-button (click)="deselectAllRows()" title="Deselect All" i18n><img src="assets/images/deselect_all.png" /></button>
+  <!--<button *ngIf="editMode" mat-raised-button (click)="selectAllRows()" title="Select All" i18n><img src="assets/images/select_all.png" /></button>
+  <button *ngIf="editMode" mat-raised-button (click)="deselectAllRows()" title="Deselect All" i18n><img src="assets/images/deselect_all.png" /></button>-->
   <button *ngIf="editMode" mat-raised-button (click)="onAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
   <button *ngIf="editMode && showRemove" mat-raised-button (click)="onRemoveClick()" title="Remove" i18n><img src="assets/images/remove.png" /></button>
   <button *ngIf="editMode" mat-raised-button (click)="onEditClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
 </p>
-<ag-grid-angular style="width: 100%; height:538px;"
+<ag-grid-angular style="width: 100%; height:594px;"
                  class="ag-theme-balham"
                  [rowData]="rowData"
                  [columnDefs]="columnDefs"

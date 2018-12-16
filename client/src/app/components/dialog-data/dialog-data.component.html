@@ -17,6 +17,15 @@
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker></mat-form-field>
   </div>
+  <div class="row" *ngIf="showPublished">
+    <mat-form-field>
+      <mat-select placeholder="Published" [(ngModel)]="dataItem.published">
+        <mat-option *ngFor="let publishedLevel of publishedLevels" [value]="publishedLevel.key">
+          {{publishedLevel.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
   <div class="row">
     <button mat-raised-button (click)="onOKClick()" i18n>OK</button>
     <button mat-raised-button (click)="onCancelClick()" i18n>Cancel</button>

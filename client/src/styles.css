@@ -85,6 +85,27 @@ a {
   padding: 3px;
 }
 
+.text-box {
+  border: 1px solid rgb(235, 235, 235);
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: 11px;
+  white-space: normal;
+  overflow: auto;
+}
+
+.button-area {
+  height: 40px;
+}
+
+.info {
+  color: gray;
+}
+
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
 #header {
   position: absolute;
   top: 7px;
@@ -114,6 +135,10 @@ a {
 
 .mat-form-field-infix {
   width: 200px !important;
+}
+
+mat-radio-group.lines mat-radio-button {
+  display: block !important;
 }
 
 /* Grid overrides */

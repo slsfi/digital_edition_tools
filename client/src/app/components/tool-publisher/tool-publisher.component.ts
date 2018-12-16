@@ -59,9 +59,17 @@ export class ToolPublisherComponent implements OnInit {
   onPublicationCollectionOpened(publicationCollection: DataItemDescriptor) {
     // Change header
     this.data.changeHeader(publicationCollection.title);
-    // TODO: Get title and introduction texts
-    this.titleText = this.stringNA;
-    this.introductionText = this.stringNA;
+
+    // Get title and introduction texts
+    this.data.getPublicationCollection(this.data.projectName, publicationCollection).subscribe(
+      data => {
+        // TODO: Fix the reading of title and introduction
+        this.titleText = this.stringNA;
+        this.introductionText = this.stringNA;
+      },
+      err => { console.info(err); }
+    );
+    
   }
 
   onPublicationOpened(publication: DataItemDescriptor) {

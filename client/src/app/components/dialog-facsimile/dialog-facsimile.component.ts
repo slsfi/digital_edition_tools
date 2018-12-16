@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { FacsimileDescriptor } from '../../services/data.service';
+import { DataService, FacsimileDescriptor, DataItemType } from '../../services/data.service';
 
 @Component({
   selector: 'app-dialog-facsimile',
@@ -9,22 +9,40 @@ import { FacsimileDescriptor } from '../../services/data.service';
 })
 export class DialogFacsimileComponent implements OnInit {
 
+  facsimileType = DataItemType;
   header: string = '';
   dataItemEmpty: FacsimileDescriptor = {} as any;
+  versions: any;
+  manuscripts: any;
 
-  constructor( public dialogRef: MatDialogRef<DialogFacsimileComponent>, @Inject(MAT_DIALOG_DATA) public dataItem: FacsimileDescriptor ) {
+  constructor( private data: DataService, public dialogRef: MatDialogRef<DialogFacsimileComponent>, @Inject(MAT_DIALOG_DATA) public dataItem: FacsimileDescriptor ) {
     // Build the dialog header
     if(this.dataItem.id !== undefined)
       this.header = 'Edit ';
     else
       this.header = 'New ';
-    this.header += 'Facsimile';
+    this.header += 'Facsimile Link';
   }
 
   ngOnInit() {
+    // Get versions
+    this.data.getVersions(this.data.projectName, this.data.publicationCollection, this.data.publication).subscribe(
+      data => {
+        this.versions = data.variations;
+      },
+      err => { console.info(err); }
+    );
+    // Get manuscripts
+    this.data.getManuscripts(this.data.projectName, this.data.publicationCollection, this.data.publication).subscribe(
+      data => {
+        this.manuscripts = data.manuscripts;
+      },
+      err => { console.info(err); }
+    );
   }
 
   onOKClick() {
+    console.info(this.dataItem);
     // Return the edited project data
     this.dialogRef.close(this.dataItem);
   }

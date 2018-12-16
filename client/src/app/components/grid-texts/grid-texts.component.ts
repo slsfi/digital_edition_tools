@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { GridOptions, RowNode } from 'ag-grid';
 import { ChildEvent, ChildEventType, DataService, DataItemType, DataItemDescriptor } from '../../services/data.service';
 import { DialogDataComponent } from '../dialog-data/dialog-data.component';
+import { DialogGitComponent } from '../dialog-git/dialog-git.component';
 
 @Component({
   selector: 'app-grid-texts',
@@ -29,7 +30,9 @@ export class GridTextsComponent implements OnInit {
     // Set up the grid
     this.gridOptions = <GridOptions>{
       enableSorting: false,
+      enableColResize: true,
       rowSelection: 'single',
+      rowDragManaged: true,
       overlayLoadingTemplate: '<span><div class="spinner"></div></span>'
     };
 
@@ -40,9 +43,10 @@ export class GridTextsComponent implements OnInit {
 
     // Grid columns
     this.columnDefs = [
-      {headerName: 'Title', field: 'title', width: 230},
+      {headerName: 'Title', field: 'title', width: 230, rowDrag: true},
       {headerName: 'Id', field: 'id', hide: true},
-      {headerName: 'Filename', field: 'filename', width: 400}
+      {headerName: 'Filename', field: 'filename', width: 400},
+      {headerName: 'SortOrder', field: 'sortOrder', width: 50}
     ];
 
   }
@@ -52,6 +56,21 @@ export class GridTextsComponent implements OnInit {
 
   onGridReady(params) {
     // Do something when grid has initialized
+  }
+
+  onRowDragEnd(event: any) {
+    this.gridOptions.api.forEachNodeAfterFilterAndSort( (node) => {
+      switch(this.dataType) {
+        case DataItemType.Version:
+          console.info(node);
+          //this.data.editVersion(
+          break;
+        
+        case DataItemType.Manuscript:
+          console.info(node);
+          break;
+      }
+    });
   }
 
   showLoadingOverlay() {
@@ -70,8 +89,6 @@ export class GridTextsComponent implements OnInit {
     if(selRows.length == 1) {
       const dataItem: DataItemDescriptor = {type: this.dataType, id: selRows[0].id, title: selRows[0].title, fileName: selRows[0].filename};
       this.showDataDialog(dataItem);
-      //const doc: ChildEvent = {type: ChildEventType.Edit};
-      //this.editClick.emit(doc);
     }
     else
       alert('You need to select a row to edit!');
@@ -87,13 +104,33 @@ export class GridTextsComponent implements OnInit {
   }
 
   onLinkFileClick() {
-    const rowSelection = this.gridOptions.api.getSelectedRows();
-    if(rowSelection.length == 1) {
-      const doc: ChildEvent = {type: ChildEventType.LinkFile};
-      this.linkFileClick.emit(doc);
+    const selRows = this.gridOptions.api.getSelectedRows();
+    if(selRows.length == 1) {
+      //this.linkItemEditedId = selRows[0].id;
+      this.showGitDialog();
     }
     else
       alert('You need to select a row to link a file!');
+  }
+
+  showGitDialog() {
+    const dialogRef = this.dialog.open(DialogGitComponent, {
+      width: '700px',
+      data: {name: "", path: ""}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.name.length > 0) {
+        // Get selected rows of grid
+        let selRows = this.gridOptions.api.getSelectedRows();
+        // Create a data item and set the path to the selected file
+        const dataItem: DataItemDescriptor = {type: this.dataType, id: selRows[0].id, title: selRows[0].title, fileName: result.path + '/' + result.name};
+        // Keep track of edited item, this will be used if server request is successful
+        this.dataItemEdited = dataItem;
+        // Edit the item (send request to server)
+        this.editItem(dataItem);
+      }
+    });
   }
 
   showDataDialog(dataItem: DataItemDescriptor) {

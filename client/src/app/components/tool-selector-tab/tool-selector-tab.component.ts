@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {GridOptions, RowNode} from "ag-grid";
-import { DataService } from '../../services/data.service';
+import { MatDialog } from '@angular/material';
+import { GridOptions, RowNode } from "ag-grid";
+import { DataService, SubjectDescriptor, LocationDescriptor } from '../../services/data.service';
+import { DialogSubjectComponent } from '../dialog-subject/dialog-subject.component';
+import { DialogLocationComponent } from '../dialog-location/dialog-location.component';
 
 @Component({
   selector: 'app-tool-selector-tab',
@@ -11,6 +14,8 @@ export class ToolSelectorTabComponent implements OnInit {
 
   @Input() header: string;
   @Input() configuration: SelectorTabConfiguration;
+
+  public fileName: string = "No file opened";
 
   // Grid for occurences
   occGridOptions: GridOptions;
@@ -30,7 +35,10 @@ export class ToolSelectorTabComponent implements OnInit {
   // XML Document Nodes
   xmlNodes: Element[] = [];
 
-  constructor(private data: DataService) {
+  textParagraph: string;
+  textDescription: string;
+
+  constructor(private data: DataService, public dialog: MatDialog) {
     // Set up the grids 
     this.occGridOptions = <GridOptions>{
       enableColResize: true,
@@ -192,6 +200,29 @@ export class ToolSelectorTabComponent implements OnInit {
     this.datGridOptions.api.setSortModel(sort);
   }
 
+  datOnRefreshClick() {
+    this.refreshData(true);
+  }
+
+  datOnAddClick() {
+    switch(this.configuration.type) 
+    {
+      case 'subjects':
+        const subjectEmpty: SubjectDescriptor = {};
+        this.showDataDialog(subjectEmpty);
+        break;
+
+      case 'locations':
+        const locationEmpty: LocationDescriptor = {};
+        this.showDataDialog(locationEmpty);
+        break;
+    }
+
+  }
+
+  datOnEditClick() {
+  }
+
   datOnKeyDown(event: KeyboardEvent) {
     // Check for printable character (excluding space)
     if(event.key.length === 1 && event.key !== ' ') {
@@ -221,6 +252,33 @@ export class ToolSelectorTabComponent implements OnInit {
     }
   }
 
+  showDataDialog(dataItem: any) {
+    let dialogType = DialogSubjectComponent;
+    if(this.configuration.type == 'locations')
+      dialogType = DialogLocationComponent;
+    // Show the dialog
+    const dialogRef = this.dialog.open(dialogType, {
+      width: '700px',
+      data: dataItem
+    });
+    // Subscribe to dialog closed event
+    dialogRef.afterClosed().subscribe(result => {
+      // If title is undefined, then user cancelled the dialog
+      /*if(result.title !== undefined) { 
+        // Keep track of edited item, this will be used if server request is successful
+        this.dataItemEdited = result;
+        // id is defined, means that an item has been edited
+        if(result.id !== undefined)
+          this.editItem(result);
+        // Id is not defined, add item
+        else
+          this.addItem(result);
+      }*/
+    });
+  }
+
+
+
   datSetId() {
     // Check if a row is selected in the occurences grid
     if(this.occGridOptions.api.getSelectedRows().length > 0) {
@@ -242,7 +300,10 @@ export class ToolSelectorTabComponent implements OnInit {
       this.occGridOptions.api.redrawRows();
       // Select next occurence
       let rowNode = this.occGridOptions.api.getSelectedNodes()[0];
-      this.occGridOptions.api.selectIndex(rowNode.childIndex+1, false, false);
+      if(rowNode.childIndex < this.occGridOptions.api.getDisplayedRowCount()-1) {
+        this.occGridOptions.api.selectIndex(rowNode.childIndex+1, false, false);
+        this.occGridOptions.api.ensureIndexVisible(rowNode.childIndex+1, 'middle');
+      }
     }
   }
 
@@ -251,6 +312,9 @@ export class ToolSelectorTabComponent implements OnInit {
     if(node.data.id.length > 0) {
       // Set id to search for in data grid
       this.datSearchId = node.data.id;
+      // Update text box to show paragraph
+      const _rowIndex = node.rowIndex;
+      this.textParagraph = this.xmlNodes[_rowIndex].parentElement.textContent;
       // Enable searching
       this.datRowFound = false;
       // Select node with id in data grid
@@ -269,6 +333,12 @@ export class ToolSelectorTabComponent implements OnInit {
       this.datGridOptions.api.deselectAll();
   }
 
+  // Show info for data row
+  datOnCellClicked(event: any) {
+    this.textDescription = event.data.description;
+  }
+
+  // Go to a node in the data grid (select and set to be in view)
   datGotoNode(node: RowNode, focus: boolean, select: boolean) {
     // Ensure row is visible
     this.datGridOptions.api.ensureIndexVisible(node.rowIndex, 'middle');

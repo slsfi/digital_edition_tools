@@ -1,7 +1,34 @@
 <div>
   <p i18n>{{header}}</p>
-  <div class="row">
+  <div class="row margin-bottom">
     <div i18n>Title: {{dataItem.title}}</div>
+  </div>
+  <div class="row margin-bottom">
+    <mat-form-field>
+      <mat-select placeholder="Type" [(ngModel)]="dataItem.type" required>
+        <mat-option value="{{facsimileType.Publication}}">Reading Text</mat-option>
+        <mat-option value="{{facsimileType.Version}}">Version</mat-option>
+        <mat-option value="{{facsimileType.Manuscript}}">Manuscript</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row margin-bottom" *ngIf="dataItem.type==facsimileType.Version">
+    <mat-form-field>
+      <mat-select placeholder="Version" [(ngModel)]="dataItem.versionId">
+        <mat-option *ngFor="let version of versions" [value]="version.id">
+          {{version.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row margin-bottom" *ngIf="dataItem.type==facsimileType.Manuscript">
+    <mat-form-field>
+      <mat-select placeholder="Manuscript" [(ngModel)]="dataItem.manuscriptId">
+        <mat-option *ngFor="let manuscript of manuscripts" [value]="manuscript.id">
+          {{manuscript.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>   
   </div>
   <div class="row">
     <mat-form-field><input matInput i18n-placeholder placeholder="Page" [(ngModel)]="dataItem.page" name="page" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>

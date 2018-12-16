@@ -42,5 +42,10 @@ export const environment = {
     { key: 'drama', name: 'Drama' },
     { key: 'non-fiction', name: 'Non-fiction' },
     { key: 'media', name: 'Media' }
+  ],
+  published_levels: [
+    { key: 0, name: 'No' },
+    { key: 1, name: 'Internally' },
+    { key: 2, name: 'Externally' }
   ]
 };
