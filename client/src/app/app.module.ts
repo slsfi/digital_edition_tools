@@ -26,7 +26,7 @@ import { AppConfigModule } from './modules/app-config.module';
 import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
 import { ToolPublisherComponent } from './components/tool-publisher/tool-publisher.component';
-import { ToolMenusComponent } from './components/tool-menus/tool-menus.component';
+import { ToolTOCComponent } from './components/tool-toc/tool-toc.component';
 import { ToolSelectorComponent } from './components/tool-selector/tool-selector.component';
 import { ToolTaggerComponent } from './components/tool-tagger/tool-tagger.component';
 import { ToolFacsimilesComponent } from './components/tool-facsimiles/tool-facsimiles.component';
@@ -53,7 +53,7 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'menu', component: MenuMainComponent, canActivate: [CanActivateViaAuthGuard] },
   { path: 'publisher', component: ToolPublisherComponent, canActivate: [CanActivateViaAuthGuard] },
-  { path: 'menus', component: ToolMenusComponent, canActivate: [CanActivateViaAuthGuard] },
+  { path: 'toc', component: ToolTOCComponent, canActivate: [CanActivateViaAuthGuard] },
   { path: 'selector', component: ToolSelectorComponent, canActivate: [CanActivateViaAuthGuard] },
   { path: 'tagger', component: ToolTaggerComponent, canActivate: [CanActivateViaAuthGuard] },
   { path: 'facsimiles', component: ToolFacsimilesComponent, canActivate: [CanActivateViaAuthGuard]  },
@@ -80,7 +80,7 @@ const appRoutes: Routes = [
     ToolPublisherComponent,
     MenuMainComponent,
     HeaderComponent,
-    ToolMenusComponent,
+    ToolTOCComponent,
     ToolSelectorComponent,
     ToolTaggerComponent,
     ToolFacsimilesComponent,
@@ -148,7 +148,8 @@ const appRoutes: Routes = [
     DialogFacsimileCollectionComponent,
     DialogFacsimileComponent,
     DialogLocationComponent,
-    DialogSubjectComponent
+    DialogSubjectComponent,
+    DialogPublicationCollectionComponent
   ],
   bootstrap: [AppComponent]
 })

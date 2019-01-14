@@ -1,7 +1,11 @@
 <div>
   <p i18n>{{header}}</p>
   <div class="row">
-    <mat-form-field><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="publicationCollection.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+    <app-grid-publications
+      [editMode]="false"
+      [listLevelLocked]="true"
+      (publicationCollectionOpened)="onPublicationCollectionOpened($event)">
+    </app-grid-publications>
   </div>
   <div class="row">
     <button mat-raised-button (click)="onOKClick()" i18n>OK</button>

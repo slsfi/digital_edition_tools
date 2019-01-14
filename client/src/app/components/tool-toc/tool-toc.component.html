@@ -1,22 +1,28 @@
 <div>
   <button mat-raised-button (click)="eventPopulate()" i18n>Fill table</button>
-  <button mat-raised-button (click)="eventNewItem()" i18n>New</button>
+  <button mat-raised-button (click)="loadFromServer()" i18n>Load</button>
+  <button mat-raised-button (click)="saveToServer()" i18n>Save</button>
   <button mat-raised-button (click)="fileInput.click()">
-    <span i18n>Load Menu (from json)</span>
+    <span i18n>Load from computer</span>
     <input #fileInput type="file" multiple accept=".json" (change)="onFileInput($event)" style="display:none;" />
   </button>
-  <button mat-raised-button (click)="saveToClient()" i18n>Save menu (json)</button>
+  <button mat-raised-button (click)="saveToClient()" i18n>Save to computer</button>
 </div>
 <div><p>{{test}}</p></div>
 <div class="page-container">
-  <div class="container-wide">
-    <app-grid-publications></app-grid-publications>
-  </div>
-  <div class="container">
+  <div class="container-widest toc">
     <div class="dd" id="menu"></div>
   </div>
-  <div class="container">
+  <div class="container-wide fixed">
     <form>
+
+      <div class="row margin-bottom">
+        <button mat-raised-button (click)="collapseAll()" i18n>Collapse all</button>
+        <button mat-raised-button (click)="expandAll()" i18n>Expand all</button>
+        <button mat-raised-button (click)="eventNewItem()" i18n>New item</button>
+      </div>
+
+      <div class="box-header margin-bottom" i18n>TOC Item</div>
 
       <div class="row">
         <!--<input [(ngModel)]="itemCurrent.type" name="type"/>-->
@@ -28,11 +34,11 @@
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput i18n-placeholder placeholder="Text" [(ngModel)]="itemCurrent.text" name="text" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+        <mat-form-field class="input-wide1"><input matInput i18n-placeholder placeholder="Text" [(ngModel)]="itemCurrent.text" name="text" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput i18n-placeholder placeholder="ID or URL" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+        <mat-form-field class="input-wide1"><input matInput i18n-placeholder placeholder="ID or URL" [(ngModel)]="itemCurrent.itemId" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
       </div>
 
     </form>

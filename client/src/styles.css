@@ -15,7 +15,7 @@ a {
   white-space: nowrap;
 }
 
-.container, .container-narrow, .container-medium-narrow, .container-medium, .container-wide {
+.container, .container-narrow, .container-medium-narrow, .container-medium, .container-wide, .container-widest {
   font-size: 13px;
   display: inline-block;
   vertical-align: top;
@@ -46,9 +46,17 @@ a {
   width: 500px;
 }
 
+.container-widest {
+  width: 600px;
+}
+
 .container-auto {
   display: inline-block;
   vertical-align: top;
+}
+
+.fixed {
+  position: fixed;
 }
 
 .box {
@@ -72,6 +80,10 @@ a {
 
 .input-wide {
   width: 300px;
+}
+
+.input-wide1 {
+  width: 500px;
 }
 
 .input-wide2 {
@@ -104,6 +116,11 @@ a {
 
 .margin-bottom {
   margin-bottom: 10px;
+}
+
+.toc {
+  height: 700px;
+  overflow-y: scroll;
 }
 
 #header {

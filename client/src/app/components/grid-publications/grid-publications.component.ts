@@ -51,7 +51,7 @@ export class GridPublicationsComponent implements OnInit {
 
     // Grid columns
     this.columnDefs = [
-      {headerName: 'Title', field: 'title', width: 200, checkboxSelection: true},
+      {headerName: 'Title', field: 'title', width: 200},
       {headerName: 'Id', field: 'id', width: 70},
       {headerName: 'PublishedHidden', field: 'published', hide: true},
       {headerName: 'DatePublishedExternally', field: 'date', hide: true},

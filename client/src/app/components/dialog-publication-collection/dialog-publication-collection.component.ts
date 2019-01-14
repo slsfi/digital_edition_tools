@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PublicationCollectionDescriptor } from '../../services/data.service';
 
 @Component({
@@ -9,15 +9,11 @@ import { PublicationCollectionDescriptor } from '../../services/data.service';
 })
 export class DialogPublicationCollectionComponent implements OnInit {
 
-  header: string = '';
+  //header: string = 'Select Publication Collection';
   publicationCollectionEmpty: PublicationCollectionDescriptor = {} as any;
+  publicationCollection: PublicationCollectionDescriptor;
 
-  constructor( public dialogRef: MatDialogRef<DialogPublicationCollectionComponent>, @Inject(MAT_DIALOG_DATA) public publicationCollection: PublicationCollectionDescriptor ) {
-    // Check input data if creating a project or editing one
-    if(this.publicationCollection.id !== undefined)
-      this.header = 'Edit Project';
-    else
-      this.header = 'New Project';
+  constructor( public dialogRef: MatDialogRef<DialogPublicationCollectionComponent>, @Inject(MAT_DIALOG_DATA) public header: string ) {
   }
 
   ngOnInit() {

@@ -1,40 +1,42 @@
 /*
-Name: tool-menus
-Description: Use this to create menus for table of contents etc.
+Name: tool-toc
+Description: Use this to create table of contents for publication collections
 Notes: This component uses nestable2, which is a jQuery plugin. 
 Although it's not recommended to use jQuery with Angular, there
 isn't any good drag and drop treeview system available for Angular.
 */
 
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { saveAs } from 'file-saver/FileSaver';
 import { DataService } from "../../services/data.service";
 import { MenuItem } from "../../classes/menu-item";
 import { environment } from '../../../environments/environment';
+import { DialogPublicationCollectionComponent } from '../dialog-publication-collection/dialog-publication-collection.component';
 
 // Declare $ as any to allow nestable jquery
 declare var $: any;
 
 @Component({
-  selector: 'app-tool-menus',
-  templateUrl: './tool-menus.component.html',
-  styleUrls: ['./tool-menus.component.css']
+  selector: 'app-tool-toc',
+  templateUrl: './tool-toc.component.html',
+  styleUrls: ['./tool-toc.component.css']
 })
-export class ToolMenusComponent implements OnInit {
+export class ToolTOCComponent implements OnInit {
 
   elementSelector: string = "#menu";
   itemCurrent: MenuItem;
 
   // Constructor, inject the instance of DataService
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, public dialog: MatDialog) { }
 
   ngOnInit() {
     // Change active tool
-    this.data.changeTool("Menus");
+    this.data.changeTool("TOC");
     // Create an instance of MenuItem
     this.itemCurrent = new MenuItem();
     // Create json data for nestable
-    let jsonMenu: string = '[{"id":1,"url":1,"type":"link","content":"Ljungblommor","text":"Ljungblommor"},{"id":2,"url":2,"type":"link","content":"En ros","text":"En ros"},{"id":3,"url":3,"type":"heading1","content":"Andra dikter","text":"Andra dikter","children":[{"id":4,"url":4,"type":"link","content":"Våren","text":"Våren"},{"id":5,"url":5,"type":"link","foo":"bar","content":"Hösten","text":"Hösten"}]}]';
+    let jsonMenu: string = '[{"id":1,"itemId":1,"type":"est","content":"Ljungblommor","text":"Ljungblommor"},{"id":2,"itemId":2,"type":"est","content":"En ros","text":"En ros"},{"id":3,"itemId":3,"type":"heading1","content":"Andra dikter","text":"Andra dikter","children":[{"id":4,"itemId":4,"type":"est","content":"Våren","text":"Våren"},{"id":5,"itemId":5,"type":"est","foo":"bar","content":"Hösten","text":"Hösten"}]}]';
     // Populate the menu
     this.populateMenu(jsonMenu);
   }
@@ -72,7 +74,7 @@ export class ToolMenusComponent implements OnInit {
     // Deactivate nestable before reactivation
     $(this.elementSelector).nestable("destroy");
     // Create json data for nestable
-    let jsonMenu: string = '[{"url":1,"type":"link","content":"Ljungblommor","text":"Ljungblommor"},{"url":2,"type":"link","content":"En ros","text":"En ros"},{"url":3,"type":"heading1","content":"Andra dikter","text":"Andra dikter","children":[{"url":4,"type":"link","content":"Våren","text":"Våren"},{"url":5,"type":"link","foo":"bar","content":"Hösten","text":"Hösten"}]}]';
+    let jsonMenu: string = '[{"itemId":1,"type":"est","content":"Ljungblommor","text":"Ljungblommor"},{"itemId":2,"type":"est","content":"En ros","text":"En ros"},{"itemId":3,"type":"heading1","content":"Andra dikter","text":"Andra dikter","children":[{"itemId":4,"type":"est","content":"Våren","text":"Våren"},{"itemId":5,"type":"est","foo":"bar","content":"Hösten","text":"Hösten"}]}]';
     // Populate menu and reactivate nestable
     this.populateMenu(jsonMenu);
   }
@@ -106,6 +108,14 @@ export class ToolMenusComponent implements OnInit {
     this.itemCurrent.Reset();
   }
 
+  collapseAll() {
+    $(this.elementSelector).nestable('collapseAll');
+  }
+
+  expandAll() {
+    $(this.elementSelector).nestable('expandAll');
+  }
+
   onKeyUp(event: KeyboardEvent): void { 
     if (event.which == 13) { // Enter pressed
       // Add / update item
@@ -114,6 +124,10 @@ export class ToolMenusComponent implements OnInit {
       else
         this.eventUpdateItem();
     } 
+  }
+
+  loadFromServer() {
+    this.showPublicationCollectionDialog("Select Collection");
   }
 
   onFileInput(event: any) {
@@ -195,6 +209,17 @@ export class ToolMenusComponent implements OnInit {
         }                
       }
     }
+  }
+
+  showPublicationCollectionDialog(header: string) {
+    const dialogRef = this.dialog.open(DialogPublicationCollectionComponent, {
+      width: '700px',
+      data: header
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      alert('Ok');
+    });
   }
 
 }

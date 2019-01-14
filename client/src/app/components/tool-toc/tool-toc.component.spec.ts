@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ToolMenusComponent } from './tool-menus.component';
+import { ToolTOCComponent } from './tool-toc.component';
 
-describe('ToolMenusComponent', () => {
-  let component: ToolMenusComponent;
-  let fixture: ComponentFixture<ToolMenusComponent>;
+describe('ToolTOCComponent', () => {
+  let component: ToolTOCComponent;
+  let fixture: ComponentFixture<ToolTOCComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ToolMenusComponent ]
+      declarations: [ ToolTOCComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ToolMenusComponent);
+    fixture = TestBed.createComponent(ToolTOCComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

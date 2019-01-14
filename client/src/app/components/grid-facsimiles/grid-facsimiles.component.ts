@@ -325,7 +325,7 @@ export class GridFacsimilesComponent implements OnInit {
   // Add a facsimile (called when facsimile dialog is closed)
   addF(dataItem: FacsimileDescriptor) {
     // Remove redundant ids
-    dataItem.type = parseInt(dataItem.type); // Convert type to id (for enum)
+    dataItem.type = parseInt(dataItem.type.toString()); // Convert type to id (for enum)
     //dataItem.version_id = undefined;
     //dataItem.manuscript_id = undefined;
     switch(dataItem.type) {
