@@ -1,7 +1,7 @@
 <!--<button (click)="buttonClick($event)" >Load</button><span>{{header}}</span>-->
 <div class="float">
   <div class="button-area info">{{fileName}}</div>
-  <ag-grid-angular style="width: 300px; height:520px;"
+  <ag-grid-angular
                   class="ag-theme-balham"
                   [rowData]="occRowData"
                   [columnDefs]="occColumnDefs"
@@ -17,7 +17,7 @@
     <button mat-raised-button (click)="datOnAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
     <button mat-raised-button (click)="datOnEditClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
   </div>
-  <ag-grid-angular style="width: 300px; height:520px;"
+  <ag-grid-angular
                   class="ag-theme-balham"
                   [rowData]="datRowData"
                   [columnDefs]="datColumnDefs"
@@ -30,6 +30,6 @@
 </div>
 <div class="float">
   <div class="button-area"></div>
-  <div class="text-box" style="width:200px;height:320px;">{{textParagraph}}</div>
-  <div class="text-box" style="width:200px;height:166px;">{{textDescription}}</div>
+  <div class="text-box">{{textParagraph}}</div>
+  <div class="text-box">{{textDescription}}</div>
 </div>

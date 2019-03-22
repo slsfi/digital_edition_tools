@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   version: '0.9.0',
   server_url: 'localhost:5000',
-  api_url: 'http://dockerhost-ext02.sls.fi:8000',
+  api_url: 'http://api.sls.fi:8000',
   api_url_path: 'digitaledition',
   project_default: 'topelius',
   image_logo: 'logo.png',

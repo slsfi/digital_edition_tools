@@ -1,6 +1,5 @@
 <div>
   <button mat-raised-button (click)="eventPopulate()" i18n>Fill table</button>
-  <button mat-raised-button (click)="eventNewItem()" i18n>New</button>
   <button mat-raised-button (click)="fileInput.click()">
     <span i18n>Load Menu (from json)</span>
     <input #fileInput type="file" multiple accept=".json" (change)="onFileInput($event)" style="display:none;" />
@@ -10,12 +9,12 @@
 <div><p>{{test}}</p></div>
 <div class="page-container">
   <div class="container-wide">
-    <app-grid-publications></app-grid-publications>
+    <app-grid-publications (publicationCollectionOpened)='setSelectedItem($event)'></app-grid-publications>
   </div>
-  <div class="container">
+  <div class="container menu">
     <div class="dd" id="menu"></div>
   </div>
-  <div class="container">
+  <div class="container add">
     <form>
 
       <div class="row">
@@ -32,14 +31,19 @@
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput i18n-placeholder placeholder="ID or URL" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+        <mat-form-field><input matInput i18n-placeholder placeholder="ID" [(ngModel)]="itemCurrent.itemId" name="itemId" type="text" (keyup)="onKeyUp($event)" value="{{selectedCollection.collectionId}}_"/></mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field><input matInput i18n-placeholder placeholder="URL" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
       </div>
 
     </form>
     <div>
+      <button mat-raised-button (click)="eventNewItem()" i18n>New item</button>
       <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventUpdateItem()" i18n>Update</button>
       <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventDeleteItem()" i18n>Delete</button>
-      <button mat-raised-button *ngIf=itemCurrent.newItem (click)="eventAddItem()" i18n>Add</button>
+      <button mat-raised-button *ngIf=itemCurrent.newItem (click)="eventAddItem()" i18n>Save</button>
     </div>
   </div>
 </div>
