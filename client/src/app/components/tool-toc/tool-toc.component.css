@@ -3,3 +3,18 @@
 .dd {
   cursor: all-scroll;
 }
+
+.page-container {
+  width: 100%;
+}
+.container.menu{
+  width: fit-content;
+}
+.container.add{
+  width: fit-content;
+  position: fixed;
+}
+.container-wide {
+  width: 18%;
+  display: inline-block;
+}

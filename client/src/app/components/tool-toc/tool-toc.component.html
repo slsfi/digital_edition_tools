@@ -10,10 +10,13 @@
 </div>
 <div><p>{{test}}</p></div>
 <div class="page-container">
-  <div class="container-widest toc">
+  <div class="container-wide">
+    <app-grid-publications (publicationCollectionOpened)='setSelectedItem($event)'></app-grid-publications>
+  </div>
+  <div class="container menu">
     <div class="dd" id="menu"></div>
   </div>
-  <div class="container-wide fixed">
+  <div class="container add">
     <form>
 
       <div class="row margin-bottom">
@@ -38,14 +41,19 @@
       </div>
 
       <div class="row">
-        <mat-form-field class="input-wide1"><input matInput i18n-placeholder placeholder="ID or URL" [(ngModel)]="itemCurrent.itemId" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+        <mat-form-field><input matInput i18n-placeholder placeholder="ID" [(ngModel)]="itemCurrent.itemId" name="itemId" type="text" (keyup)="onKeyUp($event)" value="{{selectedCollection.collectionId}}_"/></mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field><input matInput i18n-placeholder placeholder="URL" [(ngModel)]="itemCurrent.url" name="url" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
       </div>
 
     </form>
     <div>
+      <button mat-raised-button (click)="eventNewItem()" i18n>New item</button>
       <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventUpdateItem()" i18n>Update</button>
       <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventDeleteItem()" i18n>Delete</button>
-      <button mat-raised-button *ngIf=itemCurrent.newItem (click)="eventAddItem()" i18n>Add</button>
+      <button mat-raised-button *ngIf=itemCurrent.newItem (click)="eventAddItem()" i18n>Save</button>
     </div>
   </div>
 </div>

@@ -12,23 +12,23 @@ import { GridOptions } from 'ag-grid';
 export class GridPublicationsComponent implements OnInit {
 
   showRemove: boolean = environment.publisher_configuration.show_remove;
-  
+
   gridOptions: GridOptions;
   columnDefs: any[];
   rowData: any[];
 
   dataItemEdited: DataItemDescriptor;
 
-  @Input() editMode: boolean = false; 
+  @Input() editMode = false;
   @Input() listLevel: DataItemType = DataItemType.PublicationCollection;
-  @Input() listLevelLocked: boolean = false;
+  @Input() listLevelLocked = false;
   @Output() listLevelChanged: EventEmitter<DataItemType> = new EventEmitter<DataItemType>();
   @Output() selectionChanged: EventEmitter<any> = new EventEmitter<any>();
   @Output() publicationCollectionOpened: EventEmitter<DataItemDescriptor> = new EventEmitter<DataItemDescriptor>();
   @Output() publicationOpened: EventEmitter<DataItemDescriptor> = new EventEmitter<DataItemDescriptor>();
 
   constructor(private data: DataService, public dialog: MatDialog) {
-    
+
     // Set up the grid
     this.gridOptions = <GridOptions>{
       enableSorting: true,
@@ -38,10 +38,11 @@ export class GridPublicationsComponent implements OnInit {
 
     // Set a callback for row style (green text if published)
     this.gridOptions.getRowStyle = function(params) {
-      if (params.node.data.published == 2) // Published externally
+      if (params.node.data.published === 2) { // Published externally
         return { color: '#0d6e00' };
-      else if (params.node.data.published == 1) // Published internally 
+      } else if (params.node.data.published === 1) { // Published internally
         return { color: '#4e5bb9' };
+      }
     };
 
     // Set callback so rows can be found with the getRowNode function
@@ -60,25 +61,27 @@ export class GridPublicationsComponent implements OnInit {
     ];
   }
   ngOnInit() {
-    
+
   }
 
   onGridReady(params) {
-    if(this.listLevel == DataItemType.Project)
+    if (this.listLevel === DataItemType.Project) {
       this.listProjects();
-    else if(this.listLevel == DataItemType.PublicationCollection)
+    } else if (this.listLevel === DataItemType.PublicationCollection) {
       this.listPublicationCollections(this.data.projectName);
+         }
   }
 
   onSelectionChanged(event: any) {
     this.selectionChanged.emit(event);
-    var selectedRows = this.gridOptions.api.getSelectedRows();
-    if(selectedRows.length == 1) {
-      switch(this.listLevel) {
+    const selectedRows = this.gridOptions.api.getSelectedRows();
+    if (selectedRows.length === 1) {
+      switch (this.listLevel) {
         // Open Publication Collection
         case DataItemType.PublicationCollection:
           this.data.publicationCollection = selectedRows[0].id;
-          const publicationCollection: DataItemDescriptor = {type: DataItemType.PublicationCollection, id: selectedRows[0].id,title: selectedRows[0].title};
+          const publicationCollection: DataItemDescriptor = {type: DataItemType.PublicationCollection, 
+            id: selectedRows[0].id, title: selectedRows[0].title};
           this.publicationCollectionOpened.emit(publicationCollection);
           break;
         // Open Publication
@@ -96,7 +99,7 @@ export class GridPublicationsComponent implements OnInit {
   }
 
   onRowDoubleClick(event: any) {
-    switch(this.listLevel) {
+    switch (this.listLevel) {
       case DataItemType.Project:
         // Set active project
         this.data.projectName = event.data.title;
@@ -121,9 +124,10 @@ export class GridPublicationsComponent implements OnInit {
     this.data.getProjects().subscribe(
       data => {
         this.listLevel = DataItemType.Project;
-        var tmpTreeData = [];
-        for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': this.data.getPublishedLevelText(data[i].published), genre: ''});
+        const tmpTreeData = [];
+        for (let i = 0; i < data.length; i++) {
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id,
+          'published': data[i].published, 'date': '', 'publishedText': this.data.getPublishedLevelText(data[i].published), genre: ''});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
@@ -137,15 +141,17 @@ export class GridPublicationsComponent implements OnInit {
     this.data.getPublicationCollections(projectName).subscribe(
       data => {
         this.listLevel = DataItemType.PublicationCollection;
-        var tmpTreeData = [];
-        for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': data[i].date_published_externally, 'publishedText': this.data.getPublishedLevelText(data[i].published), genre: ''});
+        const tmpTreeData = [];
+        for (let i = 0; i < data.length; i++) {
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id,
+          'published': data[i].published, 'date': data[i].date_published_externally,
+          'publishedText': this.data.getPublishedLevelText(data[i].published), genre: ''});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
       },
       err => {
-        //this.showSpinner = false;
+        // this.showSpinner = false;
       }
     );
   }
@@ -155,15 +161,17 @@ export class GridPublicationsComponent implements OnInit {
     this.data.getPublications(projectName, id).subscribe(
       data => {
         this.listLevel = DataItemType.Publication;
-        var tmpTreeData = [];
-        for(var i=0; i<data.length; i++) {
-          tmpTreeData.push({'title': data[i].name, 'id': data[i].id, 'published': data[i].published, 'date': '', 'publishedText': this.data.getPublishedLevelText(data[i].published), genre: data[i].genre});
+        const tmpTreeData = [];
+        for (let i = 0; i < data.length; i++) {
+          tmpTreeData.push({'title': data[i].name, 'id': data[i].id,
+          'published': data[i].published, 'date': '',
+          'publishedText': this.data.getPublishedLevelText(data[i].published), genre: data[i].genre});
         }
         this.rowData = tmpTreeData;
         this.listLevelChanged.emit(this.listLevel);
       },
       err => {
-        //this.showSpinner = false;
+        // this.showSpinner = false;
       }
     );
   }
@@ -177,7 +185,7 @@ export class GridPublicationsComponent implements OnInit {
   }
 
   onParentClick() {
-    switch(this.listLevel) {
+    switch (this.listLevel) {
       case DataItemType.Project:
         this.listProjects();
         break;
@@ -202,12 +210,13 @@ export class GridPublicationsComponent implements OnInit {
     // Get selected rows
     const selRows = this.gridOptions.api.getSelectedRows();
     // Check that (only) one row is selected
-    if(selRows.length == 1) {
-      const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id, title: selRows[0].title, date: selRows[0].date, published: selRows[0].published, genre: selRows[0].genre};
+    if (selRows.length === 1) {
+      const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id,
+        title: selRows[0].title, date: selRows[0].date, published: selRows[0].published, genre: selRows[0].genre};
       this.showDataDialog(dataItem);
-    }
-    else
+    } else {
       alert('You need to select (only) one row to edit!');
+    }
   }
 
   onRemoveClick() {
@@ -223,21 +232,21 @@ export class GridPublicationsComponent implements OnInit {
     // Subscribe to dialog closed event
     dialogRef.afterClosed().subscribe(result => {
       // If title is undefined, then user cancelled the dialog
-      if(result.title !== undefined) { 
+      if (result.title !== undefined) {
         // Keep track of edited item, this will be used if server request is successful
         this.dataItemEdited = result;
         // id is defined, means that an item has been edited
-        if(result.id !== undefined)
+        if (result.id !== undefined) {
           this.editItem(result);
-        // Id is not defined, add item
-        else
+        } else {
           this.addItem(result);
+        }
       }
     });
   }
 
   addItem(dataItem: DataItemDescriptor) {
-    switch(dataItem.type) {
+    switch (dataItem.type) {
       case DataItemType.Project:
         this.data.addProject(dataItem).subscribe(
           data => {
@@ -278,7 +287,7 @@ export class GridPublicationsComponent implements OnInit {
 
   // Edit an item
   editItem(dataItem: DataItemDescriptor) {
-    switch(dataItem.type) {
+    switch (dataItem.type) {
       case DataItemType.Project:
         this.data.editProject(dataItem).subscribe(
           data => {
@@ -296,7 +305,7 @@ export class GridPublicationsComponent implements OnInit {
         err => { console.info(err); }
       );
         break;
-      
+
       case DataItemType.Publication:
         this.data.editPublication(this.data.projectName, dataItem).subscribe(
           data => {
@@ -317,13 +326,14 @@ export class GridPublicationsComponent implements OnInit {
 
   editRow(data: any) {
     // Get the row node with the id of the edited item
-    let rowNode = this.gridOptions.api.getRowNode(this.dataItemEdited.id.toString());
+    const rowNode = this.gridOptions.api.getRowNode(this.dataItemEdited.id.toString());
     // Set the new item row data
     rowNode.setData(this.createGridData(this.dataItemEdited));
   }
 
   createGridData(dataItem: DataItemDescriptor): any {
-    let newData = {'title': dataItem.title, 'id': dataItem.id, 'published': dataItem.published, 'date': dataItem.date, 'publishedText': this.data.getPublishedLevelText(dataItem.published), 'genre': dataItem.genre};
+    const newData = {'title': dataItem.title, 'id': dataItem.id, 'published': dataItem.published,
+     'date': dataItem.date, 'publishedText': this.data.getPublishedLevelText(dataItem.published), 'genre': dataItem.genre};
     return newData;
   }
 
@@ -332,8 +342,8 @@ export class GridPublicationsComponent implements OnInit {
       data => {
         console.info(data);
       },
-      err => { 
-        console.info(err); 
+      err => {
+        console.info(err);
       }
     );
   }

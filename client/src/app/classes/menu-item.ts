@@ -3,8 +3,8 @@ declare var $: any;
 
 export class MenuItem {
 
-  //types = ['Title', 'Subtitle', 'Heading 1', 'Heading 2', 'Heading 3', 'Link'];
-  //types_id = ['title', 'subtitle', 'heading1',  'heading2',  'heading3',  'link'];
+  // types = ['Title', 'Subtitle', 'Heading 1', 'Heading 2', 'Heading 3', 'Link'];
+  // types_id = ['title', 'subtitle', 'heading1',  'heading2',  'heading3',  'link'];
   types = [
     {'id': 'title', 'description': 'Title'},
     {'id': 'subtitle', 'description': 'Subtitle'},
@@ -19,6 +19,7 @@ export class MenuItem {
   type_default = 'link';
 
   id: string;
+  url: string;
   itemId: string;
   type: string;
   text: string;
@@ -31,10 +32,11 @@ export class MenuItem {
   }
 
   Reset() {
-    this.id = "";
-    this.itemId = "";
+    this.id = '';
+    this.url = '';
+    this.itemId = '';
     this.type = this.type_default;
-    this.text = "";
+    this.text = '';
     this.element = undefined;
     this.editItem = false;
     this.newItem = false;
@@ -45,33 +47,36 @@ export class MenuItem {
     this.element = e;
     // Get data from jQuery element
     this.id = $(e).attr('data-id');
-    this.itemId = $(e).attr('data-itemid');
+    this.url = $(e).attr('data-url');
+    this.itemId = $(e).attr('data-itemId');
     this.type = $(e).attr('data-type');
     this.text = $(e).attr('data-text');
   }
 
   SetElement(e: any): boolean {
-    if(this.id.length > 0 && this.text.length > 0) {
+    if (this.id.length > 0 && this.text.length > 0) {
       $(e).attr('data-id', this.id);
-      $(e).attr('data-itemid', this.itemId);
+      $(e).attr('data-url', this.url);
+      $(e).attr('data-itemId', this.itemId);
       $(e).attr('data-type', this.type);
       $(e).attr('data-text', this.text);
       $(e).children('.dd-handle').children('.dd-content').html(this.text);
       return true;
-    }
-    else
+    } else {
       return false;
+    }
   }
 
   AddElement(menuSelector: string): boolean {
-    if(this.text.length > 0) {
+    if (this.text.length > 0) {
       this.id = Date.now().toString(); // Create unique id for the element
-      $(menuSelector).nestable('add', {"id":this.id,"itemid":this.itemId, "type":this.type,"content":this.text,"text":this.text});
-      this.element = $(menuSelector).find('[data-id='+this.id+']'); // Get the created element
+      $(menuSelector).nestable('add', {'id': this.id, 'url': this.url, 'itemId': this.itemId,
+      'type': this.type, 'content': this.text, 'text': this.text});
+      this.element = $(menuSelector).find('[data-id=' + this.id + ']'); // Get the created element
       return true;
-    }
-    else
+    } else {
       return false;
+    }
   }
 
 }

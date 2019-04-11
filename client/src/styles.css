@@ -27,23 +27,23 @@ a {
 }
 
 .container {
-  width: 300px;
+
 }
 
 .container-narrow {
-  width: 200px;
+
 }
 
 .container-medium-narrow {
-  width: 350px;
+
 }
 
 .container-medium {
-  width: 400px;
+
 }
 
 .container-wide {
-  width: 500px;
+
 }
 
 .container-widest {
@@ -73,13 +73,10 @@ a {
 }
 
 .height-max-medium {
-  min-height: 200px;
-  max-height: 700px;
   overflow-y: auto;
 }
 
 .input-wide {
-  width: 300px;
 }
 
 .input-wide1 {
@@ -87,7 +84,6 @@ a {
 }
 
 .input-wide2 {
-  width: 650px;
 }
 
 .text-field {
