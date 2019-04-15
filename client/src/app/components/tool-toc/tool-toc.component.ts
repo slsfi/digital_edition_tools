@@ -27,7 +27,7 @@ export class ToolTOCComponent implements OnInit {
 
   elementSelector = '#menu';
   itemCurrent: MenuItem;
-  selectedCollection: Object;
+  selectedCollection: Collection;
 
   // Constructor, inject the instance of DataService
   constructor(private data: DataService, public dialog: MatDialog) { }
@@ -246,11 +246,17 @@ export class ToolTOCComponent implements OnInit {
     });
   }
 
-}
   setSelectedItem( item: any) {
     this.selectedCollection.collectionId = item.id;
     this.selectedCollection.text = item.title;
     this.selectedCollection.type = 'title';
   }
 
+}
+
+export interface Collection
+{
+  collectionId: string;
+  text: string;
+  type: string;
 }
