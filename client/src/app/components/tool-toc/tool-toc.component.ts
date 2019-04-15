@@ -36,7 +36,7 @@ export class ToolTOCComponent implements OnInit {
 
     this.selectedCollection = {type: '', text: '', collectionId: ''};
     // Change active tool
-    this.data.changeTool('Menus');
+    this.data.changeTool('Table of Contents');
     // Create an instance of MenuItem
     this.itemCurrent = new MenuItem();
     // Create json data for nestable
