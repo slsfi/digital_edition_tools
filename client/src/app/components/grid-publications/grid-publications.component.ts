@@ -99,23 +99,40 @@ export class GridPublicationsComponent implements OnInit {
   }
 
   onRowDoubleClick(event: any) {
-    switch (this.listLevel) {
-      case DataItemType.Project:
-        // Set active project
-        this.data.projectName = event.data.title;
-        // List all publication collections for the project
-        this.listPublicationCollections(event.data.title);
-        break;
-      case DataItemType.PublicationCollection:
-        // Set active publication Collection
-        this.data.publicationCollection = event.data.id;
-        this.listPublications(this.data.projectName, event.data.id);
-        break;
-      case DataItemType.Publication:
-        // Open publication
-        /*this.data.publication = event.data.id;
-        const publication: DataItemDescriptor = {type: DataItemType.Publication, id: event.data.id};
-        this.publicationOpened.emit(publication);*/
+    if(!this.listLevelLocked)
+    {
+      switch (this.listLevel) {
+        case DataItemType.Project:
+          // Set active project
+          this.data.projectName = event.data.title;
+          // List all publication collections for the project
+          this.listPublicationCollections(event.data.title);
+          break;
+        case DataItemType.PublicationCollection:
+          // Set active publication Collection
+          this.data.publicationCollection = event.data.id;
+          this.listPublications(this.data.projectName, event.data.id);
+          break;
+        case DataItemType.Publication:
+          // Open publication
+          /*this.data.publication = event.data.id;
+          const publication: DataItemDescriptor = {type: DataItemType.Publication, id: event.data.id};
+          this.publicationOpened.emit(publication);*/
+          break;
+      }
+    }
+    else
+    {
+      switch (this.listLevel) {
+        case DataItemType.Project:
+          // Set active project
+          this.data.projectName = event.data.title;
+          break;
+        case DataItemType.PublicationCollection:
+          // Set active publication Collection
+          this.data.publicationCollection = event.data.id;
+          break;
+      }
     }
   }
 

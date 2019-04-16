@@ -48,7 +48,7 @@ export class MenuItem {
     // Get data from jQuery element
     this.id = $(e).attr('data-id');
     this.url = $(e).attr('data-url');
-    this.itemId = $(e).attr('data-itemId');
+    this.itemId = $(e).attr('data-itemid');
     this.type = $(e).attr('data-type');
     this.text = $(e).attr('data-text');
   }
@@ -57,7 +57,7 @@ export class MenuItem {
     if (this.id.length > 0 && this.text.length > 0) {
       $(e).attr('data-id', this.id);
       $(e).attr('data-url', this.url);
-      $(e).attr('data-itemId', this.itemId);
+      $(e).attr('data-itemid', this.itemId);
       $(e).attr('data-type', this.type);
       $(e).attr('data-text', this.text);
       $(e).children('.dd-handle').children('.dd-content').html(this.text);
@@ -70,7 +70,7 @@ export class MenuItem {
   AddElement(menuSelector: string): boolean {
     if (this.text.length > 0) {
       this.id = Date.now().toString(); // Create unique id for the element
-      $(menuSelector).nestable('add', {'id': this.id, 'url': this.url, 'itemId': this.itemId,
+      $(menuSelector).nestable('add', {'id': this.id, 'url': this.url, 'itemid': this.itemId,
       'type': this.type, 'content': this.text, 'text': this.text});
       this.element = $(menuSelector).find('[data-id=' + this.id + ']'); // Get the created element
       return true;

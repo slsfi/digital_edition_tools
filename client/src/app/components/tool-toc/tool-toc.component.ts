@@ -14,6 +14,7 @@ import { MenuItem } from '../../classes/menu-item';
 import { environment } from '../../../environments/environment';
 import { DialogPublicationCollectionComponent } from '../dialog-publication-collection/dialog-publication-collection.component';
 import { stringify } from '@angular/core/src/render3/util';
+import { PublicationCollectionDescriptor } from '../../services/data.service';
 
 // Declare $ as any to allow nestable jquery
 declare var $: any;
@@ -28,6 +29,7 @@ export class ToolTOCComponent implements OnInit {
   elementSelector = '#menu';
   itemCurrent: MenuItem;
   selectedCollection: Collection;
+  publicationCollection: PublicationCollectionDescriptor;
 
   // Constructor, inject the instance of DataService
   constructor(private data: DataService, public dialog: MatDialog) { }
@@ -40,9 +42,9 @@ export class ToolTOCComponent implements OnInit {
     // Create an instance of MenuItem
     this.itemCurrent = new MenuItem();
     // Create json data for nestable
-    const jsonMenu = '[{"id":1,"url":1,"type":"link","content":"Ljungblommor","text":"Ljungblommor"},{"id":2,"url":2,"type":"link",\
-    "content":"En ros","text":"En ros"},{"id":3,"url":3,"type":"heading1","content":"Andra dikter","text":"Andra dikter",\
-    "children":[{"id":4,"url":4,"type":"link","content":"Våren","text":"Våren"},{"id":5,"url":5,"type":"link","foo":"bar"\
+    const jsonMenu = '[{"id":1,"url":1,"itemId":"","type":"link","content":"Ljungblommor","text":"Ljungblommor"},{"id":2,"url":2,"itemId":"","type":"link",\
+    "content":"En ros","text":"En ros"},{"id":3,"url":3,"itemId":"","type":"heading1","content":"Andra dikter","text":"Andra dikter",\
+    "children":[{"id":4,"url":4,"itemId":"","type":"link","content":"Våren","text":"Våren"},{"id":5,"url":5,"itemId":"","type":"link","foo":"bar"\
     ,"content":"Hösten","text":"Hösten"}]}]';
     // Populate the menu
     this.populateMenu(jsonMenu);
@@ -142,8 +144,12 @@ export class ToolTOCComponent implements OnInit {
     }
   }
 
+  createFromCollection() {
+    this.showPublicationCollectionDialogCreate("Select Collection to create ToC for");
+  }
+
   loadFromServer() {
-    this.showPublicationCollectionDialog("Select Collection");
+    this.showPublicationCollectionDialogLoad("Select Collection to load ToC from");
   }
 
   onFileInput(event: any) {
@@ -235,14 +241,25 @@ export class ToolTOCComponent implements OnInit {
     }
   }
 
-  showPublicationCollectionDialog(header: string) {
+  showPublicationCollectionDialogCreate(header: string) {
     const dialogRef = this.dialog.open(DialogPublicationCollectionComponent, {
       width: '700px',
       data: header
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      alert('Ok');
+      this.publicationCollection = result;
+    });
+  }
+
+  showPublicationCollectionDialogLoad(header: string) {
+    const dialogRef = this.dialog.open(DialogPublicationCollectionComponent, {
+      width: '700px',
+      data: header
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.publicationCollection = result;
     });
   }
 

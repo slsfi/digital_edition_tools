@@ -19,6 +19,10 @@ export class DialogPublicationCollectionComponent implements OnInit {
   ngOnInit() {
   }
 
+  onPublicationCollectionOpened(event: any) {
+    this.publicationCollection = event;
+  }
+
   onOKClick() {
     // Return the edited project data
     this.dialogRef.close(this.publicationCollection);
