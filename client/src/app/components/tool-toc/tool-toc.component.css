@@ -9,6 +9,7 @@
 }
 .container.menu{
   width: fit-content;
+  min-width: 400px;
 }
 .container.add{
   width: fit-content;

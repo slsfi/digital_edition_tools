@@ -1,15 +1,15 @@
 <div>
-  <button mat-raised-button (click)="eventPopulate()" i18n>Filltest</button>
-  <button mat-raised-button (click)="createFromCollection()" i18n>Create from collection...</button>
-  <button mat-raised-button (click)="loadFromServer()" i18n>Load...</button>
-  <button mat-raised-button (click)="saveToServer()" i18n>Save</button>
+  <button mat-raised-button (click)="onPopulate()" i18n>Filltest</button>
+  <button mat-raised-button (click)="onCreateFromCollection()" i18n>Create from collection...</button>
+  <button mat-raised-button (click)="onLoadFromServer()" i18n>Load...</button>
+  <button mat-raised-button (click)="onSaveToServer()" i18n>Save</button>
   <button mat-raised-button (click)="fileInput.click()">
     <span i18n>Load from computer</span>
     <input #fileInput type="file" multiple accept=".json" (change)="onFileInput($event)" style="display:none;" />
   </button>
   <button mat-raised-button (click)="saveToClient()" i18n>Save to computer</button>
 </div>
-<div><p>{{test}}</p></div>
+<div><p>Opened collection: {{publicationCollectionText}}</p></div>
 <div class="page-container">
   <div class="container-wide">
     <app-grid-publications (publicationCollectionOpened)='setSelectedItem($event)'></app-grid-publications>

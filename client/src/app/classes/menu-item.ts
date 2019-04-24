@@ -12,6 +12,7 @@ export class MenuItem {
     {'id': 'heading1', 'description': 'Heading 1'},
     {'id': 'heading2', 'description': 'Heading 2'},
     {'id': 'heading3', 'description': 'Heading 3'},
+    {'id': 'link', 'description': 'Link'},
     {'id': 'est', 'description': 'Reading text'},
     {'id': 'var', 'description': 'Version'},
     {'id': 'ms',  'description': 'Manuscript'},

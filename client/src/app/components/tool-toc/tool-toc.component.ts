@@ -30,6 +30,7 @@ export class ToolTOCComponent implements OnInit {
   itemCurrent: MenuItem;
   selectedCollection: Collection;
   publicationCollection: PublicationCollectionDescriptor;
+  publicationCollectionText = '';
 
   // Constructor, inject the instance of DataService
   constructor(private data: DataService, public dialog: MatDialog) { }
@@ -42,18 +43,23 @@ export class ToolTOCComponent implements OnInit {
     // Create an instance of MenuItem
     this.itemCurrent = new MenuItem();
     // Create json data for nestable
-    const jsonMenu = '[{"id":1,"url":1,"itemId":"","type":"link","content":"Ljungblommor","text":"Ljungblommor"},{"id":2,"url":2,"itemId":"","type":"link",\
-    "content":"En ros","text":"En ros"},{"id":3,"url":3,"itemId":"","type":"heading1","content":"Andra dikter","text":"Andra dikter",\
-    "children":[{"id":4,"url":4,"itemId":"","type":"link","content":"Våren","text":"Våren"},{"id":5,"url":5,"itemId":"","type":"link","foo":"bar"\
-    ,"content":"Hösten","text":"Hösten"}]}]';
+    //const jsonMenu = [{'id':1,'url':1,'itemId':'','type':'link','content':'Ljungblommor','text':'Ljungblommor'},{'id':2,'url':2,'itemId':'','type':'link',
+    //'content':'En ros','text':'En ros'},{'id':3,'url':3,'itemId':'','type':'heading1','content':'Andra dikter','text':'Andra dikter',
+    //'children':[{'id':4,'url':4,'itemId':'','type':'link','content':'Våren','text':'Våren'},{'id':5,'url':5,'itemId':'','type':'link','foo':'bar'
+    //,'content':'Hösten','text':'Hösten'}]}];
     // Populate the menu
-    this.populateMenu(jsonMenu);
+    this.populateMenu([]);
   }
 
-  populateMenu(json: string) {
+  createEmptyMenu(): any {
+    return 
+  }
+
+  populateMenu(json: any) {
 
     // Convert json string to an object so it can be parsed
-    let oJson = JSON.parse(json);
+    //let oJson = JSON.parse(json);
+    let oJson = json;
     if ( oJson.collectionId !== undefined ) {
       oJson = oJson.children;
     }
@@ -81,17 +87,17 @@ export class ToolTOCComponent implements OnInit {
     this.itemCurrent.newItem = false;
   }
 
-  eventPopulate() {
+  onPopulate() {
     // Reset current item variables
     this.itemCurrent.Reset();
     // Deactivate nestable before reactivation
     $(this.elementSelector).nestable('destroy');
     // Create json data for nestable
-    const jsonMenu = '[{"url":1,"type":"link","content":"Ljungblommor","text":"Ljungblommor"},\
-    {"url":2,"type":"link","content":"En ros","text":"En ros"},\
-    {"url":3,"type":"heading1","content":"Andra dikter","text":"Andra dikter",\
-    "children":[{"url":4,"type":"link","content":"Våren","text":"Våren"},\
-    {"url":5,"type":"link","foo":"bar","content":"Hösten","text":"Hösten"}]}]';
+    const jsonMenu = [{'url':1,'type':'est','content':'Ljungblommor','text':'Ljungblommor'},
+    {'url':2,'type':'est','content':'En ros','text':'En ros'},
+    {'url':3,'type':'heading1','content':'Andra dikter','text':'Andra dikter',
+    'children':[{'url':4,'type':'est','content':'Våren','text':'Våren'},
+    {'url':5,'type':'est','foo':'bar','content':'Hösten','text':'Hösten'}]}];
     // Populate menu and reactivate nestable
     this.populateMenu(jsonMenu);
   }
@@ -144,12 +150,12 @@ export class ToolTOCComponent implements OnInit {
     }
   }
 
-  createFromCollection() {
-    this.showPublicationCollectionDialogCreate("Select Collection to create ToC for");
+  onCreateFromCollection() {
+    this.showPublicationCollectionDialogCreate('Select Collection to create ToC for');
   }
 
-  loadFromServer() {
-    this.showPublicationCollectionDialogLoad("Select Collection to load ToC from");
+  onLoadFromServer() {
+    this.showPublicationCollectionDialogLoad('Select Collection to load ToC from');
   }
 
   onFileInput(event: any) {
@@ -163,7 +169,8 @@ export class ToolTOCComponent implements OnInit {
       // Deactivate nestable before reactivation
       $(this.elementSelector).nestable('destroy');
       // Create json data for nestable
-      const jsonMenu: string = reader.result.toString();
+      //const jsonMenu: string = reader.result.toString();
+      const jsonMenu: any = JSON.parse(reader.result.toString());
       // Populate menu and reactivate nestable
       this.populateMenu(jsonMenu);
     };
@@ -192,6 +199,10 @@ export class ToolTOCComponent implements OnInit {
     const blob = new Blob([stringToSave], { type: 'text/plain' });
     // Save the blob
     saveAs(blob, 'menu.json');
+  }
+
+  onSaveToServer(event: any) {
+
   }
 
   processJsonForLoad(obj: any, menuItemId: string) {
@@ -249,6 +260,9 @@ export class ToolTOCComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.publicationCollection = result;
+      this.publicationCollectionText = result.id.toString() + ': ' + result.title; 
+      console.info(this.publicationCollection);
+      this.createTOCFromCollection(this.publicationCollection);
     });
   }
 
@@ -260,7 +274,34 @@ export class ToolTOCComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.publicationCollection = result;
+      this.publicationCollectionText = result.id.toString() + ': ' + result.title; 
     });
+  }
+
+  createTOCFromCollection(collection: PublicationCollectionDescriptor) {
+    this.data.getPublications(this.data.projectName, collection.id).subscribe(
+      data => {
+        // Create menu items from all the publications
+        let jsonObj = [];
+        for (var i = 0; i < data.length; i++) {
+          jsonObj.push( {'text': data[i].name, 'type': 'est', 'url': '', 'itemid': data[i].publication_collection_id.toString()+'_'+data[i].id.toString(), } );
+        }
+        // Uncomment this and use tmpObj for populateMenu if you want to create a title parent item
+        //let tmpObj = {text: '', type: 'title', 'url': '', 'itemid': '', children: Array<object>()};
+        //tmpObj.text = this.publicationCollection.title;
+        //tmpObj.collectionId = this.publicationCollection.id.toString();
+        //tmpObj.type = '';
+        //tmpObj.children = jsonObj;
+
+        // Reset current item variables
+        this.itemCurrent.Reset();
+        // Deactivate nestable before reactivation
+        $(this.elementSelector).nestable('destroy');
+        // Populate the menu
+        this.populateMenu(jsonObj);
+      },
+      err => { }
+    );
   }
 
   setSelectedItem( item: any) {

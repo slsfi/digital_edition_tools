@@ -376,13 +376,13 @@ export interface FacsimileDescriptor {
 export interface PublicationCollectionDescriptor {
   id: number;
   title: string;
-  published: boolean;
+  published: number;
 }
 
 export interface PublicationDescriptor {
   id: number;
   title: string;
-  published: boolean;
+  published: number;
 }
 
 export interface SubjectDescriptor {
