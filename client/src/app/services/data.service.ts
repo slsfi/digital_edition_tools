@@ -238,6 +238,22 @@ export class DataService {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/subjects/');
   }
 
+  // ---------------------------------------
+  // Table of Contents
+  // ---------------------------------------
+
+  // Get a table of contents file from the server
+  getTOC(projectName: string, collection: PublicationCollectionDescriptor): Observable<any> {
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/toc/' + collection.id + '/');
+  }
+
+  // Save a table of contents file to the server
+  putTOC(projectName: string, collection: PublicationCollectionDescriptor, toc: string): Observable<any> {
+    // Encode the toc as base64
+    const tocBase64 = btoa(toc);
+    // Send the toc with a http request
+    return this.http.put<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/toc/' + collection.id + '/', { 'file' : tocBase64 });
+  }
 
   // ---------------------------------------
   // Documents (GIT)
