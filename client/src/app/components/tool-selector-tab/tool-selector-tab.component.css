@@ -7,3 +7,13 @@
 .bolded {
   color: green;
 }
+
+.text-box{
+  height: 270px;
+  width: 10rem;
+}
+
+.ag-theme-balham{
+  width: 30rem;
+  height: 50rem;
+}
