@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs/Rx';
+import { map, catchError } from "rxjs/operators";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -103,9 +104,35 @@ export class AuthService {
     return this.http.post<any>(environment.api_url + "/auth/test", null);
   }
 
+  refreshToken() : Observable<string> {
+    // Set the flag that renewal is in progress so multiple requests of this kind will not be made at once
+    this.accessTokenRenewalInProgress = true;
+    // Clear the current access token
+    this.user.tokenAccess = "";
+    // Send a refresh http request with the refresh token in the header
+    return this.http.post<any>(environment.api_url + "/auth/refresh", null, { headers: {'Authorization':'Bearer '+this.user.tokenRefresh} }).pipe(
+      map(data => {
+        this.user.tokenAccess = data.access_token;
+        // Update the behaviour subject for the access token
+        this.accessToken.next(this.user.tokenAccess);
+        this.accessTokenRenewalInProgress = false;
+        return data.access_token;
+      }),
+      catchError((err, caught) => {
+        // Something went wrong, go to login page if unauthorized
+        this.accessTokenRenewalInProgress = false;
+        // If unauthorized, go to login screen
+        if(err.status == 401) {
+          this.logout();
+        }
+        return null;
+      })
+    );
+  }
+
   // Renew the access token used by the JWT authentication.
   // If it fails, the user will be redirected to the login screen (if there was a response from the server).
-  renewAccessToken() {
+  /*renewAccessToken() {
     // Set the flag that renewal is in progress so multiple requests of this kind will not be made at once
     this.accessTokenRenewalInProgress = true;
     // Clear the current access token
@@ -129,12 +156,13 @@ export class AuthService {
         console.log(err); 
       }
     );
-  }
+  }*/
 
   // The method called by the timer set up to renew access tokens.
   // It will simply call the renewAccessToken method on every tick.
   refreshTokenTick(tick){
-    this.renewAccessToken();
+    if(!this.getAccessTokenRenewalInProgress())
+      this.refreshToken().subscribe();
   }
 
   // Used to stop (unsubscribe) the timer to renew access tokens

@@ -17,7 +17,7 @@
   <div class="container menu">
     <div class="dd" id="menu"></div>
   </div>
-  <div class="container add">
+  <div *ngIf="tocLoaded" class="container add">
     <form>
 
       <div class="row margin-bottom">
@@ -51,9 +51,9 @@
 
     </form>
     <div>
-      <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventUpdateItem()" i18n>Update</button>
-      <button mat-raised-button *ngIf=itemCurrent.editItem (click)="eventDeleteItem()" i18n>Delete</button>
-      <button mat-raised-button *ngIf=itemCurrent.newItem (click)="eventAddItem()" i18n>Save</button>
+      <button mat-raised-button *ngIf="itemCurrent.editItem" (click)="eventUpdateItem()" i18n>Update</button>
+      <button mat-raised-button *ngIf="itemCurrent.editItem" (click)="eventDeleteItem()" i18n>Delete</button>
+      <button mat-raised-button *ngIf="itemCurrent.newItem" (click)="eventAddItem()" i18n>Save</button>
     </div>
   </div>
 </div>

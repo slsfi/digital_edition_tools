@@ -33,6 +33,8 @@ export class ToolTOCComponent implements OnInit {
   publicationCollectionText = '';
 
   isDisabled: boolean = true;  
+  tocLoaded: boolean = false;
+
 
   // Constructor, inject the instance of DataService
   constructor(private data: DataService, public dialog: MatDialog) { }
@@ -188,6 +190,8 @@ export class ToolTOCComponent implements OnInit {
       const jsonMenu: any = JSON.parse(reader.result.toString());
       // Populate menu and reactivate nestable
       this.populateMenu(jsonMenu);
+      // Set loaded to true
+      this.tocLoaded = true;
     };
     // Read the file as text
     reader.readAsText(files.item(0));
@@ -293,6 +297,8 @@ export class ToolTOCComponent implements OnInit {
       this.publicationCollectionText = result.id.toString() + ': ' + result.title; 
       console.info(this.publicationCollection);
       this.createTOCFromCollection(this.publicationCollection);
+      // Set loaded to true
+      this.tocLoaded = true;
     });
   }
 
@@ -308,7 +314,15 @@ export class ToolTOCComponent implements OnInit {
       this.publicationCollectionText = result.id.toString() + ': ' + result.title; 
       this.data.getTOC(this.data.projectName, this.publicationCollection).subscribe(
         data => {
-          console.info(data);
+          // Deactivate nestable before reactivation
+          $(this.elementSelector).nestable('destroy');
+          // Create json data for nestable
+          //const jsonMenu: string = reader.result.toString();
+          const jsonMenu: any = JSON.parse(data);
+          // Populate menu and reactivate nestable
+          this.populateMenu(jsonMenu);
+          // Set loaded to true
+          this.tocLoaded = true;
         },
         err => { console.info(err); }
       );
