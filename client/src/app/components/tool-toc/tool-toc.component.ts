@@ -28,16 +28,19 @@ export class ToolTOCComponent implements OnInit {
 
   elementSelector = '#menu';
   itemCurrent: MenuItem;
-  selectedCollection: Collection;
+  //selectedCollection: Collection;
   publicationCollection: PublicationCollectionDescriptor;
   publicationCollectionText = '';
+
+  isDisabled: boolean = true;  
 
   // Constructor, inject the instance of DataService
   constructor(private data: DataService, public dialog: MatDialog) { }
 
   ngOnInit() {
 
-    this.selectedCollection = {type: '', text: '', collectionId: ''};
+    //this.selectedCollection = {type: '', text: '', collectionId: ''};
+    this.publicationCollection = {id: 0, title: '', published: 0};
     // Change active tool
     this.data.changeTool('Table of Contents');
     // Create an instance of MenuItem
@@ -80,16 +83,17 @@ export class ToolTOCComponent implements OnInit {
   }
 
   callbackItemMoved(l: any, e: any) {
-    // Update current menut item from jQuery element
+    // Update current menu item from jQuery element
     this.itemCurrent.GetElement(e);
     // Set edit flags
     this.itemCurrent.editItem = true;
     this.itemCurrent.newItem = false;
+    this.isDisabled = false;
   }
 
   onPopulate() {
-    // Reset current item variables
-    this.itemCurrent.Reset();
+    // Clear form
+    this.clearForm();
     // Deactivate nestable before reactivation
     $(this.elementSelector).nestable('destroy');
     // Create json data for nestable
@@ -102,7 +106,19 @@ export class ToolTOCComponent implements OnInit {
     this.populateMenu(jsonMenu);
   }
 
+  clearForm() {
+    // Reset item
+    this.eventNewItem();
+    // Disable form
+    this.isDisabled = true;
+    // Set new/edit item flags
+    this.itemCurrent.newItem = false;
+    this.itemCurrent.editItem = false;
+  }
+
   eventNewItem() {
+    // Enable form
+    this.isDisabled = false;
     // Reset current item variables
     this.itemCurrent.Reset();
     // Set new item flag
@@ -115,20 +131,20 @@ export class ToolTOCComponent implements OnInit {
     // Update edit flags
     if (added) {
       this.itemCurrent.editItem = false;
-      this.eventNewItem();
+      this.clearForm();
     }
   }
 
   eventUpdateItem() {
     // Update current item
     this.itemCurrent.SetElement(this.itemCurrent.element);
+    this.clearForm();
   }
 
   eventDeleteItem() {
     // Delete current item
     $(this.elementSelector).nestable('remove', this.itemCurrent.id);
-    // Reset current item variables
-    this.itemCurrent.Reset();
+    this.clearForm();
   }
 
   collapseAll() {
@@ -164,8 +180,7 @@ export class ToolTOCComponent implements OnInit {
     // Create a file reader and create a callback for the file read
     const reader = new FileReader();
     reader.onload = () => {
-      // Reset current item variables
-      this.itemCurrent.Reset();
+      this.clearForm();
       // Deactivate nestable before reactivation
       $(this.elementSelector).nestable('destroy');
       // Create json data for nestable
@@ -180,29 +195,43 @@ export class ToolTOCComponent implements OnInit {
     event.srcElement.value = null;
   }
 
-  saveToClient() {
+  tocToString(): string {
     // Get menu as a json object
     const jsonObj = $(this.elementSelector).nestable('serialize');
     // Remove the 'id' properties from the json object
     this.processJsonForSave(jsonObj);
 
     let tmpObj = {text: '', collectionId: '', type: '', children: Array<object>()};
-    tmpObj.text = this.selectedCollection.text;
-    tmpObj.collectionId = this.selectedCollection.collectionId;
-    tmpObj.type = this.selectedCollection.type;
+    tmpObj.text = this.publicationCollection.title;
+    tmpObj.collectionId = this.publicationCollection.id.toString()
+    tmpObj.type = 'title';
     tmpObj.children = jsonObj;
 
     // Stringify the json object
-    const stringToSave = JSON.stringify(tmpObj);
+    const tocString = JSON.stringify(tmpObj);
 
+    return tocString;
+  }
+
+  saveToClient() {
+    // Convert the toc to a string
+    const toc = this.tocToString();
     // Create a blob from the string
-    const blob = new Blob([stringToSave], { type: 'text/plain' });
+    const blob = new Blob([toc], { type: 'text/plain' });
     // Save the blob
     saveAs(blob, 'menu.json');
   }
 
   onSaveToServer(event: any) {
-
+    // Convert the toc to a string
+    const toc = this.tocToString();
+    // Send request to the server
+    this.data.putTOC(this.data.projectName, this.publicationCollection, toc).subscribe(
+      data => {
+        console.info(data);
+      },
+      err => { console.info(err); }
+    );
   }
 
   processJsonForLoad(obj: any, menuItemId: string) {
@@ -259,6 +288,7 @@ export class ToolTOCComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.clearForm();
       this.publicationCollection = result;
       this.publicationCollectionText = result.id.toString() + ': ' + result.title; 
       console.info(this.publicationCollection);
@@ -273,8 +303,15 @@ export class ToolTOCComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.clearForm();
       this.publicationCollection = result;
       this.publicationCollectionText = result.id.toString() + ': ' + result.title; 
+      this.data.getTOC(this.data.projectName, this.publicationCollection).subscribe(
+        data => {
+          console.info(data);
+        },
+        err => { console.info(err); }
+      );
     });
   }
 
@@ -304,11 +341,11 @@ export class ToolTOCComponent implements OnInit {
     );
   }
 
-  setSelectedItem( item: any) {
+  /*setSelectedItem( item: any) {
     this.selectedCollection.collectionId = item.id;
     this.selectedCollection.text = item.title;
     this.selectedCollection.type = 'title';
-  }
+  }*/
 
 }
 

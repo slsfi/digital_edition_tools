@@ -250,9 +250,9 @@ export class DataService {
   // Save a table of contents file to the server
   putTOC(projectName: string, collection: PublicationCollectionDescriptor, toc: string): Observable<any> {
     // Encode the toc as base64
-    const tocBase64 = btoa(toc);
+    //const tocBase64 = btoa(toc);
     // Send the toc with a http request
-    return this.http.put<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/toc/' + collection.id + '/', { 'file' : tocBase64 });
+    return this.http.put<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/toc/' + collection.id + '/', toc);
   }
 
   // ---------------------------------------
