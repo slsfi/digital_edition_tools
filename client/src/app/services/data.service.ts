@@ -160,6 +160,17 @@ export class DataService {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication.id.toString() + '/edit/', data);
   }
 
+  // TODO: Get Comments (file path)
+
+  editComments(projectName: string, publication: DataItemDescriptor): Observable<any> {
+    let data = {};
+    if(publication.fileName !== undefined)
+      data['filename'] = publication.fileName;
+    if(publication.published !== undefined)
+      data['published'] = publication.published;
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication.id.toString() + 'comment/edit/', data);
+  }
+
 
   // ---------------------------------------
   // Versions
@@ -326,7 +337,8 @@ export enum DataItemType {
   PublicationCollection,
   Publication,
   Version,
-  Manuscript
+  Manuscript,
+  Comments
 }
 
 export interface DataItemDescriptor {

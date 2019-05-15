@@ -20,8 +20,9 @@ export class ToolPublisherComponent implements OnInit {
   showPublicationGUI: boolean = false;
   showPublicationCollectionGUI: boolean = false;
   readingText: string = this.stringNA;
-  titleText: string = '';
-  introductionText: string = '';
+  comments: string = this.stringNA;
+  titleText: string = this.stringNA;
+  introductionText: string = this.stringNA;
 
   rowDataManuscripts: any = [];
   rowDataVersions: any = [];
@@ -67,17 +68,19 @@ export class ToolPublisherComponent implements OnInit {
         this.titleText = this.stringNA;
         this.introductionText = this.stringNA;
       },
-      err => { console.info(err); }
+      err => { 
+        this.titleText = this.stringNA;
+        this.introductionText = this.stringNA;
+        console.info(err); 
+      }
     );
     
   }
 
   onPublicationOpened(publication: DataItemDescriptor) {
     this.data.changeHeader(publication.title);
-    // Show the publication GUI
-    //this.showPublicationGUI = true;
-    // TODO: Get reading text original
     this.readingText = this.stringNA;
+    this.comments = this.stringNA;
     this.data.getPublication(this.data.projectName, publication.id).subscribe(
       data => {
         if(data.original_filename != null)
@@ -85,6 +88,8 @@ export class ToolPublisherComponent implements OnInit {
       },
       err => { console.info(err); }
     );
+    // TODO: Get comment file path
+    // -------
     // Show the loading overlay of the text grids
     this.gridsTexts.forEach((child) => { child.showLoadingOverlay(); });
     // Get versions
@@ -128,6 +133,11 @@ export class ToolPublisherComponent implements OnInit {
     this.showGitDialog();
   }
 
+  onLoadCommentsClick() {
+    this.textType = TextType.Comments;
+    this.showGitDialog();
+  }
+
   onLoadVersionClick() {
     this.textType = TextType.Version;
     this.showGitDialog();
@@ -155,6 +165,9 @@ export class ToolPublisherComponent implements OnInit {
             break;
           case TextType.ReadingText:
             this.setReadingText(result.path + '/' + result.name);
+            break;
+          case TextType.Comments:
+            this.setComments(result.path + '/' + result.name);
             break;
           case TextType.Version:
             break;
@@ -189,12 +202,23 @@ export class ToolPublisherComponent implements OnInit {
 
   setReadingText(fileName: string) {
     this.readingText = fileName;
-    let publication: DataItemDescriptor = {type: DataItemType.Publication, id: this.data.publication, fileName: fileName};
+    const publication: DataItemDescriptor = {type: DataItemType.Publication, id: this.data.publication, fileName: fileName};
     this.data.editPublication(this.data.projectName, publication).subscribe(
       data => {
         console.info(data);
       },
       err => { this.readingText = this.stringNA; }
+    );
+  }
+
+  setComments(fileName: string) {
+    this.comments = fileName;
+    const publicationComments: DataItemDescriptor = {type: DataItemType.Comments, id: this.data.publication, fileName: fileName};
+    this.data.editComments(this.data.projectName, publicationComments).subscribe(
+      data => {
+        console.info(data);
+      },
+      err => { this.comments = this.stringNA; }
     );
   }
 
@@ -206,5 +230,6 @@ enum TextType {
   Introduction,
   ReadingText,
   Version,
-  Manuscript
+  Manuscript,
+  Comments
 }

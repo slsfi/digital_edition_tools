@@ -88,9 +88,14 @@ a {
 
 .text-field {
   margin-top: 5px;
-  background-color: rgb(247, 247, 247);
+  margin-left: 10px;
+  background-color: rgb(252, 252, 252);
   min-height: 20px;
   padding: 3px;
+}
+
+.inline {
+  display: inline-block;
 }
 
 .text-box {

@@ -8,13 +8,18 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap, switchMap, finalize, filter, take } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { AuthService } from "../services/auth.service";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
+  
+  isRefreshingToken: boolean = false;
+  tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  
   constructor(public authService: AuthService) {}
 
   getAuthHeader() : string {
@@ -37,9 +42,21 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> { 
-    request = this.addAuthHeader(request);
-
-    return <any>next.handle(request).pipe(catchError((err) => {
+    return <any>next.handle(this.addAuthHeader(request))
+      .pipe(
+        catchError(err => {
+          if (err instanceof HttpErrorResponse) {
+            switch ((<HttpErrorResponse>err).status) {
+              case 401:
+                return this.handle401Error(request, next);
+              //case 400:
+              //  return <any>this.authService.logout();
+            }
+          } else {
+            //return throwError(err);
+          }
+        }));
+    /*return <any>next.handle(request).pipe(catchError((err) => {
       const errorResponse = err as HttpErrorResponse;
       if (errorResponse.status === 401) {
         return this.authService.refreshToken().pipe(mergeMap(() => {
@@ -47,6 +64,43 @@ export class TokenInterceptor implements HttpInterceptor {
           return next.handle(request);
         }));
       }
-    }));
+    }));*/
+  }
+
+  private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+ 
+    if(!this.isRefreshingToken) {
+      this.isRefreshingToken = true;
+ 
+      // Reset here so that the following requests wait until the token
+      // comes back from the refreshToken call.
+      this.tokenSubject.next(null);
+ 
+      return this.authService.refreshToken()
+        .pipe(
+          switchMap((token: string) => {
+            if(token.length > 0) {
+              this.tokenSubject.next(token);
+              return next.handle(this.addAuthHeader(request));
+            }
+            return <any>this.authService.logout();
+          }),
+          catchError(err => {
+            return <any>this.authService.logout();
+          }),
+          finalize(() => {
+            this.isRefreshingToken = false;
+          })
+        );
+    } else {
+      this.isRefreshingToken = false;
+ 
+      return this.tokenSubject
+        .pipe(filter(token => token != null),
+          take(1),
+          switchMap(token => {
+          return next.handle(this.addAuthHeader(request));
+        }));
+    }
   }
 }

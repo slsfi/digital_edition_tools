@@ -12,21 +12,22 @@
   <div *ngIf="showPublicationCollectionGUI" class="container-medium-narrow">
     <div class="box-header" i18n>Title</div>
     <div class="box">
-      <p><button mat-raised-button (click)="onLoadTitleClick()" i18n><img src="assets/images/file.png" /></button></p>
-      <div class="text-field">{{titleText}}</div>
+      <button mat-raised-button (click)="onLoadTitleClick()" i18n><img src="assets/images/file.png" /></button><div class="text-field inline">{{titleText}}</div>
     </div>
     <div class="box-header" i18n>Introduction</div>
     <div class="box">
-      <p><button mat-raised-button (click)="onLoadIntroductionClick()" i18n><img src="assets/images/file.png" /></button></p>
-      <div class="text-field">{{introductionText}}</div>
+      <button mat-raised-button (click)="onLoadIntroductionClick()" i18n><img src="assets/images/file.png" /></button><div class="text-field inline">{{introductionText}}</div>
     </div>
   </div>
   <!-- Publications -->
   <div *ngIf="showPublicationGUI" class="container-medium-narrow">
     <div class="box-header" i18n>Reading text</div>
     <div class="box">
-      <p><button mat-raised-button (click)="onLoadReadingTextClick()" i18n><img src="assets/images/file.png" /></button></p>
-      <div class="text-field">{{readingText}}</div>
+      <button mat-raised-button (click)="onLoadReadingTextClick()" i18n><img src="assets/images/file.png" /></button><div class="text-field inline">{{readingText}}</div>
+    </div>
+    <div class="box-header" i18n>Comments</div>
+    <div class="box">
+      <button mat-raised-button (click)="onLoadCommentsClick()" i18n><img src="assets/images/file.png" /></button><div class="text-field inline">{{comments}}</div>
     </div>
     <div class="box-header" i18n>Versions</div>
     <div class="box">
