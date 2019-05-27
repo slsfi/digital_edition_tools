@@ -6,13 +6,14 @@ Although it's not recommended to use jQuery with Angular, there
 isn't any good drag and drop treeview system available for Angular.
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { saveAs } from 'file-saver/FileSaver';
-import { DataService } from '../../services/data.service';
+import { DataService, DataItemType } from '../../services/data.service';
 import { MenuItem } from '../../classes/menu-item';
 import { environment } from '../../../environments/environment';
 import { DialogPublicationCollectionComponent } from '../dialog-publication-collection/dialog-publication-collection.component';
+import { GridPublicationsComponent } from '../grid-publications/grid-publications.component';
 import { stringify } from '@angular/core/src/render3/util';
 import { PublicationCollectionDescriptor } from '../../services/data.service';
 
@@ -26,6 +27,7 @@ declare var $: any;
 })
 export class ToolTOCComponent implements OnInit {
 
+  dataItemType = DataItemType;
   elementSelector = '#menu';
   itemCurrent: MenuItem;
   //selectedCollection: Collection;
@@ -35,6 +37,7 @@ export class ToolTOCComponent implements OnInit {
   isDisabled: boolean = true;  
   tocLoaded: boolean = false;
 
+  @ViewChild(GridPublicationsComponent) private publicationsComponent: GridPublicationsComponent;
 
   // Constructor, inject the instance of DataService
   constructor(private data: DataService, public dialog: MatDialog) { }
@@ -106,6 +109,11 @@ export class ToolTOCComponent implements OnInit {
     {'url':5,'type':'est','foo':'bar','content':'Hösten','text':'Hösten'}]}];
     // Populate menu and reactivate nestable
     this.populateMenu(jsonMenu);
+  }
+
+  onPublicationOpened(event: any) {
+    if(!this.isDisabled)
+      this.itemCurrent.itemId = this.publicationCollection.id.toString() + "_" + event.id.toString();
   }
 
   clearForm() {
@@ -299,6 +307,10 @@ export class ToolTOCComponent implements OnInit {
       this.createTOCFromCollection(this.publicationCollection);
       // Set loaded to true
       this.tocLoaded = true;
+      // Set the current publicationCollection to the data instance
+      this.data.publicationCollection = this.publicationCollection.id;
+      // Update the publications for the selected collection
+      this.updatePublications();
     });
   }
 
@@ -316,15 +328,18 @@ export class ToolTOCComponent implements OnInit {
         data => {
           // Deactivate nestable before reactivation
           $(this.elementSelector).nestable('destroy');
-          // Create json data for nestable
-          //const jsonMenu: string = reader.result.toString();
-          const jsonMenu: any = JSON.parse(data);
-          // Populate menu and reactivate nestable
-          this.populateMenu(jsonMenu);
+          // Populate menu with the loaded data and reactivate nestable
+          this.populateMenu(data);
           // Set loaded to true
           this.tocLoaded = true;
+          // Set the current publicationCollection to the data instance
+          this.data.publicationCollection = this.publicationCollection.id;
+          // Update the publications for the selected collection
+          this.updatePublications();
         },
-        err => { console.info(err); }
+        err => { 
+          alert("ToC could not be loaded (probably doesn't exist).");
+        }
       );
     });
   }
@@ -353,6 +368,10 @@ export class ToolTOCComponent implements OnInit {
       },
       err => { }
     );
+  }
+
+  updatePublications() {
+    this.publicationsComponent.listPublications(this.data.projectName, this.data.publicationCollection);
   }
 
   /*setSelectedItem( item: any) {

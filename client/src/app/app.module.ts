@@ -148,7 +148,8 @@ const appRoutes: Routes = [
     DialogFacsimileComponent,
     DialogLocationComponent,
     DialogSubjectComponent,
-    DialogPublicationCollectionComponent
+    DialogPublicationCollectionComponent,
+    FileDialogComponent
   ],
   bootstrap: [AppComponent]
 })

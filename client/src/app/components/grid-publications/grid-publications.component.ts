@@ -69,7 +69,10 @@ export class GridPublicationsComponent implements OnInit {
       this.listProjects();
     } else if (this.listLevel === DataItemType.PublicationCollection) {
       this.listPublicationCollections(this.data.projectName);
-         }
+    } else if (this.listLevel === DataItemType.Publication) {
+      const tmpTreeData = [];
+      this.rowData = tmpTreeData;
+    }
   }
 
   onSelectionChanged(event: any) {

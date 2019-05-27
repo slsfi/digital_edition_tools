@@ -81,6 +81,7 @@ export class ToolPublisherComponent implements OnInit {
     this.data.changeHeader(publication.title);
     this.readingText = this.stringNA;
     this.comments = this.stringNA;
+    // Get reading text
     this.data.getPublication(this.data.projectName, publication.id).subscribe(
       data => {
         if(data.original_filename != null)
@@ -88,8 +89,15 @@ export class ToolPublisherComponent implements OnInit {
       },
       err => { console.info(err); }
     );
-    // TODO: Get comment file path
-    // -------
+    // Get comments
+    this.data.getComments(this.data.projectName, publication.id).subscribe(
+      data => {
+        console.info(data);
+        //if(data.original_filename != null)
+        //  this.readingText = data.original_filename;
+      },
+      err => { console.info(err); }
+    );
     // Show the loading overlay of the text grids
     this.gridsTexts.forEach((child) => { child.showLoadingOverlay(); });
     // Get versions

@@ -34,6 +34,24 @@ export class DataService {
     }).join(''));
   }
 
+  public static Base64EncodeUnicode(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode(parseInt(p1, 16))
+    }));
+  }
+
+  /*public static Base644EncodeUnicode(str) {
+    // first we use encodeURIComponent to get percent-encoded UTF-8,
+    // then we convert the percent encodings into raw bytes which
+    // can be fed into btoa.
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+        function toSolidBytes(match, p1) {
+          return String.fromCharCode('0x' + p1);
+        }
+      )
+    );
+  }*/
+
   constructor(private http: HttpClient) { 
     // Check if project name is in local storage (browser)
     if(localStorage.getItem("projectName")) {
@@ -102,7 +120,7 @@ export class DataService {
 
   getPublicationCollection(projectName: string, collection: DataItemDescriptor): Observable<any>  {
     // Send the request to the server
-    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication_collection/' + collection.id.toString() + '/info/');
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication_collection/' + collection.id.toString() + '/info');
   }
 
   addPublicationCollection(projectName: string, collection: DataItemDescriptor): Observable<any> {
@@ -160,7 +178,10 @@ export class DataService {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication.id.toString() + '/edit/', data);
   }
 
-  // TODO: Get Comments (file path)
+  getComments(projectName: string, publication: number ): Observable<any>  {
+    // Send the request to the server
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication/' + publication.toString() + '/comments');
+  }
 
   editComments(projectName: string, publication: DataItemDescriptor): Observable<any> {
     let data = {};
@@ -245,8 +266,24 @@ export class DataService {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/locations/');
   }
 
+  addLocation(projectName: string, location: LocationDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/locations/new/', location);
+  }
+
+  editLocation(projectName: string, location: LocationDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/locations/' + location.id.toString() + '/edit/', location);
+  }
+
   getSubjects(): Observable<any> {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/subjects/');
+  }
+
+  addSubject(projectName: string, subject: SubjectDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/subjects/new/', subject);
+  }
+
+  editSubject(projectName: string, subject: SubjectDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/subjects/' + subject.id.toString() + '/edit/', subject);
   }
 
   // ---------------------------------------
@@ -296,7 +333,7 @@ export class DataService {
     // Master path?
     const pathAdd: string = (master === true ? '/master' : '');
     // Encode the document as base64
-    const documentBase64 = btoa(document);
+    const documentBase64 = DataService.Base64EncodeUnicode(document);
     // Send the request to the server
     return this.http.put<any>(environment.api_url + '/' +
       this.api_url_path + '/' + this.projectName + '/update_file/by_path' + pathAdd + path + doc.name, { 'file' : documentBase64 });

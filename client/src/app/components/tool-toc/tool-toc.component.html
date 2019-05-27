@@ -1,5 +1,5 @@
 <div>
-  <button mat-raised-button (click)="onPopulate()" i18n>Filltest</button>
+  <!--<button mat-raised-button (click)="onPopulate()" i18n>Filltest</button>-->
   <button mat-raised-button (click)="onCreateFromCollection()" i18n>Create from collection...</button>
   <button mat-raised-button (click)="onLoadFromServer()" i18n>Load...</button>
   <button mat-raised-button (click)="onSaveToServer()" i18n>Save</button>
@@ -12,7 +12,12 @@
 <div><p>Opened collection: {{publicationCollectionText}}</p></div>
 <div class="page-container">
   <div class="container-wide">
-    <app-grid-publications></app-grid-publications>
+    <app-grid-publications 
+      [editMode]="false"
+      [listLevelLocked]="true"
+      [listLevel]="dataItemType.Publication"
+      (publicationOpened)="onPublicationOpened($event)">
+    </app-grid-publications>
   </div>
   <div class="container menu">
     <div class="dd" id="menu"></div>
@@ -42,7 +47,7 @@
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput i18n-placeholder placeholder="ID" [(ngModel)]="itemCurrent.itemId" name="itemId" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" value="{{publicationCollection.id}}_"/></mat-form-field>
+        <mat-form-field><input matInput i18n-placeholder placeholder="ID" [(ngModel)]="itemCurrent.itemId" name="itemId" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
       </div>
 
       <div class="row">

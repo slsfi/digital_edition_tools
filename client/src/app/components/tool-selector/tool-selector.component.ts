@@ -4,6 +4,7 @@ import { DocumentDescriptor, DataService } from '../../services/data.service';
 import { environment } from '../../../environments/environment.prod';
 import { saveAs } from 'file-saver/FileSaver';
 import { ToolSelectorTabComponent } from '../tool-selector-tab/tool-selector-tab.component';
+import { FileDialogComponent } from '../file-dialog/file-dialog.component';
 
 @Component({
   selector: 'app-tool-selector',
@@ -19,14 +20,20 @@ export class ToolSelectorComponent implements OnInit {
   xmlNodes: Node[] = [];
   domParser = new DOMParser();
 
+  openedDocumentServer: DocumentDescriptor = {name: "", path: ""};
+  fileNameLocal: string = "";
+
   //showSpinner: boolean = false;
+
+  // TODO: Fix this, master files should be used!?
+  useMasterFiles: boolean = false;
 
   xmlFileExtensions: string = environment.xml_file_extensions;
   xmlFile: string;
 
   @ViewChildren('selectorTab') selectorTabs:QueryList<ToolSelectorTabComponent>;
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, public dialog: MatDialog) { }
 
   ngOnInit() {
     // Change active tool
@@ -41,6 +48,9 @@ export class ToolSelectorComponent implements OnInit {
   onFileInput(event: any) {
     // Get the list of selected files
     const files: FileList = event.target.files;
+    // set filename
+    this.openedDocumentServer = {name: "", path: ""};
+    this.fileNameLocal = event.target.files[0].name;
     // Create a file reader and create a callback for the file read
     const reader = new FileReader();
     reader.onload = () => {
@@ -85,15 +95,36 @@ export class ToolSelectorComponent implements OnInit {
   onDocumentLoaded(doc: DocumentDescriptor) {
     ///this.showSpinner = true;
     // Fetch the document from the server
-    this.loadDocumentFromServer(doc);
+    if(doc.name.length > 0)
+      this.loadDocumentFromServer(doc);
+  }
+
+  onLoadFileServer(event: any) {
+    this.showDialogLoad();
+  }
+
+  showDialogLoad() {
+    const dialogRef = this.dialog.open(FileDialogComponent, {
+      width: '700px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // Handle result
+      this.loadDocumentFromServer(result as DocumentDescriptor);
+    });
   }
 
   loadDocumentFromServer(doc: DocumentDescriptor) {
+    // Set opened document
+    this.openedDocumentServer = doc;
+    this.fileNameLocal = doc.name;
+    // Set tab data
     this.selectorTabs.forEach((child) => {
       child.showLoadingOverlay();
       child.fileName = doc.path + '/' + doc.name;
     });
-    this.data.getDocument(doc, false).subscribe(
+    // Load document
+    this.data.getDocument(doc, this.useMasterFiles).subscribe(
       data => {
         // Decode base64 encoded xml file to a string
         this.xmlFile = DataService.Base64DecodeUnicode(data.file);
@@ -112,20 +143,40 @@ export class ToolSelectorComponent implements OnInit {
 
   private saveToFileSystem() {
     // Convert xml to string and set Windows style line breaks
-    //const stringToSave = this.xmlDoc.documentElement.outerHTML.replace(/\n/g,"\r\n");
+    const stringToSave = this.processXmlForSaving(this.xmlDoc);
+    // Create a blob from the string
+    const blob = new Blob([stringToSave], { type: 'text/plain' });
+    // Save the blob
+    saveAs(blob, this.fileNameLocal);
+  }
+
+  onSaveFileServer() {
+    if(this.openedDocumentServer.name.length > 0)
+    {
+      const stringToSave = this.processXmlForSaving(this.xmlDoc);
+      this.data.putDocument(this.openedDocumentServer, stringToSave, this.useMasterFiles).subscribe(
+        data => {
+          console.info(data);
+        },
+        err => { 
+          console.info(err);
+        }
+      );
+    }
+  }
+
+  processXmlForSaving(xml: XMLDocument): string {
     // Serialize xml document to string
     const serializer = new XMLSerializer();
-    let stringToSave = serializer.serializeToString(this.xmlDoc);
+    let stringToSave = serializer.serializeToString(xml);
     // Convert line breaks to wanted format
     stringToSave = stringToSave.replace(/\r\n/g,"\n");
     stringToSave = stringToSave.replace(/(\r|\n)/g, environment.line_break);
     // Add space after trailing slash (self closed tag)?
     if(environment.xml_space_before_trailing_slash)
       stringToSave = stringToSave.replace(/\/\>/g," />");
-    // Create a blob from the string
-    const blob = new Blob([stringToSave], { type: 'text/plain' });
-    // Save the blob
-    saveAs(blob, "_text.xml");
+    // Return processed string
+    return stringToSave;
   }
 
 }

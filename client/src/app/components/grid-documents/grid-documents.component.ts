@@ -22,6 +22,8 @@ export class GridDocumentsComponent implements OnInit {
   fileSelected: boolean = false;
   openDocument: string = '';
 
+  // TODO: Fix this, master files should be used!?
+  @Input() useMasterFiles: boolean = false;
   @Input() openFileText: string = 'Open File';
   // Root folder support is not yet implemented
   @Input() rootFolder: string = '';
@@ -62,7 +64,7 @@ export class GridDocumentsComponent implements OnInit {
     // Get "root" folder? In this case we need to send a request to the server
     if (path.length === 0) {
       if(this.data.dataDocuments === undefined || forceRefresh) {
-        this.data.getDocumentTree(path, false).subscribe(
+        this.data.getDocumentTree(path, this.useMasterFiles).subscribe(
           data => {
             this.treeData = data;
             this.data.dataDocuments = data;

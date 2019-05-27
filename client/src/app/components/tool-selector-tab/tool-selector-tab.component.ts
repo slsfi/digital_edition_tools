@@ -34,6 +34,7 @@ export class ToolSelectorTabComponent implements OnInit {
 
   // XML Document Nodes
   xmlNodes: Element[] = [];
+  xmlDoc: XMLDocument;
 
   textParagraph: string;
   textDescription: string;
@@ -113,11 +114,16 @@ export class ToolSelectorTabComponent implements OnInit {
             data => {
               this.data.dataSubjects = data;
               this.poulateSubjects(data);
+              this.datGridOptions.api.hideOverlay();
             },
-            err => { console.info(err); }
+            err => { 
+              this.datGridOptions.api.hideOverlay();
+              console.info(err); 
+            }
           );
         } else {
           this.poulateSubjects(this.data.dataSubjects);
+          this.datGridOptions.api.hideOverlay();
         }
         break;
 
@@ -127,11 +133,16 @@ export class ToolSelectorTabComponent implements OnInit {
             data => {
               this.data.dataLocations = data;
               this.populateLocations(data);
+              this.datGridOptions.api.hideOverlay();
             },
-            err => { console.info(err); }
+            err => { 
+              this.datGridOptions.api.hideOverlay();
+              console.info(err); 
+            }
           );
         } else {
           this.populateLocations(this.data.dataLocations);
+          this.datGridOptions.api.hideOverlay();
         }
         break;
     }
@@ -162,6 +173,9 @@ export class ToolSelectorTabComponent implements OnInit {
   }
 
   datLoadOccurences(xmlDoc: XMLDocument) {
+
+    this.xmlDoc = xmlDoc;
+
     // Clear the occurences grid and the xml node list
     this.occRowData = [];
     this.xmlNodes = [];
@@ -198,6 +212,7 @@ export class ToolSelectorTabComponent implements OnInit {
   }
 
   datOnRefreshClick() {
+    this.datGridOptions.api.showLoadingOverlay();
     this.refreshData(true);
   }
 
@@ -280,31 +295,33 @@ export class ToolSelectorTabComponent implements OnInit {
     if (this.occGridOptions.api.getSelectedRows().length > 0) {
       // Select current row of data grid and get it's id
       const _rowIndex = this.datGridOptions.api.getFocusedCell().rowIndex;
-      this.datGridOptions.api.selectIndex(_rowIndex, false, false);
+      let n = this.datGridOptions.api.getDisplayedRowAtIndex(_rowIndex);
+      n.setSelected(true);
+      //this.datGridOptions.api.selectIndex(_rowIndex, false, false);
       const rowSource = this.datGridOptions.api.getSelectedRows()[0];
-      // Get selected row of occurences grid
+      // Get selected row/node of occurences grid
       const rowDest = this.occGridOptions.api.getSelectedRows()[0];
-      // Get row index of selected row in occurences grid
-      const _rowIndexDest = this.occGridOptions.api.getFocusedCell().rowIndex;
+      const rowDestNode = this.occGridOptions.api.getSelectedNodes()[0];
       // Copy id from data to occurences
-      rowDest.id = rowSource.id;
+      rowDest.id = rowSource.id.toString();
       // Set saved to false for row (changes colour of the row with callback)
       rowDest.saved = false;
       // Set id of xml element
-      this.xmlNodes[_rowIndexDest].setAttribute(this.configuration.attribute, rowSource.id);
+      this.xmlNodes[rowDestNode.childIndex].setAttribute(this.configuration.attribute, rowSource.id);
       // Refresh occurences grid
       this.occGridOptions.api.redrawRows();
       // Select next occurence
-      const rowNode = this.occGridOptions.api.getSelectedNodes()[0];
-      if (rowNode.childIndex < this.occGridOptions.api.getDisplayedRowCount() - 1) {
-        this.occGridOptions.api.selectIndex(rowNode.childIndex + 1, false, false);
-        this.occGridOptions.api.ensureIndexVisible(rowNode.childIndex + 1, 'middle');
+      if (rowDestNode.childIndex < this.occGridOptions.api.getDisplayedRowCount() - 1) {
+        n = this.occGridOptions.api.getDisplayedRowAtIndex(rowDestNode.childIndex + 1);
+        n.setSelected(true);
+        this.occGridOptions.api.ensureIndexVisible(rowDestNode.childIndex + 1, 'middle');
       }
     }
   }
 
   occOnSelectionChanged(event: any) {
     const node = this.occGridOptions.api.getSelectedNodes()[0];
+    console.info(node);
     if (node.data.id.length > 0) {
       // Set id to search for in data grid
       this.datSearchId = node.data.id;
@@ -314,12 +331,12 @@ export class ToolSelectorTabComponent implements OnInit {
       // Enable searching
       this.datRowFound = false;
       // Select node with id in data grid
-      this.datGridOptions.api.forEachNode( (node) => {
+      this.datGridOptions.api.forEachNode( (n) => {
         // Skip if row with criteria has already been found
         if (!this.datRowFound) {
-          if (node.data.id === this.datSearchId) {
+          if (n.data.id == this.datSearchId) {
             // Select and show rowNode in data grid
-            this.datGotoNode(node, false, true);
+            this.datGotoNode(n, false, true);
           }
         }
       });
