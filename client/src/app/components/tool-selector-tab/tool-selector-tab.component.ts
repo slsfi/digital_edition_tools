@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { GridOptions, RowNode } from "ag-grid";
-import { DataService, SubjectDescriptor, LocationDescriptor } from '../../services/data.service';
+import { DataService, SubjectDescriptor, LocationDescriptor, DialogData } from '../../services/data.service';
 import { DialogSubjectComponent } from '../dialog-subject/dialog-subject.component';
 import { DialogLocationComponent } from '../dialog-location/dialog-location.component';
+import { nbind } from 'q';
 
 @Component({
   selector: 'app-tool-selector-tab',
@@ -81,8 +82,8 @@ export class ToolSelectorTabComponent implements OnInit {
     switch (this.configuration.type) {
       case 'subjects':
         this.datColumnDefs = [
-          {headerName: 'Surname', field: 'name', sortingOrder: ['asc', 'desc']},
-          {headerName: 'First name', field: 'firstName'},
+          {headerName: 'Surname', field: 'last_name', sortingOrder: ['asc', 'desc']},
+          {headerName: 'First name', field: 'first_name'},
           {headerName: 'Description', field: 'description'},
           {headerName: 'Id', field: 'id'} // , hide: true
         ];
@@ -113,7 +114,7 @@ export class ToolSelectorTabComponent implements OnInit {
           this.data.getSubjects().subscribe(
             data => {
               this.data.dataSubjects = data;
-              this.poulateSubjects(data);
+              this.populate(data);
               this.datGridOptions.api.hideOverlay();
             },
             err => { 
@@ -122,7 +123,7 @@ export class ToolSelectorTabComponent implements OnInit {
             }
           );
         } else {
-          this.poulateSubjects(this.data.dataSubjects);
+          this.populate(this.data.dataSubjects);
           this.datGridOptions.api.hideOverlay();
         }
         break;
@@ -132,7 +133,7 @@ export class ToolSelectorTabComponent implements OnInit {
           this.data.getLocations().subscribe(
             data => {
               this.data.dataLocations = data;
-              this.populateLocations(data);
+              this.populate(data);
               this.datGridOptions.api.hideOverlay();
             },
             err => { 
@@ -141,30 +142,31 @@ export class ToolSelectorTabComponent implements OnInit {
             }
           );
         } else {
-          this.populateLocations(this.data.dataLocations);
+          this.populate(this.data.dataLocations);
           this.datGridOptions.api.hideOverlay();
         }
         break;
     }
   }
 
-  poulateSubjects(data: any) {
-    const tmpData = [];
+  populate(data: any) {
+    /*const tmpData = [];
     for (let i = 0; i < data.length; i++) {
       tmpData.push({'name': data[i].last_name, 'firstName': data[i].first_name, 'id': data[i].id, 'description': data[i].description});
     }
-    this.datRowData = tmpData;
+    this.datRowData = tmpData;*/
+    this.datRowData = data;
     this.sortData();
   }
 
-  populateLocations(data: any) {
+  /*populateLocations(data: any) {
     const tmpData = [];
     for (let i = 0; i < data.length; i++) {
       tmpData.push({'name': data[i].name, 'id': data[i].id, 'description': data[i].description});
     }
     this.datRowData = tmpData;
     this.sortData();
-  }
+  }*/
 
   occOnKeyDown(event: KeyboardEvent) {
     if (event.key.toLowerCase() === 'arrowup' || event.key.toLowerCase() === 'arrowdown') {
@@ -206,7 +208,7 @@ export class ToolSelectorTabComponent implements OnInit {
 
   sortData() {
     const sort = [
-      {colId: 'name', sort: 'asc'}
+      {colId: this.configuration.sortByField, sort: 'asc'}
     ];
     this.datGridOptions.api.setSortModel(sort);
   }
@@ -228,10 +230,35 @@ export class ToolSelectorTabComponent implements OnInit {
         this.showDataDialog(locationEmpty);
         break;
     }
-
   }
 
   datOnEditClick() {
+    // Get selected row
+    //const selRows = this.datGridOptions.api.getSelectedRows();
+    const _rowIndex = this.datGridOptions.api.getFocusedCell().rowIndex;
+    const selectedNode = this.datGridOptions.api.getDisplayedRowAtIndex(_rowIndex);
+
+    // Check that (only) one row is selected
+    //if (selRows.length === 1) {
+      switch (this.configuration.type) {
+        case 'subjects':
+          //console.info(selectedNode);
+          const subject: SubjectDescriptor = selectedNode.data as SubjectDescriptor;
+          this.showDataDialog(subject);
+          break;
+  
+        case 'locations':
+          //console.info(selectedNode);
+          const location: LocationDescriptor = selectedNode.data as LocationDescriptor;
+          this.showDataDialog(location);
+          break;
+      }
+      /*const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id,
+        title: selRows[0].title, date: selRows[0].date, published: selRows[0].published, genre: selRows[0].genre};
+      this.showDataDialog(dataItem);*/
+    //} else {
+    //  alert('You need to select (only) one row to edit!');
+    //}
   }
 
   datOnKeyDown(event: KeyboardEvent) {
@@ -245,7 +272,7 @@ export class ToolSelectorTabComponent implements OnInit {
       this.datGridOptions.api.forEachNodeAfterFilterAndSort( (node) => {
         // Skip if row with criteria has already been found
         if (!this.datRowFound) {
-          if (node.data.name !== null && node.data.name.toLowerCase().startsWith(this.datSearchString) ) {
+          if (node.data[this.configuration.sortByField] !== null && node.data[this.configuration.sortByField].toLowerCase().startsWith(this.datSearchString) ) {
             // Select and show node
             this.datGotoNode(node, true, false);
           }
@@ -275,20 +302,68 @@ export class ToolSelectorTabComponent implements OnInit {
     // Subscribe to dialog closed event
     dialogRef.afterClosed().subscribe(result => {
       // If title is undefined, then user cancelled the dialog
-      /*if(result.title !== undefined) {
+      if(result.success == true) {
         // Keep track of edited item, this will be used if server request is successful
-        this.dataItemEdited = result;
+        //this.dataItemEdited = result;
         // id is defined, means that an item has been edited
         if(result.id !== undefined)
           this.editItem(result);
         // Id is not defined, add item
         else
           this.addItem(result);
-      }*/
+      }
     });
   }
 
+  addItem(dialogData: DialogData) {
+    switch (this.configuration.type) {
+      case 'subjects':
+        const subject: SubjectDescriptor = dialogData.data as SubjectDescriptor;
+        this.data.addSubject(this.data.projectName, subject).subscribe(
+          data => {
+            this.datGridOptions.api.updateRowData({add: [data.row]});
+          },
+          err => { console.info(err); }
+        );
+        break;
 
+      case 'locations':
+        const location: LocationDescriptor = dialogData.data as LocationDescriptor;
+        this.data.addLocation(this.data.projectName, location).subscribe(
+          data => {
+            this.datGridOptions.api.updateRowData({add: [data.row]});
+          },
+          err => { console.info(err); }
+        );
+        break;
+    }
+  }
+
+  editItem(dialogData: DialogData) {
+    switch (this.configuration.type) {
+      case 'subjects':
+        const subject: SubjectDescriptor = dialogData.data as SubjectDescriptor;
+        this.data.editSubject(this.data.projectName, subject).subscribe(
+          data => {
+            let rowNode = this.datGridOptions.api.getRowNode(data.row.id);
+            rowNode.setData(data.row);
+          },
+          err => { console.info(err); }
+        );
+        break;
+
+      case 'locations':
+        const location: LocationDescriptor = dialogData.data as LocationDescriptor;
+        this.data.editLocation(this.data.projectName, location).subscribe(
+          data => {
+            let rowNode = this.datGridOptions.api.getRowNode(data.row.id);
+            rowNode.setData(data.row);
+          },
+          err => { console.info(err); }
+        );
+        break;
+    }
+  }
 
   datSetId() {
     // Check if a row is selected in the occurences grid
@@ -381,6 +456,7 @@ interface SelectorTabConfiguration {
   type: string;
   descriptionField: string;
   sortByColumn: number;
+  sortByField: string;
   elements: string[];
   elementsXPath: string;
   attribute: string;

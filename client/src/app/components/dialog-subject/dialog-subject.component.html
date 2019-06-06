@@ -1,30 +1,30 @@
 <div>
   <p i18n>{{header}}</p>
   <div class="row">
-    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="First Name" [(ngModel)]="dataItem.firstName" name="firstName" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="First Name" [(ngModel)]="dataItem.first_name" name="firstName" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Last Name" [(ngModel)]="dataItem.lastName" name="lastName" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Last Name" [(ngModel)]="dataItem.last_name" name="lastName" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Preposition" [(ngModel)]="dataItem.preposition" name="preposition" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Preposition" [(ngModel)]="dataItem.preposition" name="preposition" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Description" [(ngModel)]="dataItem.decription" name="description" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Description" [(ngModel)]="dataItem.description" name="description" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Occupation" [(ngModel)]="dataItem.occupation" name="occupation" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Occupation" [(ngModel)]="dataItem.occupation" name="occupation" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Place of Birth" [(ngModel)]="dataItem.placeOfBirth" name="placeOfBirth" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Place of Birth" [(ngModel)]="dataItem.place_of_birth" name="placeOfBirth" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field><input matInput [matDatepicker]="pickerBirth" placeholder="Date of Birth" [(ngModel)]="dataItem.dateBirth" name="date"/>
+    <mat-form-field><input matInput [matDatepicker]="pickerBirth" placeholder="Date of Birth" [(ngModel)]="dataItem.date_born" name="date"/>
     <mat-datepicker-toggle matSuffix [for]="pickerBirth"></mat-datepicker-toggle>
     <mat-datepicker #pickerBirth></mat-datepicker></mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field><input matInput [matDatepicker]="pickerDeceased" placeholder="Deceased Date" [(ngModel)]="dataItem.dateDeceased" name="dateDeceased"/>
+    <mat-form-field><input matInput [matDatepicker]="pickerDeceased" placeholder="Deceased Date" [(ngModel)]="dataItem.date_deceased" name="dateDeceased"/>
     <mat-datepicker-toggle matSuffix [for]="pickerDeceased"></mat-datepicker-toggle>
     <mat-datepicker #pickerDeceased></mat-datepicker></mat-form-field>
   </div>

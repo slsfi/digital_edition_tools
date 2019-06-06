@@ -393,6 +393,11 @@ export interface DataItemDescriptor {
 
 export interface LocationDescriptor {
   id?: number;
+  legacy_id?: string;
+  project_id?: number;
+  date_created?: string;
+  date_modified?: string;
+  deleted?: number;
   name?: string;
   description?: string;
   country?: string;
@@ -400,19 +405,27 @@ export interface LocationDescriptor {
   city?: string;
   longitude?: string;
   latitude?: string;
+  source?: string;
 }
 
 export interface SubjectDescriptor {
   id?: number;
+  legacy_id?: string;
+  project_id?: number;
+  date_created?: string;
+  date_modified?: string;
+  deleted?: number;
   type?: string;
-  firstName?: string;
-  lastName?: string;
+  first_name?: string;
+  last_name?: string;
+  full_name?: string;
   preposition?: string; 
   description?: string;
-  placeOfBirth?: string;
-  dateBorn?: string;
-  dateDeceased?: string;
+  place_of_birth?: string;
+  date_born?: string;
+  date_deceased?: string;
   occupation?: string;
+  source?: string;
 }
 
 export interface FacsimileCollectionDescriptor {
@@ -468,4 +481,9 @@ export interface LocationDescriptor {
   latitude?: string;
   longitude?: string;
   legacyXMLId?: string;
+}
+
+export interface DialogData {
+  success: boolean;
+  data: object;
 }

@@ -255,9 +255,9 @@ export class GridDocumentsComponent implements OnInit {
   }
 
   // TODO: Remove this
-  onDummyClick() {
+  /*onDummyClick() {
     const doc: DocumentDescriptor = {name: '10_13_est.xml', path: 'xml/est'};
     this.documentLoaded.emit(doc);
-  }
+  }*/
 }
 

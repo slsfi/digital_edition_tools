@@ -15,6 +15,7 @@ export const environment = {
       type: 'subjects',
       descriptionField: 'Karriär',
       sortByColumn: 0,
+      sortByField: 'last_name',
       elements: [
         'persName', 'rs'
       ],
@@ -26,6 +27,7 @@ export const environment = {
       type: 'locations',
       descriptionField: 'Beskrivning',
       sortByColumn: 0,
+      sortByField: 'name',
       elements: [
         'placeName'
       ],
