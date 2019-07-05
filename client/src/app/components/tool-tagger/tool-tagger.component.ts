@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from "../../services/data.service";
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-tool-tagger',
@@ -11,7 +11,7 @@ export class ToolTaggerComponent implements OnInit {
   constructor(private data: DataService) { }
 
   ngOnInit() {
-    this.data.changeTool("Tagger");
+    this.data.changeTool('Tagger');
   }
 
 }

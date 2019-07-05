@@ -83,7 +83,7 @@ export class GridPublicationsComponent implements OnInit {
         // Open Publication Collection
         case DataItemType.PublicationCollection:
           this.data.publicationCollection = selectedRows[0].id;
-          const publicationCollection: DataItemDescriptor = {type: DataItemType.PublicationCollection, 
+          const publicationCollection: DataItemDescriptor = {type: DataItemType.PublicationCollection,
             id: selectedRows[0].id, title: selectedRows[0].title};
           this.publicationCollectionOpened.emit(publicationCollection);
           break;
@@ -102,8 +102,7 @@ export class GridPublicationsComponent implements OnInit {
   }
 
   onRowDoubleClick(event: any) {
-    if(!this.listLevelLocked)
-    {
+    if (!this.listLevelLocked) {
       switch (this.listLevel) {
         case DataItemType.Project:
           // Set active project
@@ -123,9 +122,7 @@ export class GridPublicationsComponent implements OnInit {
           this.publicationOpened.emit(publication);*/
           break;
       }
-    }
-    else
-    {
+    } else {
       switch (this.listLevel) {
         case DataItemType.Project:
           // Set active project
@@ -275,7 +272,7 @@ export class GridPublicationsComponent implements OnInit {
             // Add row
             this.addRow(data);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
 
@@ -287,7 +284,7 @@ export class GridPublicationsComponent implements OnInit {
             // Add row
             this.addRow(data);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
 
@@ -299,7 +296,7 @@ export class GridPublicationsComponent implements OnInit {
             // Add row
             this.addRow(data);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
     }
@@ -313,7 +310,7 @@ export class GridPublicationsComponent implements OnInit {
           data => {
             this.editRow(data);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
 
@@ -322,7 +319,7 @@ export class GridPublicationsComponent implements OnInit {
         data => {
           this.editRow(data);
         },
-        err => { console.info(err); }
+        err => { console.log(err); }
       );
         break;
 
@@ -331,7 +328,7 @@ export class GridPublicationsComponent implements OnInit {
           data => {
             this.editRow(data);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
     }
@@ -360,10 +357,10 @@ export class GridPublicationsComponent implements OnInit {
   onTestClick() {
     this.data.getSubjects().subscribe(
       data => {
-        console.info(data);
+        console.log(data);
       },
       err => {
-        console.info(err);
+        console.log(err);
       }
     );
   }

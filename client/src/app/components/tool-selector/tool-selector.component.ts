@@ -20,18 +20,18 @@ export class ToolSelectorComponent implements OnInit {
   xmlNodes: Node[] = [];
   domParser = new DOMParser();
 
-  openedDocumentServer: DocumentDescriptor = {name: "", path: ""};
-  fileNameLocal: string = "";
+  openedDocumentServer: DocumentDescriptor = {name: '', path: ''};
+  fileNameLocal = '';
 
-  //showSpinner: boolean = false;
+  // showSpinner: boolean = false;
 
   // TODO: Fix this, master files should be used!?
-  useMasterFiles: boolean = false;
+  useMasterFiles = false;
 
   xmlFileExtensions: string = environment.xml_file_extensions;
   xmlFile: string;
 
-  @ViewChildren('selectorTab') selectorTabs:QueryList<ToolSelectorTabComponent>;
+  @ViewChildren('selectorTab') selectorTabs: QueryList<ToolSelectorTabComponent>;
 
   constructor(private data: DataService, public dialog: MatDialog) { }
 
@@ -49,7 +49,7 @@ export class ToolSelectorComponent implements OnInit {
     // Get the list of selected files
     const files: FileList = event.target.files;
     // set filename
-    this.openedDocumentServer = {name: "", path: ""};
+    this.openedDocumentServer = {name: '', path: ''};
     this.fileNameLocal = event.target.files[0].name;
     // Create a file reader and create a callback for the file read
     const reader = new FileReader();
@@ -77,11 +77,9 @@ export class ToolSelectorComponent implements OnInit {
     }
 
     // Parse the xml string into a xml dom object
-    this.xmlDoc = this.domParser.parseFromString(xmlString,'text/xml');
+    this.xmlDoc = this.domParser.parseFromString(xmlString, 'text/xml');
 
     // Ok
-    // let xp : XPathResult = this.xmlDoc.evaluate('//placeName', this.xmlDoc.documentElement, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-
     this.selectorTabs.forEach((child) => {
       child.datLoadOccurences(this.xmlDoc);
     });
@@ -93,10 +91,11 @@ export class ToolSelectorComponent implements OnInit {
   }
 
   onDocumentLoaded(doc: DocumentDescriptor) {
-    ///this.showSpinner = true;
+    /// this.showSpinner = true;
     // Fetch the document from the server
-    if(doc.name.length > 0)
+    if (doc.name.length > 0) {
       this.loadDocumentFromServer(doc);
+    }
   }
 
   onLoadFileServer(event: any) {
@@ -151,15 +150,14 @@ export class ToolSelectorComponent implements OnInit {
   }
 
   onSaveFileServer() {
-    if(this.openedDocumentServer.name.length > 0)
-    {
+    if (this.openedDocumentServer.name.length > 0) {
       const stringToSave = this.processXmlForSaving(this.xmlDoc);
       this.data.putDocument(this.openedDocumentServer, stringToSave, this.useMasterFiles).subscribe(
         data => {
-          console.info(data);
+          console.log(data);
         },
-        err => { 
-          console.info(err);
+        err => {
+          console.log(err);
         }
       );
     }
@@ -170,11 +168,12 @@ export class ToolSelectorComponent implements OnInit {
     const serializer = new XMLSerializer();
     let stringToSave = serializer.serializeToString(xml);
     // Convert line breaks to wanted format
-    stringToSave = stringToSave.replace(/\r\n/g,"\n");
+    stringToSave = stringToSave.replace(/\r\n/g, '\n');
     stringToSave = stringToSave.replace(/(\r|\n)/g, environment.line_break);
     // Add space after trailing slash (self closed tag)?
-    if(environment.xml_space_before_trailing_slash)
-      stringToSave = stringToSave.replace(/\/\>/g," />");
+    if (environment.xml_space_before_trailing_slash) {
+      stringToSave = stringToSave.replace(/\/\>/g, ' />');
+    }
     // Return processed string
     return stringToSave;
   }

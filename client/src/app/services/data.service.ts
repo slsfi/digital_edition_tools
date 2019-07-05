@@ -289,7 +289,8 @@ export class DataService {
   }
 
   /*editFacsimile(projectName: string, publication: number, facsimile: FacsimileDescriptor): Observable<any> {
-    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/facsimile_collection/' + facsimile.id + '/edit/', facsimile);
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
+      '/facsimile_collection/' + facsimile.id + '/edit/', facsimile);
   }*/
 
 
@@ -337,7 +338,8 @@ export class DataService {
   // Save a table of contents file to the server
   putTOC(projectName: string, collection: PublicationCollectionDescriptor, toc: string): Observable<any> {
     // Send the toc with a http request
-    return this.http.put<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/toc/' + collection.id , toc);
+    return this.http.put<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/toc/' + collection.id , toc,
+     httpOptions);
   }
 
   // ---------------------------------------
@@ -375,7 +377,8 @@ export class DataService {
     const documentBase64 = DataService.Base64EncodeUnicode(document);
     // Send the request to the server
     return this.http.put<any>(environment.api_url + '/' +
-      this.api_url_path + '/' + this.projectName + '/update_file/by_path' + pathAdd + path + doc.name, { 'file' : documentBase64 });
+      this.api_url_path + '/' + this.projectName + '/update_file/by_path' + pathAdd + path + doc.name, { 'file' : documentBase64 },
+       httpOptions);
   }
 
   // Add leading and trailing slashes to a path string

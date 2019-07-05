@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { GridOptions, RowNode } from "ag-grid";
+import { GridOptions, RowNode } from 'ag-grid';
 import { DataService, SubjectDescriptor, LocationDescriptor, DialogData } from '../../services/data.service';
 import { DialogSubjectComponent } from '../dialog-subject/dialog-subject.component';
 import { DialogLocationComponent } from '../dialog-location/dialog-location.component';
@@ -16,7 +16,7 @@ export class ToolSelectorTabComponent implements OnInit {
   @Input() header: string;
   @Input() configuration: SelectorTabConfiguration;
 
-  public fileName: string = "No file opened";
+  public fileName = 'No file opened';
 
   // Grid for occurences
   occGridOptions: GridOptions;
@@ -25,10 +25,10 @@ export class ToolSelectorTabComponent implements OnInit {
 
   // Grid for data (persons, places, etc.)
   datGridOptions: GridOptions;
-  datColumnDefs: any[]
+  datColumnDefs: any[];
   datRowData: any[];
   datSeachStringTimeout: any = null;
-  datSearchString: string = "";
+  datSearchString = '';
   datSearchId = '';
   datRowFound = false;
   datFocusRow = -1;
@@ -60,7 +60,7 @@ export class ToolSelectorTabComponent implements OnInit {
 
     // Set row style callback functions
     this.occGridOptions.getRowStyle = function(params) {
-      if(!params.node.data.saved) {
+      if (!params.node.data.saved) {
         return { color: 'blue' };
       } else if (params.node.data.id.length > 0) {
         return { color: 'green' };
@@ -84,6 +84,7 @@ export class ToolSelectorTabComponent implements OnInit {
         this.datColumnDefs = [
           {headerName: 'Surname', field: 'last_name', sortingOrder: ['asc', 'desc']},
           {headerName: 'First name', field: 'first_name'},
+          {headerName: 'Full name', field: 'full_name'},
           {headerName: 'Description', field: 'description'},
           {headerName: 'Id', field: 'id'} // , hide: true
         ];
@@ -117,9 +118,9 @@ export class ToolSelectorTabComponent implements OnInit {
               this.populate(data);
               this.datGridOptions.api.hideOverlay();
             },
-            err => { 
+            err => {
               this.datGridOptions.api.hideOverlay();
-              console.info(err); 
+              console.log(err);
             }
           );
         } else {
@@ -136,9 +137,9 @@ export class ToolSelectorTabComponent implements OnInit {
               this.populate(data);
               this.datGridOptions.api.hideOverlay();
             },
-            err => { 
+            err => {
               this.datGridOptions.api.hideOverlay();
-              console.info(err); 
+              console.log(err);
             }
           );
         } else {
@@ -183,7 +184,8 @@ export class ToolSelectorTabComponent implements OnInit {
     this.xmlNodes = [];
 
     // Get the nodes using XPath defined in configuration (environment)
-    const xp: XPathResult = xmlDoc.evaluate(this.configuration.elementsXPath, xmlDoc.documentElement, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    const xp: XPathResult = xmlDoc.evaluate(this.configuration.elementsXPath, xmlDoc.documentElement,
+       null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
     // this.xmltest = this.xmlDoc.getElementsByTagName("p")[0].innerHTML;
 
@@ -198,7 +200,8 @@ export class ToolSelectorTabComponent implements OnInit {
       if (id === null) {
         id = '';
       }
-      this.occRowData.push({occurence: element.textContent, section: element.parentElement.textContent.substring(0, 50), id: id, saved: true});
+      this.occRowData.push({occurence: element.textContent, section: element.parentElement.textContent.substring(0, 50),
+         id: id, saved: true});
     });
   }
 
@@ -234,21 +237,21 @@ export class ToolSelectorTabComponent implements OnInit {
 
   datOnEditClick() {
     // Get selected row
-    //const selRows = this.datGridOptions.api.getSelectedRows();
+    // const selRows = this.datGridOptions.api.getSelectedRows();
     const _rowIndex = this.datGridOptions.api.getFocusedCell().rowIndex;
     const selectedNode = this.datGridOptions.api.getDisplayedRowAtIndex(_rowIndex);
 
     // Check that (only) one row is selected
-    //if (selRows.length === 1) {
+    // if (selRows.length === 1) {
       switch (this.configuration.type) {
         case 'subjects':
-          //console.info(selectedNode);
+          // console.info(selectedNode);
           const subject: SubjectDescriptor = selectedNode.data as SubjectDescriptor;
           this.showDataDialog(subject);
           break;
-  
+
         case 'locations':
-          //console.info(selectedNode);
+          // console.info(selectedNode);
           const location: LocationDescriptor = selectedNode.data as LocationDescriptor;
           this.showDataDialog(location);
           break;
@@ -256,9 +259,9 @@ export class ToolSelectorTabComponent implements OnInit {
       /*const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id,
         title: selRows[0].title, date: selRows[0].date, published: selRows[0].published, genre: selRows[0].genre};
       this.showDataDialog(dataItem);*/
-    //} else {
+    // } else {
     //  alert('You need to select (only) one row to edit!');
-    //}
+    // }
   }
 
   datOnKeyDown(event: KeyboardEvent) {
@@ -272,7 +275,8 @@ export class ToolSelectorTabComponent implements OnInit {
       this.datGridOptions.api.forEachNodeAfterFilterAndSort( (node) => {
         // Skip if row with criteria has already been found
         if (!this.datRowFound) {
-          if (node.data[this.configuration.sortByField] !== null && node.data[this.configuration.sortByField].toLowerCase().startsWith(this.datSearchString) ) {
+          if (node.data[this.configuration.sortByField] !== null &&
+            node.data[this.configuration.sortByField].toLowerCase().startsWith(this.datSearchString) ) {
             // Select and show node
             this.datGotoNode(node, true, false);
           }
@@ -302,15 +306,15 @@ export class ToolSelectorTabComponent implements OnInit {
     // Subscribe to dialog closed event
     dialogRef.afterClosed().subscribe(result => {
       // If title is undefined, then user cancelled the dialog
-      if(result.success == true) {
+      if (result.success === true) {
         // Keep track of edited item, this will be used if server request is successful
-        //this.dataItemEdited = result;
+        // this.dataItemEdited = result;
         // id is defined, means that an item has been edited
-        if(result.id !== undefined)
+        if (result.id !== undefined) {
           this.editItem(result);
-        // Id is not defined, add item
-        else
+        } else {
           this.addItem(result);
+        }
       }
     });
   }
@@ -323,7 +327,7 @@ export class ToolSelectorTabComponent implements OnInit {
           data => {
             this.datGridOptions.api.updateRowData({add: [data.row]});
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
 
@@ -333,7 +337,7 @@ export class ToolSelectorTabComponent implements OnInit {
           data => {
             this.datGridOptions.api.updateRowData({add: [data.row]});
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
     }
@@ -345,10 +349,10 @@ export class ToolSelectorTabComponent implements OnInit {
         const subject: SubjectDescriptor = dialogData.data as SubjectDescriptor;
         this.data.editSubject(this.data.projectName, subject).subscribe(
           data => {
-            let rowNode = this.datGridOptions.api.getRowNode(data.row.id);
+            const rowNode = this.datGridOptions.api.getRowNode(data.row.id);
             rowNode.setData(data.row);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
 
@@ -356,10 +360,10 @@ export class ToolSelectorTabComponent implements OnInit {
         const location: LocationDescriptor = dialogData.data as LocationDescriptor;
         this.data.editLocation(this.data.projectName, location).subscribe(
           data => {
-            let rowNode = this.datGridOptions.api.getRowNode(data.row.id);
+            const rowNode = this.datGridOptions.api.getRowNode(data.row.id);
             rowNode.setData(data.row);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
     }
@@ -372,7 +376,7 @@ export class ToolSelectorTabComponent implements OnInit {
       const _rowIndex = this.datGridOptions.api.getFocusedCell().rowIndex;
       let n = this.datGridOptions.api.getDisplayedRowAtIndex(_rowIndex);
       n.setSelected(true);
-      //this.datGridOptions.api.selectIndex(_rowIndex, false, false);
+      // this.datGridOptions.api.selectIndex(_rowIndex, false, false);
       const rowSource = this.datGridOptions.api.getSelectedRows()[0];
       // Get selected row/node of occurences grid
       const rowDest = this.occGridOptions.api.getSelectedRows()[0];
@@ -396,7 +400,7 @@ export class ToolSelectorTabComponent implements OnInit {
 
   occOnSelectionChanged(event: any) {
     const node = this.occGridOptions.api.getSelectedNodes()[0];
-    console.info(node);
+    console.log(node);
     if (node.data.id.length > 0) {
       // Set id to search for in data grid
       this.datSearchId = node.data.id;
@@ -409,7 +413,7 @@ export class ToolSelectorTabComponent implements OnInit {
       this.datGridOptions.api.forEachNode( (n) => {
         // Skip if row with criteria has already been found
         if (!this.datRowFound) {
-          if (n.data.id == this.datSearchId) {
+          if (n.data.id === this.datSearchId) {
             // Select and show rowNode in data grid
             this.datGotoNode(n, false, true);
           }
