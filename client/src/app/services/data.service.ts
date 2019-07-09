@@ -28,15 +28,15 @@ export class DataService {
   public dataLocations: any;
   public dataDocuments: any;
 
-  public static Base64DecodeUnicode( stringBase64: string ) {
-    return decodeURIComponent(atob(stringBase64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  public static Base64DecodeUnicode(stringBase64: string) {
+    return decodeURIComponent(atob(stringBase64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
   }
 
   public static Base64EncodeUnicode(str) {
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
-        return String.fromCharCode(parseInt(p1, 16));
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+      return String.fromCharCode(parseInt(p1, 16));
     }));
   }
 
@@ -86,18 +86,18 @@ export class DataService {
   // ---------------------------------------
   // Projects
   // ---------------------------------------
-  getProjects(): Observable<any>  {
+  getProjects(): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/projects/');
   }
 
   addProject(project: DataItemDescriptor): Observable<any> {
-    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/projects/new/', {'name': project.title});
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/projects/new/', { 'name': project.title });
   }
 
   editProject(project: DataItemDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/projects/' +
-     project.id + '/edit/', {'name': project.title});
+      project.id + '/edit/', { 'name': project.title });
   }
 
   setProject(projectName: string) {
@@ -115,37 +115,41 @@ export class DataService {
   // ---------------------------------------
   // Publication Collections
   // ---------------------------------------
-  getPublicationCollections(projectName: string): Observable<any>  {
+  getPublicationCollections(projectName: string): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication_collection/list/');
   }
 
-  getPublicationCollection(projectName: string, collection: DataItemDescriptor): Observable<any>  {
+  getPublicationCollection(projectName: string, collection: DataItemDescriptor): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-     '/publication_collection/' + collection.id.toString() + '/info');
+      '/publication_collection/' + collection.id.toString() + '/info');
   }
 
   addPublicationCollection(projectName: string, collection: DataItemDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-     '/publication_collection/new/', {'name': collection.title, 'datePublishedExternally': collection.date,
-     'published': collection.published});
+      '/publication_collection/new/', {
+        'name': collection.title, 'datePublishedExternally': collection.date,
+        'published': collection.published
+      });
   }
 
   editPublicationCollection(projectName: string, collection: DataItemDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-    '/publication_collection/' + collection.id + '/edit/', {'name': collection.title, 'datePublishedExternally': collection.date,
-    'published': collection.published});
+      '/publication_collection/' + collection.id + '/edit/', {
+        'name': collection.title, 'datePublishedExternally': collection.date,
+        'published': collection.published
+      });
   }
 
   setPublicationCollectionTitle(projectName: string, collection: DataItemDescriptor) {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-     '/publication_collection/' + collection.id + '/title/edit/', {'filename': collection.fileName});
+      '/publication_collection/' + collection.id + '/title/edit/', { 'filename': collection.fileName });
   }
 
   setPublicationCollectionIntro(projectName: string, collection: DataItemDescriptor) {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-     '/publication_collection/' + collection.id + '/intro/edit/', {'filename': collection.fileName});
+      '/publication_collection/' + collection.id + '/intro/edit/', { 'filename': collection.fileName });
   }
 
 
@@ -153,16 +157,16 @@ export class DataService {
   // Publications
   // ---------------------------------------
 
-  getPublications(projectName: string, publicationCollection: number): Observable<any>  {
+  getPublications(projectName: string, publicationCollection: number): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-    '/publication_collection/' + publicationCollection.toString() + '/publications/');
+      '/publication_collection/' + publicationCollection.toString() + '/publications/');
   }
 
-  getPublication(projectName: string, publication: number ): Observable<any>  {
+  getPublication(projectName: string, publication: number): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-    '/publication/' + publication.toString() + '/');
+      '/publication/' + publication.toString() + '/');
   }
 
   addPublication(projectName: string, publicationCollection: number, publication: DataItemDescriptor): Observable<any> {
@@ -176,8 +180,8 @@ export class DataService {
     if (publication.published !== undefined) {
       data['published'] = publication.published;
     }
-    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/publication_collection/' +
-    publicationCollection.toString() + '/publications/new/', data);
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/publication_collection/' +
+      publicationCollection.toString() + '/publications/new/', data);
   }
 
   editPublication(projectName: string, publication: DataItemDescriptor): Observable<any> {
@@ -195,13 +199,13 @@ export class DataService {
       data['published'] = publication.published;
     }
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/publication/' + publication.id.toString() + '/edit/', data);
+      projectName + '/publication/' + publication.id.toString() + '/edit/', data);
   }
 
-  getComments(projectName: string, publication: number ): Observable<any>  {
+  getComments(projectName: string, publication: number): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/publication/' + publication.toString() + '/comments');
+      projectName + '/publication/' + publication.toString() + '/comments/');
   }
 
   editComments(projectName: string, publication: DataItemDescriptor): Observable<any> {
@@ -213,7 +217,7 @@ export class DataService {
       data['published'] = publication.published;
     }
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/publication/' + publication.id.toString() + '/comment/edit/', data);
+      projectName + '/publication/' + publication.id.toString() + '/comment/edit/', data);
   }
 
 
@@ -221,20 +225,20 @@ export class DataService {
   // Versions
   // ---------------------------------------
 
-  getVersions(projectName: string, publicationCollection: number, publication: number): Observable<any>  {
+  getVersions(projectName: string, publicationCollection: number, publication: number): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/text/' + publicationCollection.toString() + '/' + publication.toString() + '/var/');
+      projectName + '/text/' + publicationCollection.toString() + '/' + publication.toString() + '/var/');
   }
 
   addVersion(projectName: string, publication: number, version: DataItemDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName +  '/publication/' + publication.toString() + '/versions/new/', version);
+      projectName + '/publication/' + publication.toString() + '/versions/new/', version);
   }
 
   editVersion(projectName: string, version: DataItemDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/versions/' + version.id.toString() + '/edit/', version);
+      projectName + '/versions/' + version.id.toString() + '/edit/', version);
   }
 
 
@@ -242,20 +246,20 @@ export class DataService {
   // Manuscripts
   // ---------------------------------------
 
-  getManuscripts(projectName: string, publicationCollection: number, publication: number): Observable<any>  {
+  getManuscripts(projectName: string, publicationCollection: number, publication: number): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/text/' + publicationCollection.toString() + '/' + publication.toString() + '/ms/');
+      projectName + '/text/' + publicationCollection.toString() + '/' + publication.toString() + '/ms/');
   }
 
   addManuscript(projectName: string, publication: number, manuscript: DataItemDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName +  '/publication/' + publication.toString() + '/manuscripts/new/', manuscript);
+      projectName + '/publication/' + publication.toString() + '/manuscripts/new/', manuscript);
   }
 
   editManuscript(projectName: string, manuscript: DataItemDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/manuscripts/' + manuscript.id.toString() + '/edit/', manuscript);
+      projectName + '/manuscripts/' + manuscript.id.toString() + '/edit/', manuscript);
   }
 
 
@@ -265,27 +269,27 @@ export class DataService {
 
   addFacsimileCollection(projectName: string, collection: FacsimileCollectionDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName +  '/facsimile_collection/new/', collection);
+      projectName + '/facsimile_collection/new/', collection);
   }
 
   editFacsimileCollection(projectName: string, collection: FacsimileCollectionDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName +  '/facsimile_collection/' + collection.id + '/edit/', collection);
+      projectName + '/facsimile_collection/' + collection.id + '/edit/', collection);
   }
 
   getFacsimileCollections(projectName: string): Observable<any> {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/facsimile_collection/list/');
+      projectName + '/facsimile_collection/list/');
   }
 
   getFacsimiles(projectName: string, publication: number): Observable<any> {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/publication/' + publication + '/facsimiles/');
+      projectName + '/publication/' + publication + '/facsimiles/');
   }
 
   linkFacsimile(projectName: string, facsimile: FacsimileDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName +  '/facsimile_collection/' + facsimile.facsimile_collection_id + '/link/', facsimile);
+      projectName + '/facsimile_collection/' + facsimile.facsimile_collection_id + '/link/', facsimile);
   }
 
   /*editFacsimile(projectName: string, publication: number, facsimile: FacsimileDescriptor): Observable<any> {
@@ -304,12 +308,12 @@ export class DataService {
 
   addLocation(projectName: string, location: LocationDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName +  '/locations/new/', location);
+      projectName + '/locations/new/', location);
   }
 
   editLocation(projectName: string, location: LocationDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/locations/' + location.id.toString() + '/edit/', location);
+      projectName + '/locations/' + location.id.toString() + '/edit/', location);
   }
 
   getSubjects(): Observable<any> {
@@ -318,12 +322,12 @@ export class DataService {
 
   addSubject(projectName: string, subject: SubjectDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName +  '/subjects/new/', subject);
+      projectName + '/subjects/new/', subject);
   }
 
   editSubject(projectName: string, subject: SubjectDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-     projectName + '/subjects/' + subject.id.toString() + '/edit/', subject);
+      projectName + '/subjects/' + subject.id.toString() + '/edit/', subject);
   }
 
   // ---------------------------------------
@@ -332,14 +336,14 @@ export class DataService {
 
   // Get a table of contents file from the server
   getTOC(projectName: string, collection: PublicationCollectionDescriptor): Observable<any> {
-    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/toc/' + collection.id);
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/toc/' + collection.id);
   }
 
   // Save a table of contents file to the server
   putTOC(projectName: string, collection: PublicationCollectionDescriptor, toc: string): Observable<any> {
     // Send the toc with a http request
-    return this.http.put<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +  '/toc/' + collection.id , toc,
-     httpOptions);
+    return this.http.put<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/toc/' + collection.id, toc,
+      httpOptions);
   }
 
   // ---------------------------------------
@@ -347,7 +351,7 @@ export class DataService {
   // ---------------------------------------
 
   // Get a document tree from the server
-  getDocumentTree(path: string, master: boolean): Observable<any>  {
+  getDocumentTree(path: string, master: boolean): Observable<any> {
     // Add slashes to start and end of path string if necessary
     path = this.addSlashesToPath(path);
     // Master path?
@@ -377,12 +381,12 @@ export class DataService {
     const documentBase64 = DataService.Base64EncodeUnicode(document);
     // Send the request to the server
     return this.http.put<any>(environment.api_url + '/' +
-      this.api_url_path + '/' + this.projectName + '/update_file/by_path' + pathAdd + path + doc.name, { 'file' : documentBase64 },
-       httpOptions);
+      this.api_url_path + '/' + this.projectName + '/update_file/by_path' + pathAdd + path + doc.name, { 'file': documentBase64 },
+      httpOptions);
   }
 
   // Add leading and trailing slashes to a path string
-  addSlashesToPath (path: string): string {
+  addSlashesToPath(path: string): string {
     if (path.length > 0 && !path.startsWith('/')) {
       path = '/' + path;
     }
