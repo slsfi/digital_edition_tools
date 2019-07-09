@@ -95,7 +95,11 @@ export class ToolPublisherComponent implements OnInit {
     // Get comments
     this.data.getComments(this.data.projectName, publication.id).subscribe(
       data => {
-        this.comments = data.original_filename;
+        if (data[0] !== undefined) {
+          this.comments = data[0].original_filename;
+        } else {
+          this.comments = data.original_filename;
+        }
       },
       err => { console.log(err); }
     );
