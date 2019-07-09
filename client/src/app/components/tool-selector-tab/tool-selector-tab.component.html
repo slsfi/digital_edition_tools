@@ -1,14 +1,9 @@
 <!--<button (click)="buttonClick($event)" >Load</button><span>{{header}}</span>-->
 <div class="float">
-  <div class="button-area info">{{fileName}}</div>
-  <ag-grid-angular
-                  class="ag-theme-balham"
-                  [rowData]="occRowData"
-                  [columnDefs]="occColumnDefs"
-                  [gridOptions]="occGridOptions"
-                  (gridReady)="occOnGridReady($event)"
-                  (keydown)="occOnKeyDown($event)"
-                  (selectionChanged)="occOnSelectionChanged($event)">
+  <div class="button-area info">{{filename}}</div>
+  <ag-grid-angular class="ag-theme-balham" [rowData]="occRowData" [columnDefs]="occColumnDefs"
+    [gridOptions]="occGridOptions" (gridReady)="occOnGridReady($event)" (keydown)="occOnKeyDown($event)"
+    (selectionChanged)="occOnSelectionChanged($event)">
   </ag-grid-angular>
 </div>
 <div class="float">
@@ -17,15 +12,9 @@
     <button mat-raised-button (click)="datOnAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
     <button mat-raised-button (click)="datOnEditClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
   </div>
-  <ag-grid-angular
-                  class="ag-theme-balham"
-                  [rowData]="datRowData"
-                  [columnDefs]="datColumnDefs"
-                  [gridOptions]="datGridOptions"
-                  (gridReady)="datOnGridReady($event)"
-                  (keydown)="datOnKeyDown($event)"
-                  (cellClicked)="datOnCellClicked($event)"
-                  (cellDoubleClicked)="datOnCellDoubleClicked($event)">
+  <ag-grid-angular class="ag-theme-balham" [rowData]="datRowData" [columnDefs]="datColumnDefs"
+    [gridOptions]="datGridOptions" (gridReady)="datOnGridReady($event)" (keydown)="datOnKeyDown($event)"
+    (cellClicked)="datOnCellClicked($event)" (cellDoubleClicked)="datOnCellDoubleClicked($event)">
   </ag-grid-angular>
 </div>
 <div class="float">

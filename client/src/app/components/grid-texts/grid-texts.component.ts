@@ -14,7 +14,7 @@ export class GridTextsComponent implements OnInit {
 
   gridOptions: GridOptions;
   columnDefs: any[];
-  showRemove: boolean = false;
+  showRemove = false;
 
   dataItemEdited: DataItemDescriptor;
 
@@ -37,15 +37,15 @@ export class GridTextsComponent implements OnInit {
     };
 
     // Set callback so rows can be found with the getRowNode function
-    this.gridOptions.getRowNodeId = function(data) {
+    this.gridOptions.getRowNodeId = function (data) {
       return data.id;
     };
 
     // Grid columns
     this.columnDefs = [
-      {headerName: 'Title', field: 'title', width: 230, rowDrag: true},
-      {headerName: 'Id', field: 'id', hide: true},
-      {headerName: 'Filename', field: 'filename', width: 400}
+      { headerName: 'Title', field: 'title', width: 230, rowDrag: true },
+      { headerName: 'Id', field: 'id', hide: true },
+      { headerName: 'Filename', field: 'filename', width: 400 }
     ];
 
   }
@@ -58,10 +58,10 @@ export class GridTextsComponent implements OnInit {
   }
 
   onRowDragEnd(event: any) {
-    this.gridOptions.api.forEachNodeAfterFilterAndSort( (node) => {
-      switch(this.dataType) {
+    this.gridOptions.api.forEachNodeAfterFilterAndSort((node) => {
+      switch (this.dataType) {
         case DataItemType.Version:
-          let version: DataItemDescriptor = {type: DataItemType.Version, id: node.data.id, sort_order: node.childIndex+1};
+          const version: DataItemDescriptor = { type: DataItemType.Version, id: node.data.id, sort_order: node.childIndex + 1 };
           this.data.editVersion(this.data.projectName, version).subscribe(
             data => { },
             err => { console.log(err); }
@@ -69,7 +69,7 @@ export class GridTextsComponent implements OnInit {
           break;
 
         case DataItemType.Manuscript:
-          let manuscript: DataItemDescriptor = {type: DataItemType.Manuscript, id: node.data.id, sort_order: node.childIndex+1};
+          const manuscript: DataItemDescriptor = { type: DataItemType.Manuscript, id: node.data.id, sort_order: node.childIndex + 1 };
           this.data.editManuscript(this.data.projectName, manuscript).subscribe(
             data => { },
             err => { console.log(err); }
@@ -84,20 +84,23 @@ export class GridTextsComponent implements OnInit {
   }
 
   onAddClick() {
-    //const doc: ChildEvent = {type: ChildEventType.Add};
-    //this.addClick.emit(doc);
-    const dataEmpty: DataItemDescriptor = {type: this.dataType};
+    // const doc: ChildEvent = {type: ChildEventType.Add};
+    // this.addClick.emit(doc);
+    const dataEmpty: DataItemDescriptor = { type: this.dataType };
     this.showDataDialog(dataEmpty);
   }
 
   onEditClick() {
     const selRows = this.gridOptions.api.getSelectedRows();
-    if(selRows.length == 1) {
-      const dataItem: DataItemDescriptor = {type: this.dataType, id: selRows[0].id, title: selRows[0].title, fileName: selRows[0].filename};
+    if (selRows.length === 1) {
+      const dataItem: DataItemDescriptor = {
+        type: this.dataType, id: selRows[0].id,
+        title: selRows[0].title, filename: selRows[0].filename
+      };
       this.showDataDialog(dataItem);
-    }
-    else
+    } else {
       alert('You need to select a row to edit!');
+    }
   }
 
   // Remove clicked, not currently implemented
@@ -111,26 +114,29 @@ export class GridTextsComponent implements OnInit {
 
   onLinkFileClick() {
     const selRows = this.gridOptions.api.getSelectedRows();
-    if(selRows.length == 1) {
-      //this.linkItemEditedId = selRows[0].id;
+    if (selRows.length == 1) {
+      // this.linkItemEditedId = selRows[0].id;
       this.showGitDialog();
-    }
-    else
+    } else {
       alert('You need to select a row to link a file!');
+    }
   }
 
   showGitDialog() {
     const dialogRef = this.dialog.open(DialogGitComponent, {
       width: '700px',
-      data: {name: "", path: ""}
+      data: { name: '', path: '' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result.name.length > 0) {
+      if (result.name.length > 0) {
         // Get selected rows of grid
-        let selRows = this.gridOptions.api.getSelectedRows();
+        const selRows = this.gridOptions.api.getSelectedRows();
         // Create a data item and set the path to the selected file
-        const dataItem: DataItemDescriptor = {type: this.dataType, id: selRows[0].id, title: selRows[0].title, fileName: result.path + '/' + result.name};
+        const dataItem: DataItemDescriptor = {
+          type: this.dataType, id: selRows[0].id,
+          title: selRows[0].title, filename: result.path + '/' + result.name
+        };
         // Keep track of edited item, this will be used if server request is successful
         this.dataItemEdited = dataItem;
         // Edit the item (send request to server)
@@ -148,22 +154,24 @@ export class GridTextsComponent implements OnInit {
     // Subscribe to dialog closed event
     dialogRef.afterClosed().subscribe(result => {
       // If title is undefined, then user cancelled the dialog
-      if(result.title !== undefined) {
+      if (result.title !== undefined) {
         // Keep track of edited item, this will be used if server request is successful
         this.dataItemEdited = result;
         // id is defined, means that an item has been edited
-        if(result.id !== undefined)
+        if (result.id !== undefined) {
           this.editItem(result);
+        }
         // Id is not defined, add item
-        else
+        else {
           this.addItem(result);
+        }
       }
     });
   }
 
   addItem(dataItem: DataItemDescriptor) {
-    dataItem.sort_order = this.gridOptions.api.getDisplayedRowCount()+1;
-    switch(dataItem.type) {
+    dataItem.sort_order = this.gridOptions.api.getDisplayedRowCount() + 1;
+    switch (dataItem.type) {
       case DataItemType.Version:
         this.data.addVersion(this.data.projectName, this.data.publication, dataItem).subscribe(
           data => {
@@ -192,7 +200,7 @@ export class GridTextsComponent implements OnInit {
 
   // Edit an item
   editItem(dataItem: DataItemDescriptor) {
-    switch(dataItem.type) {
+    switch (dataItem.type) {
       case DataItemType.Version:
         this.data.editVersion(this.data.projectName, dataItem).subscribe(
           data => {
@@ -216,18 +224,18 @@ export class GridTextsComponent implements OnInit {
     // Create a grid row item from the project data
     const rowDataItem = this.createGridData(this.dataItemEdited);
     // Add the new project row to the grid
-    this.gridOptions.api.updateRowData({add: [rowDataItem]});
+    this.gridOptions.api.updateRowData({ add: [rowDataItem] });
   }
 
   editRow(data: any) {
     // Get the row node with the id of the edited item
-    let rowNode = this.gridOptions.api.getRowNode(this.dataItemEdited.id.toString());
+    const rowNode = this.gridOptions.api.getRowNode(this.dataItemEdited.id.toString());
     // Set the new item row data
     rowNode.setData(this.createGridData(this.dataItemEdited));
   }
 
   createGridData(dataItem: DataItemDescriptor): any {
-    let newData = {'title': dataItem.title, 'id': dataItem.id, 'filename': dataItem.fileName};
+    const newData = { 'title': dataItem.title, 'id': dataItem.id, 'filename': dataItem.filename };
     return newData;
   }
 

@@ -16,7 +16,7 @@ export class ToolSelectorTabComponent implements OnInit {
   @Input() header: string;
   @Input() configuration: SelectorTabConfiguration;
 
-  public fileName = 'No file opened';
+  public filename = 'No file opened';
 
   // Grid for occurences
   occGridOptions: GridOptions;
@@ -59,7 +59,7 @@ export class ToolSelectorTabComponent implements OnInit {
     };
 
     // Set row style callback functions
-    this.occGridOptions.getRowStyle = function(params) {
+    this.occGridOptions.getRowStyle = function (params) {
       if (!params.node.data.saved) {
         return { color: 'blue' };
       } else if (params.node.data.id.length > 0) {
@@ -69,10 +69,10 @@ export class ToolSelectorTabComponent implements OnInit {
 
     // Set columns for occurences grid
     this.occColumnDefs = [
-      {headerName: 'Occurence', field: 'occurence'},
-      {headerName: 'Paragraph', field: 'section'},
-      {headerName: 'Id', field: 'id'},
-      {headerName: 'Saved', field: 'saved', hide: true}
+      { headerName: 'Occurence', field: 'occurence' },
+      { headerName: 'Paragraph', field: 'section' },
+      { headerName: 'Id', field: 'id' },
+      { headerName: 'Saved', field: 'saved', hide: true }
     ];
 
   }
@@ -82,19 +82,19 @@ export class ToolSelectorTabComponent implements OnInit {
     switch (this.configuration.type) {
       case 'subjects':
         this.datColumnDefs = [
-          {headerName: 'Surname', field: 'last_name', sortingOrder: ['asc', 'desc']},
-          {headerName: 'First name', field: 'first_name'},
-          {headerName: 'Full name', field: 'full_name'},
-          {headerName: 'Description', field: 'description'},
-          {headerName: 'Id', field: 'id'} // , hide: true
+          { headerName: 'Surname', field: 'last_name', sortingOrder: ['asc', 'desc'] },
+          { headerName: 'First name', field: 'first_name' },
+          { headerName: 'Full name', field: 'full_name' },
+          { headerName: 'Description', field: 'description' },
+          { headerName: 'Id', field: 'id' } // , hide: true
         ];
         break;
 
       case 'locations':
         this.datColumnDefs = [
-          {headerName: 'Place', field: 'name', sortingOrder: ['asc', 'desc']},
-          {headerName: 'Description', field: 'description'},
-          {headerName: 'Id', field: 'id'} // , hide: true
+          { headerName: 'Place', field: 'name', sortingOrder: ['asc', 'desc'] },
+          { headerName: 'Description', field: 'description' },
+          { headerName: 'Id', field: 'id' } // , hide: true
         ];
         break;
     }
@@ -185,7 +185,7 @@ export class ToolSelectorTabComponent implements OnInit {
 
     // Get the nodes using XPath defined in configuration (environment)
     const xp: XPathResult = xmlDoc.evaluate(this.configuration.elementsXPath, xmlDoc.documentElement,
-       null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+      null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
     // this.xmltest = this.xmlDoc.getElementsByTagName("p")[0].innerHTML;
 
@@ -200,8 +200,10 @@ export class ToolSelectorTabComponent implements OnInit {
       if (id === null) {
         id = '';
       }
-      this.occRowData.push({occurence: element.textContent, section: element.parentElement.textContent.substring(0, 50),
-         id: id, saved: true});
+      this.occRowData.push({
+        occurence: element.textContent, section: element.parentElement.textContent.substring(0, 50),
+        id: id, saved: true
+      });
     });
   }
 
@@ -211,7 +213,7 @@ export class ToolSelectorTabComponent implements OnInit {
 
   sortData() {
     const sort = [
-      {colId: this.configuration.sortByField, sort: 'asc'}
+      { colId: this.configuration.sortByField, sort: 'asc' }
     ];
     this.datGridOptions.api.setSortModel(sort);
   }
@@ -243,22 +245,22 @@ export class ToolSelectorTabComponent implements OnInit {
 
     // Check that (only) one row is selected
     // if (selRows.length === 1) {
-      switch (this.configuration.type) {
-        case 'subjects':
-          // console.log(selectedNode);
-          const subject: SubjectDescriptor = selectedNode.data as SubjectDescriptor;
-          this.showDataDialog(subject);
-          break;
+    switch (this.configuration.type) {
+      case 'subjects':
+        // console.log(selectedNode);
+        const subject: SubjectDescriptor = selectedNode.data as SubjectDescriptor;
+        this.showDataDialog(subject);
+        break;
 
-        case 'locations':
-          // console.log(selectedNode);
-          const location: LocationDescriptor = selectedNode.data as LocationDescriptor;
-          this.showDataDialog(location);
-          break;
-      }
-      /*const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id,
-        title: selRows[0].title, date: selRows[0].date, published: selRows[0].published, genre: selRows[0].genre};
-      this.showDataDialog(dataItem);*/
+      case 'locations':
+        // console.log(selectedNode);
+        const location: LocationDescriptor = selectedNode.data as LocationDescriptor;
+        this.showDataDialog(location);
+        break;
+    }
+    /*const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id,
+      title: selRows[0].title, date: selRows[0].date, published: selRows[0].published, genre: selRows[0].genre};
+    this.showDataDialog(dataItem);*/
     // } else {
     //  alert('You need to select (only) one row to edit!');
     // }
@@ -272,11 +274,11 @@ export class ToolSelectorTabComponent implements OnInit {
       // Set datRowFound to false to enable search
       this.datRowFound = false;
       // Select first node with search criteria
-      this.datGridOptions.api.forEachNodeAfterFilterAndSort( (node) => {
+      this.datGridOptions.api.forEachNodeAfterFilterAndSort((node) => {
         // Skip if row with criteria has already been found
         if (!this.datRowFound) {
           if (node.data[this.configuration.sortByField] !== null &&
-            node.data[this.configuration.sortByField].toLowerCase().startsWith(this.datSearchString) ) {
+            node.data[this.configuration.sortByField].toLowerCase().startsWith(this.datSearchString)) {
             // Select and show node
             this.datGotoNode(node, true, false);
           }
@@ -325,7 +327,7 @@ export class ToolSelectorTabComponent implements OnInit {
         const subject: SubjectDescriptor = dialogData.data as SubjectDescriptor;
         this.data.addSubject(this.data.projectName, subject).subscribe(
           data => {
-            this.datGridOptions.api.updateRowData({add: [data.row]});
+            this.datGridOptions.api.updateRowData({ add: [data.row] });
           },
           err => { console.log(err); }
         );
@@ -335,7 +337,7 @@ export class ToolSelectorTabComponent implements OnInit {
         const location: LocationDescriptor = dialogData.data as LocationDescriptor;
         this.data.addLocation(this.data.projectName, location).subscribe(
           data => {
-            this.datGridOptions.api.updateRowData({add: [data.row]});
+            this.datGridOptions.api.updateRowData({ add: [data.row] });
           },
           err => { console.log(err); }
         );
@@ -410,7 +412,7 @@ export class ToolSelectorTabComponent implements OnInit {
       // Enable searching
       this.datRowFound = false;
       // Select node with id in data grid
-      this.datGridOptions.api.forEachNode( (n) => {
+      this.datGridOptions.api.forEachNode((n) => {
         // Skip if row with criteria has already been found
         if (!this.datRowFound) {
           if (n.data.id === this.datSearchId) {

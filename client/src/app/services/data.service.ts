@@ -144,12 +144,12 @@ export class DataService {
 
   setPublicationCollectionTitle(projectName: string, collection: DataItemDescriptor) {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-      '/publication_collection/' + collection.id + '/title/edit/', { 'filename': collection.fileName });
+      '/publication_collection/' + collection.id + '/title/edit/', { 'filename': collection.filename });
   }
 
   setPublicationCollectionIntro(projectName: string, collection: DataItemDescriptor) {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-      '/publication_collection/' + collection.id + '/intro/edit/', { 'filename': collection.fileName });
+      '/publication_collection/' + collection.id + '/intro/edit/', { 'filename': collection.filename });
   }
 
 
@@ -192,8 +192,8 @@ export class DataService {
     if (publication.genre !== undefined) {
       data['genre'] = publication.genre;
     }
-    if (publication.fileName !== undefined) {
-      data['filename'] = publication.fileName;
+    if (publication.filename !== undefined) {
+      data['filename'] = publication.filename;
     }
     if (publication.published !== undefined) {
       data['published'] = publication.published;
@@ -210,8 +210,8 @@ export class DataService {
 
   editComments(projectName: string, publication: DataItemDescriptor): Observable<any> {
     const data = {};
-    if (publication.fileName !== undefined) {
-      data['filename'] = publication.fileName;
+    if (publication.filename !== undefined) {
+      data['filename'] = publication.filename;
     }
     if (publication.published !== undefined) {
       data['published'] = publication.published;
@@ -432,7 +432,7 @@ export interface DataItemDescriptor {
   date?: string;
   published?: number;
   genre?: string;
-  fileName?: string;
+  filename?: string;
   sort_order?: number;
   data?: any;
 }

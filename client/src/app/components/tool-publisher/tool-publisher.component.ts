@@ -197,11 +197,11 @@ export class ToolPublisherComponent implements OnInit {
     });
   }
 
-  setPublicationCollectionTitle(fileName: string) {
-    this.titleText = fileName;
+  setPublicationCollectionTitle(filename: string) {
+    this.titleText = filename;
     const collection: DataItemDescriptor = {
       type: DataItemType.PublicationCollection,
-      id: this.data.publicationCollection, fileName: fileName
+      id: this.data.publicationCollection, filename: filename
     };
     this.data.setPublicationCollectionTitle(this.data.projectName, collection).subscribe(
       data => {
@@ -211,11 +211,11 @@ export class ToolPublisherComponent implements OnInit {
     );
   }
 
-  setPublicationCollectionIntro(fileName: string) {
-    this.introductionText = fileName;
+  setPublicationCollectionIntro(filename: string) {
+    this.introductionText = filename;
     const collection: DataItemDescriptor = {
       type: DataItemType.PublicationCollection,
-      id: this.data.publicationCollection, fileName: fileName
+      id: this.data.publicationCollection, filename: filename
     };
     this.data.setPublicationCollectionIntro(this.data.projectName, collection).subscribe(
       data => {
@@ -225,11 +225,11 @@ export class ToolPublisherComponent implements OnInit {
     );
   }
 
-  setReadingText(fileName: string) {
-    this.readingText = fileName;
+  setReadingText(filename: string) {
+    this.readingText = filename;
     const publication: DataItemDescriptor = {
       type: DataItemType.Publication,
-      id: this.data.publication, fileName: fileName
+      id: this.data.publication, filename: filename
     };
     this.data.editPublication(this.data.projectName, publication).subscribe(
       data => {
@@ -239,11 +239,11 @@ export class ToolPublisherComponent implements OnInit {
     );
   }
 
-  setComments(fileName: string) {
-    this.comments = fileName;
+  setComments(filename: string) {
+    this.comments = filename;
     const publicationComments: DataItemDescriptor = {
       type: DataItemType.Comments,
-      id: this.data.publication, fileName: fileName
+      id: this.data.publication, filename: filename
     };
     this.data.editComments(this.data.projectName, publicationComments).subscribe(
       data => {

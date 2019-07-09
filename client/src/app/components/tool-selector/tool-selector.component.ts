@@ -20,8 +20,8 @@ export class ToolSelectorComponent implements OnInit {
   xmlNodes: Node[] = [];
   domParser = new DOMParser();
 
-  openedDocumentServer: DocumentDescriptor = {name: '', path: ''};
-  fileNameLocal = '';
+  openedDocumentServer: DocumentDescriptor = { name: '', path: '' };
+  filenameLocal = '';
 
   // showSpinner: boolean = false;
 
@@ -49,8 +49,8 @@ export class ToolSelectorComponent implements OnInit {
     // Get the list of selected files
     const files: FileList = event.target.files;
     // set filename
-    this.openedDocumentServer = {name: '', path: ''};
-    this.fileNameLocal = event.target.files[0].name;
+    this.openedDocumentServer = { name: '', path: '' };
+    this.filenameLocal = event.target.files[0].name;
     // Create a file reader and create a callback for the file read
     const reader = new FileReader();
     reader.onload = () => {
@@ -116,11 +116,11 @@ export class ToolSelectorComponent implements OnInit {
   loadDocumentFromServer(doc: DocumentDescriptor) {
     // Set opened document
     this.openedDocumentServer = doc;
-    this.fileNameLocal = doc.name;
+    this.filenameLocal = doc.name;
     // Set tab data
     this.selectorTabs.forEach((child) => {
       child.showLoadingOverlay();
-      child.fileName = doc.path + '/' + doc.name;
+      child.filename = doc.path + '/' + doc.name;
     });
     // Load document
     this.data.getDocument(doc, this.useMasterFiles).subscribe(
@@ -130,7 +130,7 @@ export class ToolSelectorComponent implements OnInit {
         // Parse the xml string
         this.readXmlString(this.xmlFile);
         // Console
-       // console.log(this.xmlFile);
+        // console.log(this.xmlFile);
       },
       err => { }
     );
@@ -146,7 +146,7 @@ export class ToolSelectorComponent implements OnInit {
     // Create a blob from the string
     const blob = new Blob([stringToSave], { type: 'text/plain' });
     // Save the blob
-    saveAs(blob, this.fileNameLocal);
+    saveAs(blob, this.filenameLocal);
   }
 
   onSaveFileServer() {
