@@ -286,6 +286,11 @@ export class ToolTOCComponent implements OnInit {
         delete obj.id;
       }
 
+      if (obj.hasOwnProperty('itemid')) {
+        obj.itemId = obj.itemid;
+        delete obj.itemid;
+      }
+
       // Recursive call for child objects
       for (k in obj) {
         if (obj.hasOwnProperty(k)) {
