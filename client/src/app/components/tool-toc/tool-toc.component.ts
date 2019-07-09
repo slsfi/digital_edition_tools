@@ -1,7 +1,7 @@
 /*
 Name: tool-toc
 Description: Use this to create table of contents for publication collections
-Notes: This component uses nestable2, which is a jQuery plugin. 
+Notes: This component uses nestable2, which is a jQuery plugin.
 Although it's not recommended to use jQuery with Angular, there
 isn't any good drag and drop treeview system available for Angular.
 */
@@ -30,12 +30,11 @@ export class ToolTOCComponent implements OnInit {
   dataItemType = DataItemType;
   elementSelector = '#menu';
   itemCurrent: MenuItem;
-  //selectedCollection: Collection;
   publicationCollection: PublicationCollectionDescriptor;
   publicationCollectionText = '';
 
-  isDisabled: boolean = true;  
-  tocLoaded: boolean = false;
+  isDisabled: Boolean = true;
+  tocLoaded: Boolean = false;
 
   @ViewChild(GridPublicationsComponent) private publicationsComponent: GridPublicationsComponent;
 
@@ -44,29 +43,31 @@ export class ToolTOCComponent implements OnInit {
 
   ngOnInit() {
 
-    //this.selectedCollection = {type: '', text: '', collectionId: ''};
+    // this.selectedCollection = {type: '', text: '', collectionId: ''};
     this.publicationCollection = {id: 0, title: '', published: 0};
     // Change active tool
     this.data.changeTool('Table of Contents');
     // Create an instance of MenuItem
     this.itemCurrent = new MenuItem();
     // Create json data for nestable
-    //const jsonMenu = [{'id':1,'url':1,'itemId':'','type':'link','content':'Ljungblommor','text':'Ljungblommor'},{'id':2,'url':2,'itemId':'','type':'link',
-    //'content':'En ros','text':'En ros'},{'id':3,'url':3,'itemId':'','type':'heading1','content':'Andra dikter','text':'Andra dikter',
-    //'children':[{'id':4,'url':4,'itemId':'','type':'link','content':'Våren','text':'Våren'},{'id':5,'url':5,'itemId':'','type':'link','foo':'bar'
-    //,'content':'Hösten','text':'Hösten'}]}];
+    // const jsonMenu = [{'id':1,'url':1,'itemId':'','type':'link','content':'Ljungblommor','text':'Ljungblommor'},
+    // {'id':2,'url':2,'itemId':'','type':'link',
+    // 'content':'En ros','text':'En ros'},{'id':3,'url':3,'itemId':'','type':'heading1','content':'Andra dikter','text':'Andra dikter',
+    // 'children':[{'id':4,'url':4,'itemId':'','type':'link','content':'Våren','text':'Våren'},
+    // {'id':5,'url':5,'itemId':'','type':'link','foo':'bar'
+    // ,'content':'Hösten','text':'Hösten'}]}];
     // Populate the menu
     this.populateMenu([]);
   }
 
   createEmptyMenu(): any {
-    return 
+    return;
   }
 
   populateMenu(json: any) {
 
     // Convert json string to an object so it can be parsed
-    //let oJson = JSON.parse(json);
+    // let oJson = JSON.parse(json);
     let oJson = json;
     if ( oJson.collectionId !== undefined ) {
       oJson = oJson.children;
@@ -102,18 +103,19 @@ export class ToolTOCComponent implements OnInit {
     // Deactivate nestable before reactivation
     $(this.elementSelector).nestable('destroy');
     // Create json data for nestable
-    const jsonMenu = [{'url':1,'type':'est','content':'Ljungblommor','text':'Ljungblommor'},
-    {'url':2,'type':'est','content':'En ros','text':'En ros'},
-    {'url':3,'type':'heading1','content':'Andra dikter','text':'Andra dikter',
-    'children':[{'url':4,'type':'est','content':'Våren','text':'Våren'},
-    {'url':5,'type':'est','foo':'bar','content':'Hösten','text':'Hösten'}]}];
+    const jsonMenu = [{'url': 1, 'type': 'est', 'content': 'Ljungblommor', 'text': 'Ljungblommor'},
+    {'url': 2, 'type': 'est', 'content': 'En ros', 'text': 'En ros'},
+    {'url': 3, 'type': 'heading1', 'content': 'Andra dikter', 'text': 'Andra dikter',
+    'children': [{'url': 4, 'type': 'est', 'content': 'Våren', 'text': 'Våren'},
+    {'url': 5, 'type': 'est', 'foo': 'bar', 'content': 'Hösten', 'text': 'Hösten'}]}];
     // Populate menu and reactivate nestable
     this.populateMenu(jsonMenu);
   }
 
   onPublicationOpened(event: any) {
-    if(!this.isDisabled)
-      this.itemCurrent.itemId = this.publicationCollection.id.toString() + "_" + event.id.toString();
+    if (!this.isDisabled) {
+      this.itemCurrent.itemId = this.publicationCollection.id.toString() + '_' + event.id.toString();
+    }
   }
 
   clearForm() {
@@ -164,7 +166,7 @@ export class ToolTOCComponent implements OnInit {
   expandAll() {
     $(this.elementSelector).nestable('expandAll');
   }
-  
+
   onKeyUp(event: KeyboardEvent): void {
     if (event.which === 13) { // Enter pressed
       // Add / update item
@@ -194,7 +196,7 @@ export class ToolTOCComponent implements OnInit {
       // Deactivate nestable before reactivation
       $(this.elementSelector).nestable('destroy');
       // Create json data for nestable
-      //const jsonMenu: string = reader.result.toString();
+      // const jsonMenu: string = reader.result.toString();
       const jsonMenu: any = JSON.parse(reader.result.toString());
       // Populate menu and reactivate nestable
       this.populateMenu(jsonMenu);
@@ -213,9 +215,9 @@ export class ToolTOCComponent implements OnInit {
     // Remove the 'id' properties from the json object
     this.processJsonForSave(jsonObj);
 
-    let tmpObj = {text: '', collectionId: '', type: '', children: Array<object>()};
+    const tmpObj = {text: '', collectionId: '', type: '', children: Array<object>()};
     tmpObj.text = this.publicationCollection.title;
-    tmpObj.collectionId = this.publicationCollection.id.toString()
+    tmpObj.collectionId = this.publicationCollection.id.toString();
     tmpObj.type = 'title';
     tmpObj.children = jsonObj;
 
@@ -229,7 +231,7 @@ export class ToolTOCComponent implements OnInit {
     // Convert the toc to a string
     const toc = this.tocToString();
     // Create a blob from the string
-    const blob = new Blob([toc], { type: 'text/plain' });
+    const blob = new Blob([toc], { type: 'application/json' });
     // Save the blob
     saveAs(blob, 'menu.json');
   }
@@ -240,9 +242,9 @@ export class ToolTOCComponent implements OnInit {
     // Send request to the server
     this.data.putTOC(this.data.projectName, this.publicationCollection, toc).subscribe(
       data => {
-        console.info(data);
+        console.log(data);
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
   }
 
@@ -302,8 +304,7 @@ export class ToolTOCComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.clearForm();
       this.publicationCollection = result;
-      this.publicationCollectionText = result.id.toString() + ': ' + result.title; 
-      console.info(this.publicationCollection);
+      this.publicationCollectionText = result.id.toString() + ': ' + result.title;
       this.createTOCFromCollection(this.publicationCollection);
       // Set loaded to true
       this.tocLoaded = true;
@@ -323,7 +324,7 @@ export class ToolTOCComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.clearForm();
       this.publicationCollection = result;
-      this.publicationCollectionText = result.id.toString() + ': ' + result.title; 
+      this.publicationCollectionText = result.id.toString() + ': ' + result.title;
       this.data.getTOC(this.data.projectName, this.publicationCollection).subscribe(
         data => {
           // Deactivate nestable before reactivation
@@ -337,8 +338,8 @@ export class ToolTOCComponent implements OnInit {
           // Update the publications for the selected collection
           this.updatePublications();
         },
-        err => { 
-          alert("ToC could not be loaded (probably doesn't exist).");
+        err => {
+          alert('ToC could not be loaded (probably doesn\'t exist).');
         }
       );
     });
@@ -348,17 +349,11 @@ export class ToolTOCComponent implements OnInit {
     this.data.getPublications(this.data.projectName, collection.id).subscribe(
       data => {
         // Create menu items from all the publications
-        let jsonObj = [];
-        for (var i = 0; i < data.length; i++) {
-          jsonObj.push( {'text': data[i].name, 'type': 'est', 'url': '', 'itemid': data[i].publication_collection_id.toString()+'_'+data[i].id.toString(), } );
+        const jsonObj = [];
+        for (let i = 0; i < data.length; i++) {
+          jsonObj.push( {'text': data[i].name, 'type': 'est', 'url': '',
+           'itemId': data[i].publication_collection_id.toString() + '_' + data[i].id.toString(), } );
         }
-        // Uncomment this and use tmpObj for populateMenu if you want to create a title parent item
-        //let tmpObj = {text: '', type: 'title', 'url': '', 'itemid': '', children: Array<object>()};
-        //tmpObj.text = this.publicationCollection.title;
-        //tmpObj.collectionId = this.publicationCollection.id.toString();
-        //tmpObj.type = '';
-        //tmpObj.children = jsonObj;
-
         // Reset current item variables
         this.itemCurrent.Reset();
         // Deactivate nestable before reactivation
@@ -373,17 +368,9 @@ export class ToolTOCComponent implements OnInit {
   updatePublications() {
     this.publicationsComponent.listPublications(this.data.projectName, this.data.publicationCollection);
   }
-
-  /*setSelectedItem( item: any) {
-    this.selectedCollection.collectionId = item.id;
-    this.selectedCollection.text = item.title;
-    this.selectedCollection.type = 'title';
-  }*/
-
 }
 
-export interface Collection
-{
+export interface Collection {
   collectionId: string;
   text: string;
   type: string;
