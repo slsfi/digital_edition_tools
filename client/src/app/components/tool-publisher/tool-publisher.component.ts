@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { DataItemDescriptor, DataItemType, DataService } from "../../services/data.service";
+import { DataItemDescriptor, DataItemType, DataService } from '../../services/data.service';
 //import { ListLevel } from "../grid-publications/grid-publications.component";
 import { DialogGitComponent } from '../dialog-git/dialog-git.component';
 import { GridFacsimilesComponent } from '../grid-facsimiles/grid-facsimiles.component';
@@ -17,8 +17,8 @@ export class ToolPublisherComponent implements OnInit {
   textType: TextType = TextType.None;
   public dataItemTypes: any = DataItemType;
   listLevel: DataItemType = DataItemType.Project;
-  showPublicationGUI: boolean = false;
-  showPublicationCollectionGUI: boolean = false;
+  showPublicationGUI = false;
+  showPublicationCollectionGUI = false;
   readingText: string = this.stringNA;
   comments: string = this.stringNA;
   titleText: string = this.stringNA;
@@ -28,16 +28,16 @@ export class ToolPublisherComponent implements OnInit {
   rowDataVersions: any = [];
   rowDataFacsimiles: any = [];
 
-  @ViewChildren(GridTextsComponent) 
+  @ViewChildren(GridTextsComponent)
   gridsTexts: QueryList<GridTextsComponent>;
 
-  @ViewChild(GridFacsimilesComponent) 
+  @ViewChild(GridFacsimilesComponent)
   private facsimilesComponent: GridFacsimilesComponent;
 
   constructor(private data: DataService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.data.changeTool("Publisher");
+    this.data.changeTool('Publisher');
   }
 
   onListLevelChanged(level: DataItemType) {
@@ -46,15 +46,17 @@ export class ToolPublisherComponent implements OnInit {
     // Set current level
     this.listLevel = level;
     // Hide the publication GUI if not showing publications
-    if(this.listLevel == DataItemType.Publication)
+    if (this.listLevel === DataItemType.Publication) {
       this.showPublicationGUI = true;
-    else
+    } else {
       this.showPublicationGUI = false;
+    }
     // Hide the publication collection GUI if not showing publication collections
-    if(this.listLevel == DataItemType.PublicationCollection)
+    if (this.listLevel == DataItemType.PublicationCollection) {
       this.showPublicationCollectionGUI = true;
-    else
+    } else {
       this.showPublicationCollectionGUI = false;
+    }
   }
 
   onPublicationCollectionOpened(publicationCollection: DataItemDescriptor) {
@@ -68,13 +70,13 @@ export class ToolPublisherComponent implements OnInit {
         this.titleText = this.stringNA;
         this.introductionText = this.stringNA;
       },
-      err => { 
+      err => {
         this.titleText = this.stringNA;
         this.introductionText = this.stringNA;
-        console.info(err); 
+        console.log(err);
       }
     );
-    
+
   }
 
   onPublicationOpened(publication: DataItemDescriptor) {
@@ -84,43 +86,48 @@ export class ToolPublisherComponent implements OnInit {
     // Get reading text
     this.data.getPublication(this.data.projectName, publication.id).subscribe(
       data => {
-        if(data.original_filename != null)
+        if (data.original_filename != null) {
           this.readingText = data.original_filename;
+        }
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
     // Get comments
     this.data.getComments(this.data.projectName, publication.id).subscribe(
       data => {
-        console.info(data);
-        //if(data.original_filename != null)
-        //  this.readingText = data.original_filename;
+        this.comments = data.original_filename;
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
     // Show the loading overlay of the text grids
     this.gridsTexts.forEach((child) => { child.showLoadingOverlay(); });
     // Get versions
     this.data.getVersions(this.data.projectName, this.data.publicationCollection, publication.id).subscribe(
       data => {
-        let versionsData = [];
-        for (var i = 0; i < data.variations.length; i++) {
-          versionsData.push( {'id': data.variations[i].id, 'title': data.variations[i].name, 'filename': data.variations[i].original_filename} );
+        const versionsData = [];
+        for (let i = 0; i < data.variations.length; i++) {
+          versionsData.push({
+            'id': data.variations[i].id, 'title': data.variations[i].name,
+            'filename': data.variations[i].original_filename
+          });
         }
         this.rowDataVersions = versionsData;
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
     // Get manuscripts
     this.data.getManuscripts(this.data.projectName, this.data.publicationCollection, publication.id).subscribe(
       data => {
-        let manuscriptsData = [];
-        for (var i = 0; i < data.manuscripts.length; i++) {
-          manuscriptsData.push( {'id': data.manuscripts[i].id, 'title': data.manuscripts[i].name, 'filename': data.manuscripts[i].original_filename} );
+        const manuscriptsData = [];
+        for (let i = 0; i < data.manuscripts.length; i++) {
+          manuscriptsData.push({
+            'id': data.manuscripts[i].id, 'title': data.manuscripts[i].name,
+            'filename': data.manuscripts[i].original_filename
+          });
         }
         this.rowDataManuscripts = manuscriptsData;
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
     // Get facsimiles (handled in the child component)
     this.facsimilesComponent.getFacsimiles();
@@ -159,14 +166,14 @@ export class ToolPublisherComponent implements OnInit {
   showGitDialog() {
     const dialogRef = this.dialog.open(DialogGitComponent, {
       width: '700px',
-      data: {name: "", path: ""}
+      data: { name: '', path: '' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result.name.length > 0) {
-        switch(this.textType) {
+      if (result.name.length > 0) {
+        switch (this.textType) {
           case TextType.Title:
-          this.setPublicationCollectionTitle(result.path + '/' + result.name);
+            this.setPublicationCollectionTitle(result.path + '/' + result.name);
             break;
           case TextType.Introduction:
             this.setPublicationCollectionIntro(result.path + '/' + result.name);
@@ -188,10 +195,13 @@ export class ToolPublisherComponent implements OnInit {
 
   setPublicationCollectionTitle(fileName: string) {
     this.titleText = fileName;
-    let collection: DataItemDescriptor = {type: DataItemType.PublicationCollection, id: this.data.publicationCollection, fileName: fileName};
+    const collection: DataItemDescriptor = {
+      type: DataItemType.PublicationCollection,
+      id: this.data.publicationCollection, fileName: fileName
+    };
     this.data.setPublicationCollectionTitle(this.data.projectName, collection).subscribe(
       data => {
-        console.info(data);
+        console.log(data);
       },
       err => { this.titleText = this.stringNA; }
     );
@@ -199,10 +209,13 @@ export class ToolPublisherComponent implements OnInit {
 
   setPublicationCollectionIntro(fileName: string) {
     this.introductionText = fileName;
-    let collection: DataItemDescriptor = {type: DataItemType.PublicationCollection, id: this.data.publicationCollection, fileName: fileName};
+    const collection: DataItemDescriptor = {
+      type: DataItemType.PublicationCollection,
+      id: this.data.publicationCollection, fileName: fileName
+    };
     this.data.setPublicationCollectionIntro(this.data.projectName, collection).subscribe(
       data => {
-        console.info(data);
+        console.log(data);
       },
       err => { this.introductionText = this.stringNA; }
     );
@@ -210,10 +223,13 @@ export class ToolPublisherComponent implements OnInit {
 
   setReadingText(fileName: string) {
     this.readingText = fileName;
-    const publication: DataItemDescriptor = {type: DataItemType.Publication, id: this.data.publication, fileName: fileName};
+    const publication: DataItemDescriptor = {
+      type: DataItemType.Publication,
+      id: this.data.publication, fileName: fileName
+    };
     this.data.editPublication(this.data.projectName, publication).subscribe(
       data => {
-        console.info(data);
+        console.log(data);
       },
       err => { this.readingText = this.stringNA; }
     );
@@ -221,10 +237,13 @@ export class ToolPublisherComponent implements OnInit {
 
   setComments(fileName: string) {
     this.comments = fileName;
-    const publicationComments: DataItemDescriptor = {type: DataItemType.Comments, id: this.data.publication, fileName: fileName};
+    const publicationComments: DataItemDescriptor = {
+      type: DataItemType.Comments,
+      id: this.data.publication, fileName: fileName
+    };
     this.data.editComments(this.data.projectName, publicationComments).subscribe(
       data => {
-        console.info(data);
+        console.log(data);
       },
       err => { this.comments = this.stringNA; }
     );

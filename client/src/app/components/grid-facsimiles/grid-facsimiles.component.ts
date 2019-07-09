@@ -31,7 +31,7 @@ export class GridFacsimilesComponent implements OnInit {
   rowDataF: any = [];
   //@Output() addClick: EventEmitter<ChildEvent> = new EventEmitter<ChildEvent>();
 
-  constructor(private data: DataService, public dialog: MatDialog) { 
+  constructor(private data: DataService, public dialog: MatDialog) {
 
     // Set up the facsimile grids
     this.gridOptionsFC = <GridOptions>{
@@ -112,7 +112,7 @@ export class GridFacsimilesComponent implements OnInit {
     else
       alert('You need to select (only) one row to edit!');
   }
-  
+
   // Remove facsimile collection button clicked (not implemented)
   onFCRemoveClick() {
     const rowSelection = this.gridOptionsFC.api.getSelectedRows();
@@ -180,7 +180,7 @@ export class GridFacsimilesComponent implements OnInit {
           // Sort the data
           this.sortFacsimileCollectionGrid();
         },
-        err => { console.info(err); }
+        err => { console.log(err); }
       );
     }
     // Fill the facsimile collection grid from cached data
@@ -217,7 +217,7 @@ export class GridFacsimilesComponent implements OnInit {
     // Subscribe to dialog closed event
     dialogRef.afterClosed().subscribe(result => {
       // If title is undefined, then user cancelled the dialog
-      if(result.title !== undefined) { 
+      if(result.title !== undefined) {
         // Store edited item, this will be used if server request is successful
         this.facsimileCollectionEdited = result;
         // id is defined, means that an item has been edited
@@ -242,10 +242,10 @@ export class GridFacsimilesComponent implements OnInit {
         // Add the new project row to the grid
         this.gridOptionsFC.api.updateRowData({add: [rowDataItem]});
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
   }
-  
+
   // Edit a facsimile collection (called when facsimile collection dialog is closed)
   editFC(dataItem: FacsimileCollectionDescriptor) {
     // Send the request to the server
@@ -256,7 +256,7 @@ export class GridFacsimilesComponent implements OnInit {
         // Set the new item row data
         rowNode.setData(this.createFCGridData(this.facsimileCollectionEdited));
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
   }
 
@@ -307,7 +307,7 @@ export class GridFacsimilesComponent implements OnInit {
     // Subscribe to dialog closed event
     dialogRef.afterClosed().subscribe(result => {
       // If page is undefined, then user cancelled the dialog
-      if(result.page !== undefined) { 
+      if(result.page !== undefined) {
         // Store edited item, this will be used if server request is successful
         this.facsimileEdited = result;
         // id is defined, means that an item has been edited
@@ -350,10 +350,10 @@ export class GridFacsimilesComponent implements OnInit {
         // Add the new row to the grid
         this.gridOptionsF.api.updateRowData({add: [rowDataItem]});
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
   }
-  
+
   // Edit a facsimile (called when facsimile dialog is closed)
   editF(dataItem: FacsimileDescriptor) {
     // Send the request to the server
@@ -364,7 +364,7 @@ export class GridFacsimilesComponent implements OnInit {
         // Set the new item row data
         rowNode.setData(this.createFGridData(this.facsimileEdited));
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
   }
 
@@ -389,7 +389,7 @@ export class GridFacsimilesComponent implements OnInit {
         // Set the new grid data
         this.rowDataF = fData;
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
   }
 

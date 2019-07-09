@@ -245,13 +245,13 @@ export class ToolSelectorTabComponent implements OnInit {
     // if (selRows.length === 1) {
       switch (this.configuration.type) {
         case 'subjects':
-          // console.info(selectedNode);
+          // console.log(selectedNode);
           const subject: SubjectDescriptor = selectedNode.data as SubjectDescriptor;
           this.showDataDialog(subject);
           break;
 
         case 'locations':
-          // console.info(selectedNode);
+          // console.log(selectedNode);
           const location: LocationDescriptor = selectedNode.data as LocationDescriptor;
           this.showDataDialog(location);
           break;

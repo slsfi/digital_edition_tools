@@ -30,14 +30,14 @@ export class DialogFacsimileComponent implements OnInit {
       data => {
         this.versions = data.variations;
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
     // Get manuscripts
     this.data.getManuscripts(this.data.projectName, this.data.publicationCollection, this.data.publication).subscribe(
       data => {
         this.manuscripts = data.manuscripts;
       },
-      err => { console.info(err); }
+      err => { console.log(err); }
     );
   }
 

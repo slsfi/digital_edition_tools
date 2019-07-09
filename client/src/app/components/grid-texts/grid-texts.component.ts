@@ -25,7 +25,7 @@ export class GridTextsComponent implements OnInit {
   @Output() removeClick: EventEmitter<ChildEvent> = new EventEmitter<ChildEvent>();
   @Output() linkFileClick: EventEmitter<ChildEvent> = new EventEmitter<ChildEvent>();
 
-  constructor(private data: DataService, public dialog: MatDialog) { 
+  constructor(private data: DataService, public dialog: MatDialog) {
 
     // Set up the grid
     this.gridOptions = <GridOptions>{
@@ -64,15 +64,15 @@ export class GridTextsComponent implements OnInit {
           let version: DataItemDescriptor = {type: DataItemType.Version, id: node.data.id, sort_order: node.childIndex+1};
           this.data.editVersion(this.data.projectName, version).subscribe(
             data => { },
-            err => { console.info(err); }
+            err => { console.log(err); }
           );
           break;
-        
+
         case DataItemType.Manuscript:
           let manuscript: DataItemDescriptor = {type: DataItemType.Manuscript, id: node.data.id, sort_order: node.childIndex+1};
           this.data.editManuscript(this.data.projectName, manuscript).subscribe(
             data => { },
-            err => { console.info(err); }
+            err => { console.log(err); }
           );
           break;
       }
@@ -99,7 +99,7 @@ export class GridTextsComponent implements OnInit {
     else
       alert('You need to select a row to edit!');
   }
-  
+
   // Remove clicked, not currently implemented
   onRemoveClick() {
     /*const rowSelection = this.gridOptions.api.getSelectedRows();
@@ -148,7 +148,7 @@ export class GridTextsComponent implements OnInit {
     // Subscribe to dialog closed event
     dialogRef.afterClosed().subscribe(result => {
       // If title is undefined, then user cancelled the dialog
-      if(result.title !== undefined) { 
+      if(result.title !== undefined) {
         // Keep track of edited item, this will be used if server request is successful
         this.dataItemEdited = result;
         // id is defined, means that an item has been edited
@@ -172,7 +172,7 @@ export class GridTextsComponent implements OnInit {
             // Add row
             this.addRow(data);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
 
@@ -184,7 +184,7 @@ export class GridTextsComponent implements OnInit {
             // Add row
             this.addRow(data);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
     }
@@ -198,7 +198,7 @@ export class GridTextsComponent implements OnInit {
           data => {
             this.editRow(data);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
       case DataItemType.Manuscript:
@@ -206,7 +206,7 @@ export class GridTextsComponent implements OnInit {
           data => {
             this.editRow(data);
           },
-          err => { console.info(err); }
+          err => { console.log(err); }
         );
         break;
     }

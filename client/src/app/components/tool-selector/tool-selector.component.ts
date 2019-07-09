@@ -130,7 +130,7 @@ export class ToolSelectorComponent implements OnInit {
         // Parse the xml string
         this.readXmlString(this.xmlFile);
         // Console
-       // console.info(this.xmlFile);
+       // console.log(this.xmlFile);
       },
       err => { }
     );
