@@ -5,6 +5,8 @@ export const environment = {
   api_url: 'http://api.sls.fi:8000',
   api_url_path: 'digitaledition',
   project_default: 'topelius',
+  project_default_id: 1,
+  project_lock_id: 1,
   image_logo: 'logo.png',
   publisher_configuration: {
     show_remove: false

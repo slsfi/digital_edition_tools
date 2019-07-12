@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { DataService, DataItemDescriptor, DataItemType } from '../../services/data.service';
 import { ReadModelAsStringFloatingFilterComp } from 'ag-grid/dist/lib/filter/floatingFilter';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-menu-main',
@@ -25,7 +26,13 @@ export class MenuMainComponent implements OnInit {
       data => {
         const tmpData = [];
         for ( let i = 0; i < data.length; i++ ) {
-          tmpData.push({type: DataItemType.Project, 'title': data[i].name, 'id': data[i].id});
+          if ( environment.project_lock_id === null ) {
+            tmpData.push({type: DataItemType.Project, 'title': data[i].name, 'id': data[i].id});
+          } else {
+            if ( environment.project_lock_id === data[i].id ) {
+              tmpData.push({type: DataItemType.Project, 'title': data[i].name, 'id': data[i].id});
+            }
+          }
         }
         this.projects = tmpData;
       },
