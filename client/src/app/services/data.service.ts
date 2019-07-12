@@ -20,6 +20,7 @@ export class DataService {
   private projectSource = new BehaviorSubject<string>(environment.project_default);
   public projectNameObservable = this.projectSource.asObservable();
   public projectName = environment.project_default;
+  public projectId = environment.project_default_id;
   public publicationCollection = 0;
   public publication = 0;
   // The variables below are used to "cache" data received from the server
@@ -57,6 +58,9 @@ export class DataService {
     if (localStorage.getItem('projectName')) {
       this.projectName = localStorage.getItem('projectName');
       this.projectSource.next(this.projectName);
+    }
+    if (localStorage.getItem('projectId')) {
+      this.projectId = Number(localStorage.getItem('projectId'));
     }
   }
 
@@ -100,12 +104,14 @@ export class DataService {
       project.id + '/edit/', { 'name': project.title });
   }
 
-  setProject(projectName: string) {
+  setProject(projectName: string, projectId: number) {
     // Set projectName and observable
     this.projectName = projectName;
+    this.projectId = projectId;
     this.projectSource.next(projectName);
     // Set local storage variable for next session
     localStorage.setItem('projectName', this.projectName);
+    localStorage.setItem('projectId', this.projectId.toString());
     // Clear documents (git)
     this.dataDocuments = undefined;
     // Reset any other variables here that are project dependant
@@ -468,8 +474,8 @@ export interface SubjectDescriptor {
   preposition?: string;
   description?: string;
   place_of_birth?: string;
-  date_born?: string;
-  date_deceased?: string;
+  date_born?: Date;
+  date_deceased?: Date;
   occupation?: string;
   source?: string;
 }
@@ -509,8 +515,8 @@ export interface PublicationDescriptor {
 
 export interface SubjectDescriptor {
   id?: number;
-  dateBorn?: string;
-  dateDeceased?: string;
+  dateBorn?: Date;
+  dateDeceased?: Date;
   description?: string;
   firstName?: string;
   fullName?: string;

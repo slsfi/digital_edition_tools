@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DataItemDescriptor, DataItemType, DataService } from '../../services/data.service';
-//import { ListLevel } from "../grid-publications/grid-publications.component";
 import { DialogGitComponent } from '../dialog-git/dialog-git.component';
 import { GridFacsimilesComponent } from '../grid-facsimiles/grid-facsimiles.component';
 import { GridTextsComponent } from '../grid-texts/grid-texts.component';
@@ -52,7 +51,7 @@ export class ToolPublisherComponent implements OnInit {
       this.showPublicationGUI = false;
     }
     // Hide the publication collection GUI if not showing publication collections
-    if (this.listLevel == DataItemType.PublicationCollection) {
+    if (this.listLevel === DataItemType.PublicationCollection) {
       this.showPublicationCollectionGUI = true;
     } else {
       this.showPublicationCollectionGUI = false;

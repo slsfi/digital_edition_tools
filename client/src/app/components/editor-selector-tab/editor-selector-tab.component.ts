@@ -7,11 +7,11 @@ import { DialogLocationComponent } from '../dialog-location/dialog-location.comp
 import { nbind } from 'q';
 
 @Component({
-  selector: 'app-tool-selector-tab',
-  templateUrl: './tool-selector-tab.component.html',
-  styleUrls: ['./tool-selector-tab.component.css']
+  selector: 'app-editor-selector-tab',
+  templateUrl: './editor-selector-tab.component.html',
+  styleUrls: ['./editor-selector-tab.component.css']
 })
-export class ToolSelectorTabComponent implements OnInit {
+export class EditorSelectorTabComponent implements OnInit {
 
   @Input() header: string;
   @Input() configuration: SelectorTabConfiguration;
@@ -151,12 +151,14 @@ export class ToolSelectorTabComponent implements OnInit {
   }
 
   populate(data: any) {
-    /*const tmpData = [];
+    const tmpData = [];
     for (let i = 0; i < data.length; i++) {
-      tmpData.push({'name': data[i].last_name, 'firstName': data[i].first_name, 'id': data[i].id, 'description': data[i].description});
+      if ( this.data.projectId === data[i].project_id ) {
+        tmpData.push(data[i]);
+      }
     }
-    this.datRowData = tmpData;*/
-    this.datRowData = data;
+    this.datRowData = tmpData;
+    // this.datRowData = data;
     this.sortData();
   }
 

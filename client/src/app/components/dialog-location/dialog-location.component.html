@@ -4,7 +4,7 @@
     <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Name" [(ngModel)]="dataItem.name" name="name" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Description" [(ngModel)]="dataItem.description" name="description" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+    <mat-form-field class="input-wide2"><textarea matInput i18n-placeholder placeholder="Description" [(ngModel)]="dataItem.description" name="description" type="text" (keyup)="onKeyUp($event)"></textarea></mat-form-field>
   </div>
   <div class="row">
     <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Country" [(ngModel)]="dataItem.country" name="country" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>

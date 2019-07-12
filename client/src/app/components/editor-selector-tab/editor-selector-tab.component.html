@@ -1,0 +1,17 @@
+<!--<button (click)="buttonClick($event)" >Load</button><span>{{header}}</span>-->
+<div class="float">
+  <div class="button-area">
+    <button mat-raised-button (click)="datOnRefreshClick()"><img src="assets/images/refresh.png" /></button>
+    <button mat-raised-button (click)="datOnAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
+    <button mat-raised-button (click)="datOnEditClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
+  </div>
+  <ag-grid-angular class="ag-theme-balham" [rowData]="datRowData" [columnDefs]="datColumnDefs"
+    [gridOptions]="datGridOptions" (gridReady)="datOnGridReady($event)" (keydown)="datOnKeyDown($event)"
+    (cellClicked)="datOnCellClicked($event)" (cellDoubleClicked)="datOnCellDoubleClicked($event)">
+  </ag-grid-angular>
+</div>
+<div class="float">
+  <div class="button-area"></div>
+  <div class="text-box">{{textParagraph}}</div>
+  <div class="text-box">{{textDescription}}</div>
+</div>

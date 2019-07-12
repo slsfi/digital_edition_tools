@@ -1,19 +1,9 @@
-<div class="margin-bottom">
-  <button mat-raised-button (click)="onLoadFileServer()" i18n>Load from Server</button>
-  <button mat-raised-button (click)="onSaveFileServer()" i18n>Save to Server</button>
-  <button mat-raised-button (click)="fileInput.click()">
-    <span i18n>Load from Computer</span>
-    <input #fileInput type="file" multiple accept="{{xmlFileExtensions}}" (change)="onFileInput($event)" style="display:none;" />
-  </button>
-  <button mat-raised-button (click)="onSaveFileLocal()" i18n>Save to Computer</button>
-<!--<app-grid-documents [rootFolder]="xml" (documentLoaded)="onDocumentLoaded($event)"></app-grid-documents>-->
-</div>
 <div class="page-container">
-<div class="container-auto">
-  <mat-tab-group>
-    <mat-tab *ngFor="let c of configurations; let i = index" label="{{c.name}}">
-      <app-tool-selector-tab #selectorTab [header]="'tab_'+(i+1).toString()" [configuration]="configurations[i]"></app-tool-selector-tab>
-    </mat-tab>
-  </mat-tab-group>
-</div>
+  <div class="container-auto">
+    <mat-tab-group>
+      <mat-tab *ngFor="let c of configurations; let i = index" label="{{c.name}}">
+        <app-editor-selector-tab #selectorTab [header]="'tab_'+(i+1).toString()" [configuration]="configurations[i]"></app-editor-selector-tab>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </div>

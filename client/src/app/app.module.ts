@@ -33,6 +33,7 @@ import { ToolEditorComponent } from './components/tool-editor/tool-editor.compon
 import { ToolFacsimilesComponent } from './components/tool-facsimiles/tool-facsimiles.component';
 import { FileDialogComponent } from './components/file-dialog/file-dialog.component';
 import { ToolSelectorTabComponent } from './components/tool-selector-tab/tool-selector-tab.component';
+import { EditorSelectorTabComponent } from './components/editor-selector-tab/editor-selector-tab.component';
 import { LoginComponent } from './components/login/login.component';
 import { CanActivateViaAuthGuard } from './guards/can-activate-via-auth.guard';
 import { TokenInterceptor } from './interceptors/token.interceptor';
@@ -89,6 +90,7 @@ const appRoutes: Routes = [
     ToolFacsimilesComponent,
     FileDialogComponent,
     ToolSelectorTabComponent,
+    EditorSelectorTabComponent,
     LoginComponent,
     DialogGitComponent,
     DialogDataComponent,

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../services/auth.service";
-import { DataService, DataItemDescriptor, DataItemType } from "../../services/data.service";
+import { AuthService } from '../../services/auth.service';
+import { DataService, DataItemDescriptor, DataItemType } from '../../services/data.service';
 import { ReadModelAsStringFloatingFilterComp } from 'ag-grid/dist/lib/filter/floatingFilter';
 
 @Component({
@@ -11,19 +11,20 @@ import { ReadModelAsStringFloatingFilterComp } from 'ag-grid/dist/lib/filter/flo
 export class MenuMainComponent implements OnInit {
 
   currentProjectName: string;
+  currentProjectId: number;
   projects: DataItemDescriptor[];
 
-  constructor(private auth: AuthService, private data: DataService) { 
+  constructor(private auth: AuthService, private data: DataService) {
     this.currentProjectName = this.data.projectName;
-
+    this.currentProjectId = this.data.projectId;
   }
 
   ngOnInit() {
-    this.data.changeTool("Menu");
+    this.data.changeTool('Menu');
     this.data.getProjects().subscribe(
       data => {
-        var tmpData = [];
-        for(var i=0; i<data.length; i++) {
+        const tmpData = [];
+        for ( let i = 0; i < data.length; i++ ) {
           tmpData.push({type: DataItemType.Project, 'title': data[i].name, 'id': data[i].id});
         }
         this.projects = tmpData;
@@ -33,8 +34,13 @@ export class MenuMainComponent implements OnInit {
   }
 
   selectProject(event: any) {
-    this.currentProjectName = event.value;
-    this.data.setProject(this.currentProjectName);
+    this.projects.forEach(project => {
+      if ( project.id === event.value ) {
+        this.currentProjectId = event.value;
+        this.currentProjectName = project.title;
+        this.data.setProject(this.currentProjectName, this.currentProjectId);
+      }
+    });
   }
 
   onLogoutClick() {

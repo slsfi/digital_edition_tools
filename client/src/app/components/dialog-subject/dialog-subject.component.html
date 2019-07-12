@@ -13,7 +13,7 @@
     <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Preposition" [(ngModel)]="dataItem.preposition" name="preposition" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
   </div>
   <div class="row">
-    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Description" [(ngModel)]="dataItem.description" name="description" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+    <mat-form-field class="input-wide2"><textarea matInput i18n-placeholder placeholder="Description" [(ngModel)]="dataItem.description" name="description" type="text" (keyup)="onKeyUp($event)"></textarea></mat-form-field>
   </div>
   <div class="row">
     <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Occupation" [(ngModel)]="dataItem.occupation" name="occupation" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
