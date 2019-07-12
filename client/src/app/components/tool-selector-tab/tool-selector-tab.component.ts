@@ -151,12 +151,14 @@ export class ToolSelectorTabComponent implements OnInit {
   }
 
   populate(data: any) {
-    /*const tmpData = [];
+    const tmpData = [];
     for (let i = 0; i < data.length; i++) {
-      tmpData.push({'name': data[i].last_name, 'firstName': data[i].first_name, 'id': data[i].id, 'description': data[i].description});
+      if ( this.data.projectId === data[i].project_id ) {
+        tmpData.push(data[i]);
+      }
     }
-    this.datRowData = tmpData;*/
-    this.datRowData = data;
+    this.datRowData = tmpData;
+    // this.datRowData = data;
     this.sortData();
   }
 
