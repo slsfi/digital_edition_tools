@@ -1,0 +1,8 @@
+version: "3"
+services:
+  tools:
+    build: .
+    ports:
+      - 4200:4200
+    volumes:
+      - ./client:/app
