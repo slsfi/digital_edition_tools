@@ -12,7 +12,7 @@
 <div><p>Opened collection: {{publicationCollectionText}}</p></div>
 <div class="page-container">
   <div class="container-wide">
-    <app-grid-publications 
+    <app-grid-publications
       [editMode]="false"
       [listLevelLocked]="true"
       [listLevel]="dataItemType.Publication"
@@ -48,6 +48,10 @@
 
       <div class="row">
         <mat-form-field><input matInput i18n-placeholder placeholder="ID" [(ngModel)]="itemCurrent.itemId" name="itemId" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field><input matInput i18n-placeholder placeholder="e.g. 1845-02-22" [(ngModel)]="itemCurrent.date" name="date" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
       </div>
 
       <div class="row">

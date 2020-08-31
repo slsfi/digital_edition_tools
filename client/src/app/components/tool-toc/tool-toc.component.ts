@@ -356,7 +356,7 @@ export class ToolTOCComponent implements OnInit {
         // Create menu items from all the publications
         const jsonObj = [];
         for (let i = 0; i < data.length; i++) {
-          jsonObj.push( {'text': data[i].name, 'type': 'est', 'url': '',
+          jsonObj.push( {'text': data[i].name, 'type': 'est', 'url': '', 'date': '',
            'itemId': data[i].publication_collection_id.toString() + '_' + data[i].id.toString(), } );
         }
         // Reset current item variables
