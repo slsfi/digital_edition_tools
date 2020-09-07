@@ -25,6 +25,7 @@ export class MenuItem {
   itemId: string;
   type: string;
   text: string;
+  collapsed: boolean;
   element: any;
   editItem: boolean;
   newItem: boolean;
@@ -42,6 +43,7 @@ export class MenuItem {
     this.text = '';
     this.element = undefined;
     this.editItem = false;
+    this.collapsed = true;
     this.newItem = false;
   }
 
@@ -55,6 +57,7 @@ export class MenuItem {
     this.itemId = $(e).attr('data-itemId');
     this.type = $(e).attr('data-type');
     this.text = $(e).attr('data-text');
+    this.collapsed = $(e).attr('data-collapsed');
   }
 
   SetElement(e: any): boolean {
@@ -65,6 +68,7 @@ export class MenuItem {
       $(e).attr('data-itemId', this.itemId);
       $(e).attr('data-type', this.type);
       $(e).attr('data-text', this.text);
+      $(e).attr('data-collapsed', this.collapsed);
       $(e).children('.dd-handle').children('.dd-content').html(this.text);
       return true;
     } else {
@@ -75,7 +79,7 @@ export class MenuItem {
   AddElement(menuSelector: string): boolean {
     if (this.text.length > 0) {
       this.id = Date.now().toString(); // Create unique id for the element
-      $(menuSelector).nestable('add', {'id': this.id, 'url': this.url, 'itemId': this.itemId, 'date': this.date,
+      $(menuSelector).nestable('add', {'id': this.id, 'url': this.url, 'itemId': this.itemId, 'date': this.date, 'collapsed': this.date,
       'type': this.type, 'content': this.text, 'text': this.text});
       this.element = $(menuSelector).find('[data-id=' + this.id + ']'); // Get the created element
       return true;
