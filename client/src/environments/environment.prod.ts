@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  version: '0.9.0',
+  version: '0.9.1',
   server_url: 'localhost:5000',
   api_url: 'http://api.sls.fi',
   api_url_path: 'digitaledition',
