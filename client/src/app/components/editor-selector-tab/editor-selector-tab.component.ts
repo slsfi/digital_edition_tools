@@ -1,9 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { GridOptions, RowNode } from 'ag-grid';
-import { DataService, SubjectDescriptor, LocationDescriptor, DialogData } from '../../services/data.service';
+import { DataService, SubjectDescriptor, LocationDescriptor, DialogData, TagDescriptor, WorkDescriptor } from '../../services/data.service';
 import { DialogSubjectComponent } from '../dialog-subject/dialog-subject.component';
 import { DialogLocationComponent } from '../dialog-location/dialog-location.component';
+import { DialogTagComponent } from '../dialog-tag/dialog-tag.component';
+import { DialogWorkComponent } from '../dialog-work/dialog-work.component';
 import { nbind } from 'q';
 
 @Component({
@@ -87,6 +89,7 @@ export class EditorSelectorTabComponent implements OnInit {
           { headerName: 'Full name', field: 'full_name' },
           { headerName: 'Date born', field: 'date_born' },
           { headerName: 'Date deceased', field: 'date_deceased' },
+          { headerName: 'Type', field: 'type' },
           { headerName: 'Description', field: 'description' },
           { headerName: 'Legacy Id', field: 'legacy_id' },
           { headerName: 'Id', field: 'id' } // , hide: true
@@ -101,6 +104,27 @@ export class EditorSelectorTabComponent implements OnInit {
           { headerName: 'Id', field: 'id' } // , hide: true
         ];
         break;
+
+      case 'works':
+          this.datColumnDefs = [
+            { headerName: 'Title', field: 'title', sortingOrder: ['asc', 'desc'] },
+            { headerName: 'Description', field: 'description' },
+            { headerName: 'Published Year', field: 'published_year' },
+            { headerName: 'Publication Location', field: 'publication_location' },
+            { headerName: 'Publisher', field: 'publisher' },
+            { headerName: 'ISBN', field: 'isbn' }
+          ];
+          break;
+
+      case 'tags':
+            this.datColumnDefs = [
+              { headerName: 'Name', field: 'name', sortingOrder: ['asc', 'desc'] },
+              { headerName: 'Description', field: 'description' },
+              { headerName: 'Type', field: 'type' },
+              { headerName: 'Legacy Id', field: 'legacy_id' },
+              { headerName: 'Id', field: 'id' } // , hide: true
+            ];
+            break;
     }
   }
 
@@ -151,13 +175,53 @@ export class EditorSelectorTabComponent implements OnInit {
           this.datGridOptions.api.hideOverlay();
         }
         break;
+
+        case 'tags':
+          if (this.data.dataTags === undefined || forceRefresh) {
+            this.data.getTags().subscribe(
+              data => {
+                this.data.dataTags = data;
+                this.populate(data);
+                this.datGridOptions.api.hideOverlay();
+              },
+              err => {
+                this.datGridOptions.api.hideOverlay();
+                console.log(err);
+              }
+            );
+          } else {
+            this.populate(this.data.dataTags);
+            this.datGridOptions.api.hideOverlay();
+          }
+          break;
+
+          case 'works':
+            if (this.data.dataWorks === undefined || forceRefresh) {
+              this.data.getWorkManifestations().subscribe(
+                data => {
+                  this.data.dataWorks = data;
+                  this.populate(data, true);
+                  this.datGridOptions.api.hideOverlay();
+                },
+                err => {
+                  this.datGridOptions.api.hideOverlay();
+                  console.log(err);
+                }
+              );
+            } else {
+              this.populate(this.data.dataWorks);
+              this.datGridOptions.api.hideOverlay();
+            }
+            break;
     }
   }
 
-  populate(data: any) {
+  populate(data: any, isWorks?) {
     const tmpData = [];
     for (let i = 0; i < data.length; i++) {
       if ( this.data.projectId === data[i].project_id ) {
+        tmpData.push(data[i]);
+      } else if ( isWorks ) {
         tmpData.push(data[i]);
       }
     }
@@ -240,6 +304,14 @@ export class EditorSelectorTabComponent implements OnInit {
         const locationEmpty: LocationDescriptor = {};
         this.showDataDialog(locationEmpty);
         break;
+        case 'tags':
+          const tagEmpty: TagDescriptor = {};
+          this.showDataDialog(tagEmpty);
+          break;
+          case 'works':
+            const workEmpty: WorkDescriptor = {};
+            this.showDataDialog(workEmpty);
+            break;
     }
   }
 
@@ -263,6 +335,18 @@ export class EditorSelectorTabComponent implements OnInit {
         const location: LocationDescriptor = selectedNode.data as LocationDescriptor;
         this.showDataDialog(location);
         break;
+
+        case 'tags':
+          // console.log(selectedNode);
+          const tag: TagDescriptor = selectedNode.data as TagDescriptor;
+          this.showDataDialog(tag);
+          break;
+
+          case 'works':
+            // console.log(selectedNode);
+            const work: WorkDescriptor = selectedNode.data as WorkDescriptor;
+            this.showDataDialog(work);
+            break;
     }
     /*const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id,
       title: selRows[0].title, date: selRows[0].date, published: selRows[0].published, genre: selRows[0].genre};
@@ -306,6 +390,12 @@ export class EditorSelectorTabComponent implements OnInit {
     if (this.configuration.type === 'locations') {
       dialogType = DialogLocationComponent;
     }
+    if (this.configuration.type === 'tags') {
+      dialogType = DialogTagComponent;
+    }
+    if (this.configuration.type === 'works') {
+      dialogType = DialogWorkComponent;
+    }
     // Show the dialog
     const dialogRef = this.dialog.open(dialogType, {
       width: '700px',
@@ -348,6 +438,26 @@ export class EditorSelectorTabComponent implements OnInit {
           err => { console.log(err); }
         );
         break;
+
+        case 'tags':
+          const tag: TagDescriptor = dialogData.data as TagDescriptor;
+          this.data.addTag(this.data.projectName, tag).subscribe(
+            data => {
+              this.datGridOptions.api.updateRowData({ add: [data.row] });
+            },
+            err => { console.log(err); }
+          );
+          break;
+
+          case 'works':
+            const work: WorkDescriptor = dialogData.data as WorkDescriptor;
+            this.data.addWork(this.data.projectName, work).subscribe(
+              data => {
+                this.datGridOptions.api.updateRowData({ add: [data.row] });
+              },
+              err => { console.log(err); }
+            );
+            break;
     }
   }
 
@@ -367,6 +477,28 @@ export class EditorSelectorTabComponent implements OnInit {
       case 'locations':
         const location: LocationDescriptor = dialogData.data as LocationDescriptor;
         this.data.editLocation(this.data.projectName, location).subscribe(
+          data => {
+            const rowNode = this.datGridOptions.api.getRowNode(data.row.id);
+            rowNode.setData(data.row);
+          },
+          err => { console.log(err); }
+        );
+        break;
+
+        case 'tags':
+          const tag: TagDescriptor = dialogData.data as TagDescriptor;
+          this.data.editTag(this.data.projectName, tag).subscribe(
+            data => {
+              const rowNode = this.datGridOptions.api.getRowNode(data.row.id);
+              rowNode.setData(data.row);
+            },
+            err => { console.log(err); }
+          );
+          break;
+
+      case 'works':
+        const work: WorkDescriptor = dialogData.data as WorkDescriptor;
+        this.data.editWorkManifestations(this.data.projectName, work).subscribe(
           data => {
             const rowNode = this.datGridOptions.api.getRowNode(data.row.id);
             rowNode.setData(data.row);

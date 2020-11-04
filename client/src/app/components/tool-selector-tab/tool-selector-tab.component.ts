@@ -147,6 +147,25 @@ export class ToolSelectorTabComponent implements OnInit {
           this.datGridOptions.api.hideOverlay();
         }
         break;
+
+      case 'tags':
+        if (this.data.dataTags === undefined || forceRefresh) {
+          this.data.getTags().subscribe(
+            data => {
+              this.data.dataTags = data;
+              this.populate(data);
+              this.datGridOptions.api.hideOverlay();
+            },
+            err => {
+              this.datGridOptions.api.hideOverlay();
+              console.log(err);
+            }
+          );
+        } else {
+          this.populate(this.data.dataTags);
+          this.datGridOptions.api.hideOverlay();
+        }
+        break;
     }
   }
 

@@ -1,0 +1,40 @@
+<div>
+  <p i18n>{{header}}</p>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><textarea matInput i18n-placeholder placeholder="Description" [(ngModel)]="dataItem.description" name="description" type="text" (keyup)="onKeyUp($event)"></textarea></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Type" [(ngModel)]="dataItem.type" name="type" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="ISBN" [(ngModel)]="dataItem.isbn" name="isbn" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Publisher" [(ngModel)]="dataItem.publisher" name="publisher" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Journal" [(ngModel)]="dataItem.journal" name="journal" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Published Year" [(ngModel)]="dataItem.published_year" name="published_year" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Source" [(ngModel)]="dataItem.source" name="source" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Total Pages" [(ngModel)]="dataItem.total_pages" name="total_pages" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Translated By" [(ngModel)]="dataItem.translated_by" name="translated_by" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Volume" [(ngModel)]="dataItem.volume" name="volume" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <button mat-raised-button (click)="onOKClick()" i18n>OK</button>
+    <button mat-raised-button (click)="onCancelClick()" i18n>Cancel</button>
+  </div>
+</div>

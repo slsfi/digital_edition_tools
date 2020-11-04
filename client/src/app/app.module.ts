@@ -46,6 +46,8 @@ import { DialogFacsimileCollectionComponent } from './components/dialog-facsimil
 import { DialogFacsimileComponent } from './components/dialog-facsimile/dialog-facsimile.component';
 import { DialogLocationComponent } from './components/dialog-location/dialog-location.component';
 import { DialogSubjectComponent } from './components/dialog-subject/dialog-subject.component';
+import { DialogTagComponent } from './components/dialog-tag/dialog-tag.component';
+import { DialogWorkComponent } from './components/dialog-work/dialog-work.component';
 
 // Set locale
 registerLocaleData(localeFi, 'fi');
@@ -100,7 +102,9 @@ const appRoutes: Routes = [
     DialogFacsimileCollectionComponent,
     DialogFacsimileComponent,
     DialogLocationComponent,
-    DialogSubjectComponent
+    DialogSubjectComponent,
+    DialogTagComponent,
+    DialogWorkComponent
   ],
   imports: [
     RouterModule.forRoot(
@@ -154,6 +158,8 @@ const appRoutes: Routes = [
     DialogFacsimileComponent,
     DialogLocationComponent,
     DialogSubjectComponent,
+    DialogTagComponent,
+    DialogWorkComponent,
     DialogPublicationCollectionComponent,
     FileDialogComponent
   ],

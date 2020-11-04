@@ -35,6 +35,30 @@ export const environment = {
       ],
       elementsXPath: '//*[name() = "placeName"]',
       attribute: 'corresp'
+    },
+    {
+      name: 'Ämnesord',
+      type: 'tags',
+      descriptionField: 'Beskrivning',
+      sortByColumn: 0,
+      sortByField: 'name',
+      elements: [
+        'tagName'
+      ],
+      elementsXPath: '//*[name() = "placeName"]',
+      attribute: 'corresp'
+    },
+    {
+      name: 'Verk',
+      type: 'works',
+      descriptionField: 'Beskrivning',
+      sortByColumn: 0,
+      sortByField: 'title',
+      elements: [
+        'workName'
+      ],
+      elementsXPath: '//*[name() = "placeName"]',
+      attribute: 'corresp'
     }
   ],
   xml_file_extensions: '.xml,.tei,.txt',

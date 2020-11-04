@@ -28,6 +28,8 @@ export class DataService {
   public dataSubjects: any;
   public dataLocations: any;
   public dataDocuments: any;
+  public dataTags: any;
+  public dataWorks: any;
 
   public static Base64DecodeUnicode(stringBase64: string) {
     return decodeURIComponent(atob(stringBase64).split('').map(function (c) {
@@ -336,6 +338,34 @@ export class DataService {
       projectName + '/subjects/' + subject.id.toString() + '/edit/', subject);
   }
 
+  getTags(): Observable<any> {
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/tags/');
+  }
+
+  editTag(projectName: string, tag: TagDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
+      projectName + '/tags/' + tag.id.toString() + '/edit/', tag);
+  }
+
+  addTag(projectName: string, tag: TagDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
+      projectName + '/tags/new/', tag);
+  }
+
+  getWorkManifestations(): Observable<any> {
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/work_manifestations/');
+  }
+
+  editWorkManifestations(projectName: string, work: WorkDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
+      projectName + '/work_manifestations/' + work.id.toString() + '/edit/', work);
+  }
+
+  addWork(projectName: string, work: WorkDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
+      projectName + '/work_manifestations/new/', work);
+  }
+
   // ---------------------------------------
   // Table of Contents
   // ---------------------------------------
@@ -458,6 +488,39 @@ export interface LocationDescriptor {
   longitude?: string;
   latitude?: string;
   source?: string;
+}
+
+
+export interface TagDescriptor {
+  id?: number;
+  legacy_id?: string;
+  project_id?: number;
+  date_created?: string;
+  date_modified?: string;
+  deleted?: number;
+  name?: string;
+  type?: string;
+}
+
+export interface WorkDescriptor {
+  id?: number;
+  legacy_id?: string;
+  project_id?: number;
+  date_created?: string;
+  date_modified?: string;
+  deleted?: number;
+  title?: string;
+  description?: string;
+  type?: string;
+  source?: string;
+  translated_by?: string;
+  journal?: string;
+  publication_location?: string;
+  publisher?: string;
+  published_year?: string;
+  volume?: string;
+  total_pages?: number;
+  isbn?: string;
 }
 
 export interface SubjectDescriptor {
