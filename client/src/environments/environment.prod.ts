@@ -2,11 +2,11 @@ export const environment = {
   production: true,
   version: '0.9.0',
   server_url: 'localhost:5000',
-  api_url: 'http://api.sls.fi:8000',
+  api_url: 'http://api.sls.fi',
   api_url_path: 'digitaledition',
   project_default: 'topelius',
-  project_default_id: 1,
-  project_lock_id: 1,
+  project_default_id: 10,
+  project_lock_id: null,
   image_logo: 'logo.png',
   publisher_configuration: {
     show_remove: false

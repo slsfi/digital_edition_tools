@@ -166,7 +166,7 @@ export class DataService {
   getPublications(projectName: string, publicationCollection: number): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-      '/publication_collection/' + publicationCollection.toString() + '/publications/');
+      '/publication_collection/' + publicationCollection.toString() + '/publications/name/');
   }
 
   getPublication(projectName: string, publication: number): Observable<any> {
@@ -474,8 +474,8 @@ export interface SubjectDescriptor {
   preposition?: string;
   description?: string;
   place_of_birth?: string;
-  date_born?: Date;
-  date_deceased?: Date;
+  date_born?: string;
+  date_deceased?: string;
   occupation?: string;
   source?: string;
 }

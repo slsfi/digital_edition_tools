@@ -16,6 +16,7 @@ export class MenuItem {
     {'id': 'est', 'description': 'Reading text'},
     {'id': 'var', 'description': 'Version'},
     {'id': 'ms',  'description': 'Manuscript'},
+    {'id': 'hidden',  'description': 'Hidden'},
   ];
   type_default = 'link';
 

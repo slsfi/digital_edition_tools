@@ -21,8 +21,6 @@ export class DialogSubjectComponent implements OnInit {
       this.header = 'New ';
     }
     this.header += 'Subject';
-    this.dataItem.date_born = new Date(this.dataItem.date_born);
-    this.dataItem.date_deceased = new Date(this.dataItem.date_deceased);
   }
 
   ngOnInit() {

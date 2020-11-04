@@ -85,7 +85,10 @@ export class EditorSelectorTabComponent implements OnInit {
           { headerName: 'Surname', field: 'last_name', sortingOrder: ['asc', 'desc'] },
           { headerName: 'First name', field: 'first_name' },
           { headerName: 'Full name', field: 'full_name' },
+          { headerName: 'Date born', field: 'date_born' },
+          { headerName: 'Date deceased', field: 'date_deceased' },
           { headerName: 'Description', field: 'description' },
+          { headerName: 'Legacy Id', field: 'legacy_id' },
           { headerName: 'Id', field: 'id' } // , hide: true
         ];
         break;
