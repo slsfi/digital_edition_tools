@@ -97,6 +97,7 @@ export class EditorSelectorTabComponent implements OnInit {
         this.datColumnDefs = [
           { headerName: 'Place', field: 'name', sortingOrder: ['asc', 'desc'] },
           { headerName: 'Description', field: 'description' },
+          { headerName: 'Legacy Id', field: 'legacy_id' },
           { headerName: 'Id', field: 'id' } // , hide: true
         ];
         break;
