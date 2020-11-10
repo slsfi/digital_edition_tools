@@ -514,6 +514,7 @@ export interface WorkDescriptor {
   type?: string;
   source?: string;
   translated_by?: string;
+  reference?: string;
   journal?: string;
   publication_location?: string;
   publisher?: string;
