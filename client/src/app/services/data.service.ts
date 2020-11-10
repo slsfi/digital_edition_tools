@@ -363,7 +363,7 @@ export class DataService {
 
   addWork(projectName: string, work: WorkDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
-      projectName + '/work_manifestations/new/', work);
+      projectName + '/work_manifestation/new/', work);
   }
 
   // ---------------------------------------
@@ -515,6 +515,7 @@ export interface WorkDescriptor {
   source?: string;
   translated_by?: string;
   reference?: string;
+  reference_id?: number;
   journal?: string;
   publication_location?: string;
   publisher?: string;
