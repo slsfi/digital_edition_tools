@@ -112,7 +112,8 @@ export class EditorSelectorTabComponent implements OnInit {
             { headerName: 'Published Year', field: 'published_year' },
             { headerName: 'Publication Location', field: 'publication_location' },
             { headerName: 'Publisher', field: 'publisher' },
-            { headerName: 'ISBN', field: 'isbn' }
+            { headerName: 'ISBN', field: 'isbn' },
+            { headerName: 'ID', field: 'id' }
           ];
           break;
 
