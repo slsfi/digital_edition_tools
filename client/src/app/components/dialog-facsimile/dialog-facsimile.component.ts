@@ -10,17 +10,19 @@ import { DataService, FacsimileDescriptor, DataItemType } from '../../services/d
 export class DialogFacsimileComponent implements OnInit {
 
   facsimileType = DataItemType;
-  header: string = '';
+  header: String = '';
   dataItemEmpty: FacsimileDescriptor = {} as any;
   versions: any;
   manuscripts: any;
 
-  constructor( private data: DataService, public dialogRef: MatDialogRef<DialogFacsimileComponent>, @Inject(MAT_DIALOG_DATA) public dataItem: FacsimileDescriptor ) {
+  constructor( private data: DataService, public dialogRef: MatDialogRef<DialogFacsimileComponent>,
+    @Inject(MAT_DIALOG_DATA) public dataItem: FacsimileDescriptor ) {
     // Build the dialog header
-    if(this.dataItem.id !== undefined)
+    if (this.dataItem.id !== undefined) {
       this.header = 'Edit ';
-    else
+    } else {
       this.header = 'New ';
+    }
     this.header += 'Facsimile Link';
   }
 
@@ -52,11 +54,10 @@ export class DialogFacsimileComponent implements OnInit {
   }
 
   onKeyUp(event: KeyboardEvent) {
-    if(event.keyCode == 13) {// Enter
+    if (event.keyCode === 13) {// Enter
       // Return the edited project data
       this.dialogRef.close(this.dataItem);
-    }
-    else if(event.keyCode == 27) {// Escape
+    } else if (event.keyCode === 27) {// Escape
       // Cancelled, return empty project data
       this.dialogRef.close(this.dataItemEmpty);
     }

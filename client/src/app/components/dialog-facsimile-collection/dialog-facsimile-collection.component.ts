@@ -9,15 +9,17 @@ import { FacsimileCollectionDescriptor } from '../../services/data.service';
 })
 export class DialogFacsimileCollectionComponent implements OnInit {
 
-  header: string = '';
+  header: String = '';
   dataItemEmpty: FacsimileCollectionDescriptor = {} as any;
 
-  constructor( public dialogRef: MatDialogRef<DialogFacsimileCollectionComponent>, @Inject(MAT_DIALOG_DATA) public dataItem: FacsimileCollectionDescriptor ) {
+  constructor( public dialogRef: MatDialogRef<DialogFacsimileCollectionComponent>,
+    @Inject(MAT_DIALOG_DATA) public dataItem: FacsimileCollectionDescriptor ) {
     // Build the dialog header
-    if(this.dataItem.id !== undefined)
+    if (this.dataItem.id !== undefined) {
       this.header = 'Edit ';
-    else
+    } else {
       this.header = 'New ';
+    }
     this.header += 'Facsimile Collection';
   }
 
@@ -35,14 +37,12 @@ export class DialogFacsimileCollectionComponent implements OnInit {
   }
 
   onKeyUp(event: KeyboardEvent) {
-    if(event.keyCode == 13) {// Enter
+    if (event.keyCode === 13) {// Enter
       // Return the edited project data
       this.dialogRef.close(this.dataItem);
-    }
-    else if(event.keyCode == 27) {// Escape
+    } else if (event.keyCode === 27) {// Escape
       // Cancelled, return empty project data
       this.dialogRef.close(this.dataItemEmpty);
     }
   }
-
 }

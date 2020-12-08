@@ -30,7 +30,7 @@ export class ToolFacsimilesComponent implements OnInit {
   constructor(private auth: AuthService, private data: DataService) { }
 
   ngOnInit() {
-    this.data.changeTool("Facsimiles");
+    this.data.changeTool('Facsimiles');
     // subcribe to the access token
     /*this.subscription = this.auth.accessToken.subscribe(item => {
       this.config.headers = {'Authorization': 'Bearer '+item};
