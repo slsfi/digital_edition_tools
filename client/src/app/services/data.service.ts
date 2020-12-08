@@ -236,7 +236,7 @@ export class DataService {
   getVersions(projectName: string, publicationCollection: number, publication: number): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' +
-      projectName + '/text/' + publicationCollection.toString() + '/' + publication.toString() + '/var/');
+      projectName + '/publication/version/' + publication.toString() + '/');
   }
 
   addVersion(projectName: string, publication: number, version: DataItemDescriptor): Observable<any> {
@@ -257,7 +257,7 @@ export class DataService {
   getManuscripts(projectName: string, publicationCollection: number, publication: number): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' +
-      projectName + '/text/' + publicationCollection.toString() + '/' + publication.toString() + '/ms/');
+      projectName + '/publication/manuscript/' + publication.toString() + '/');
   }
 
   addManuscript(projectName: string, publication: number, manuscript: DataItemDescriptor): Observable<any> {

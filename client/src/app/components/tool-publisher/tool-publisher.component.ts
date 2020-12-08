@@ -108,11 +108,13 @@ export class ToolPublisherComponent implements OnInit {
     this.data.getVersions(this.data.projectName, this.data.publicationCollection, publication.id).subscribe(
       data => {
         const versionsData = [];
-        for (let i = 0; i < data.variations.length; i++) {
-          versionsData.push({
-            'id': data.variations[i].id, 'title': data.variations[i].name,
-            'filename': data.variations[i].original_filename
-          });
+        if ( data.length > 0 ) {
+          for (let i = 0; i < data.length; i++) {
+            versionsData.push({
+              'id': data[i].id, 'title': data[i].name,
+              'filename': data[i].original_filename
+            });
+          }
         }
         this.rowDataVersions = versionsData;
       },
@@ -122,11 +124,13 @@ export class ToolPublisherComponent implements OnInit {
     this.data.getManuscripts(this.data.projectName, this.data.publicationCollection, publication.id).subscribe(
       data => {
         const manuscriptsData = [];
-        for (let i = 0; i < data.manuscripts.length; i++) {
-          manuscriptsData.push({
-            'id': data.manuscripts[i].id, 'title': data.manuscripts[i].name,
-            'filename': data.manuscripts[i].original_filename
-          });
+        if ( data.length > 0 ) {
+          for (let i = 0; i < data.length; i++) {
+            manuscriptsData.push({
+              'id': data[i].id, 'title': data[i].name,
+              'filename': data[i].original_filename
+            });
+          }
         }
         this.rowDataManuscripts = manuscriptsData;
       },
