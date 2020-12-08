@@ -29,7 +29,7 @@ export class GridFacsimilesComponent implements OnInit {
 
   rowDataFC: any = [];
   rowDataF: any = [];
-  //@Output() addClick: EventEmitter<ChildEvent> = new EventEmitter<ChildEvent>();
+  // @Output() addClick: EventEmitter<ChildEvent> = new EventEmitter<ChildEvent>();
 
   constructor(private data: DataService, public dialog: MatDialog) {
 
@@ -103,20 +103,22 @@ export class GridFacsimilesComponent implements OnInit {
     // Get selected rows of facsimile collection grid
     const selRows = this.gridOptionsFC.api.getSelectedRows();
     // Check that (only) one row is selected
-    if(selRows.length == 1) {
+    if(selRows.length === 1) {
       // Create a FacsimileCollectionDescriptor item from the row data
-      const dataItem: FacsimileCollectionDescriptor = {id: selRows[0].id, title: selRows[0].title, description: selRows[0].description, numberOfPages: selRows[0].pages, startPageNumber: selRows[0].firstPage, folderPath: selRows[0].path};
+      const dataItem: FacsimileCollectionDescriptor = {
+        id: selRows[0].id, title: selRows[0].title, description: selRows[0].description, numberOfPages: selRows[0].pages,
+         startPageNumber: selRows[0].firstPage, folderPath: selRows[0].path};
       // Show the dialog
       this.showFacsimileCollectionDialog(dataItem);
-    }
-    else
+    } else {
       alert('You need to select (only) one row to edit!');
+    }
   }
 
   // Remove facsimile collection button clicked (not implemented)
   onFCRemoveClick() {
     const rowSelection = this.gridOptionsFC.api.getSelectedRows();
-    if(rowSelection.length == 1) {
+    if(rowSelection.length === 1) {
     }
   }
 
@@ -142,7 +144,7 @@ export class GridFacsimilesComponent implements OnInit {
       clearTimeout(this.seachStringTimeoutFC);
       // Clear search string after a second
       this.seachStringTimeoutFC = setTimeout(() => {
-        this.searchStringFC="";
+        this.searchStringFC = '';
       }, 1000);
     }
   }
@@ -151,8 +153,9 @@ export class GridFacsimilesComponent implements OnInit {
     // Ensure row is visible
     this.gridOptionsFC.api.ensureIndexVisible(node.rowIndex, 'middle');
     // Select row
-    if(select)
+    if (select) {
       node.setSelected(true);
+    }
     // For some reason, focus is lost if we set focused cell directly after ensureIndexVisible, we need to use a timeout instead
     if(focus) {
       this.focusRowFC = node.rowIndex;
@@ -182,18 +185,18 @@ export class GridFacsimilesComponent implements OnInit {
         },
         err => { console.log(err); }
       );
-    }
-    // Fill the facsimile collection grid from cached data
-    else
+    } else {
       this.populateFacsimileCollections(this.data.dataFacsimileCollections);
+    }
   }
 
   // Fill the facsimile collection grid with data from server
   populateFacsimileCollections(data: any) {
     // Iterate all rows and create grid data rows
-    let fcData = [];
-    for (var i = 0; i < data.length; i++) {
-      fcData.push( {'title': data[i].title, 'description': data[i].description, 'id': data[i].id, 'pages': data[i].number_of_pages, 'firstPage': data[i].start_page_number, 'path': data[i].folder_path} );
+    const fcData = [];
+    for (let i = 0; i < data.length; i++) {
+      fcData.push( {'title': data[i].title, 'description': data[i].description, 'id': data[i].id,
+       'pages': data[i].number_of_pages, 'firstPage': data[i].start_page_number, 'path': data[i].folder_path} );
     }
     // Set the new grid data
     this.rowDataFC = fcData;
@@ -201,7 +204,7 @@ export class GridFacsimilesComponent implements OnInit {
 
   // Sort the facsimile collections grid alphabetically
   sortFacsimileCollectionGrid() {
-    var sort = [
+    const sort = [
       {colId: 'title', sort: 'asc'}
     ];
     this.gridOptionsFC.api.setSortModel(sort);
@@ -221,11 +224,12 @@ export class GridFacsimilesComponent implements OnInit {
         // Store edited item, this will be used if server request is successful
         this.facsimileCollectionEdited = result;
         // id is defined, means that an item has been edited
-        if(result.id !== undefined)
+        if (result.id !== undefined) {
           this.editFC(result);
-        // Id is not defined, add item
-        else
+        } else {
+          // Id is not defined, add item
           this.addFC(result);
+        }
       }
     });
   }
@@ -262,7 +266,8 @@ export class GridFacsimilesComponent implements OnInit {
 
   // Create facsimile collection grid data row (when row added or edited)
   createFCGridData(dataItem: FacsimileCollectionDescriptor) {
-    const newData: any = {'id': dataItem.id, 'title': dataItem.title, 'description': dataItem.description, 'pages': dataItem.numberOfPages, 'firstPage': dataItem.startPageNumber, 'path': dataItem.folderPath};
+    const newData: any = {'id': dataItem.id, 'title': dataItem.title, 'description': dataItem.description,
+    'pages': dataItem.numberOfPages, 'firstPage': dataItem.startPageNumber, 'path': dataItem.folderPath};
     return newData;
   }
 
@@ -277,7 +282,8 @@ export class GridFacsimilesComponent implements OnInit {
     // Check that (only) one row is selected
     if(selRows.length == 1) {
       // Open an facsimil dialog with empty data
-      const dataEmpty: FacsimileDescriptor = {title: selRows[0].title, facsimile_collection_id: selRows[0].id, publication_id: this.data.publication};
+      const dataEmpty: FacsimileDescriptor = {
+        title: selRows[0].title, facsimile_collection_id: selRows[0].id, publication_id: this.data.publication};
       this.showFacsimileDialog(dataEmpty);
     }
   }
@@ -287,14 +293,35 @@ export class GridFacsimilesComponent implements OnInit {
     // Get selected rows of facsimile grid
     const selRows = this.gridOptionsF.api.getSelectedRows();
     // Check that (only) one row is selected
-    if(selRows.length == 1) {
+    if(selRows.length === 1) {
       // Create a FacsimileDescriptor item from the row data
-      const dataItem: FacsimileDescriptor = {id: selRows[0].id, facsimile_collection_id: selRows[0].collectionId, title: selRows[0].title, page: selRows[0].page};
+      const dataItem: FacsimileDescriptor = {
+        id: selRows[0].id, facsimile_collection_id: selRows[0].collectionId, title: selRows[0].title, page: selRows[0].page
+      };
       // Show the dialog
       this.showFacsimileDialog(dataItem);
-    }
-    else
+    } else {
       alert('You need to select (only) one row to edit!');
+    }
+  }
+
+  onFDeleteClick() {
+    // Get selected rows of facsimile grid
+    const selRows = this.gridOptionsF.api.getSelectedRows();
+    // Check that (only) one row is selected
+    if (selRows.length === 1) {
+      // Create a FacsimileDescriptor item from the row data
+      this.data.deleteFacsimiles(this.data.projectName, selRows[0].id).subscribe(
+        data => {
+          // Get the row node with the id of the edited item
+          const rowNode = this.gridOptionsF.api.getRowNode(this.facsimileEdited.id.toString());
+          // Set the new item row data
+          rowNode.setData(this.createFGridData(this.facsimileEdited));
+        },
+        err => { console.log(err); }
+      );
+    } else {
+    }
   }
 
   // Show facsimile dialog (called when add / edit is clicked)
@@ -311,11 +338,10 @@ export class GridFacsimilesComponent implements OnInit {
         // Store edited item, this will be used if server request is successful
         this.facsimileEdited = result;
         // id is defined, means that an item has been edited
-        if(result.id !== undefined) {
+        if (result.id !== undefined) {
           this.editF(result);
-        }
-        // Id is not defined, add item
-        else {
+        } else {
+          // Id is not defined, add item
           this.addF(result);
         }
       }
@@ -326,8 +352,8 @@ export class GridFacsimilesComponent implements OnInit {
   addF(dataItem: FacsimileDescriptor) {
     // Remove redundant ids
     dataItem.type = parseInt(String(dataItem.type)); // Convert type to id (for enum)
-    //dataItem.version_id = undefined;
-    //dataItem.manuscript_id = undefined;
+    // dataItem.version_id = undefined;
+    // dataItem.manuscript_id = undefined;
     switch(dataItem.type) {
       case DataItemType.Publication:
         dataItem.version_id = undefined;
@@ -370,7 +396,8 @@ export class GridFacsimilesComponent implements OnInit {
 
   // Create facsimile grid data row (when row added or edited)
   createFGridData(dataItem: FacsimileDescriptor) {
-    const newData: any = {'id': dataItem.id, 'title': dataItem.title, 'page': dataItem.page, 'collectionId': dataItem.facsimile_collection_id};
+    const newData: any = {'id': dataItem.id, 'title': dataItem.title, 'page': dataItem.page,
+     'collectionId': dataItem.facsimile_collection_id};
     return newData;
   }
 
@@ -382,9 +409,10 @@ export class GridFacsimilesComponent implements OnInit {
     this.data.getFacsimiles(this.data.projectName, this.data.publication).subscribe(
       data => {
         // Iterate all rows and create grid data rows
-        let fData = [];
-        for (var i = 0; i < data.length; i++) {
-          fData.push( {'title': data[i].title, 'id': data[i].id, 'collectionId': data[i].publication_facsimile_collection_id, 'page': data[i].page_nr} );
+        const fData = [];
+        for (let i = 0; i < data.length; i++) {
+          fData.push( {'title': data[i].title, 'id': data[i].id,
+           'collectionId': data[i].publication_facsimile_collection_id, 'page': data[i].page_nr} );
         }
         // Set the new grid data
         this.rowDataF = fData;

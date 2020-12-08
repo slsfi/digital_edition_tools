@@ -4,7 +4,7 @@
   <button mat-raised-button (click)="onFCRemoveClick()" *ngIf="showRemove" title="Remove"><img src="assets/images/remove.png" /></button>
   <button mat-raised-button (click)="onFCEditClick()" title="Edit"><img src="assets/images/edit.png" /></button>
 </p>
-<ag-grid-angular 
+<ag-grid-angular
   style="width: 100%; height:350px"
   class="ag-theme-balham"
   [rowData]="rowDataFC"
@@ -13,12 +13,14 @@
   (gridReady)="onFCGridReady($event)"
   (keydown)="onFCKeyDown($event)">
 </ag-grid-angular>
-<p>
+<p class="box-header">
+  <span>Connected facsimile(s):</span>
   <button mat-raised-button (click)="onFAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
   <button mat-raised-button (click)="onFRemoveClick()" *ngIf="showRemove" title="Remove" i18n><img src="assets/images/remove.png" /></button>
   <button mat-raised-button (click)="onFEditClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
+  <button mat-raised-button (click)="onFDeleteClick()" title="Delete" i18n>-</button>
 </p>
-<ag-grid-angular 
+<ag-grid-angular
   style="width: 100%; height:160px"
   class="ag-theme-balham"
   [rowData]="rowDataF"

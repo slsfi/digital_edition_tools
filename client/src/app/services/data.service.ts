@@ -290,6 +290,11 @@ export class DataService {
       projectName + '/facsimile_collection/list/');
   }
 
+  deleteFacsimiles(projectName: string, publication: number): Observable<any> {
+    return this.http.delete<any>(environment.api_url + '/' + this.api_url_path + '/' +
+      projectName + '/facsimile_publication/delete/' + publication);
+  }
+
   getFacsimiles(projectName: string, publication: number): Observable<any> {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' +
       projectName + '/publication/' + publication + '/facsimiles/');
