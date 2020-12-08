@@ -57,7 +57,7 @@ export class GridFacsimilesComponent implements OnInit {
     this.columnDefsFC = [
       {headerName: 'Title', field: 'title', width: 230},
       {headerName: 'Description', field: 'description', hide: true},
-      {headerName: 'Id', field: 'id', hide: true},
+      {headerName: 'Id', field: 'id', hide: false},
       {headerName: 'Pages', field: 'pages', width: 100},
       {headerName: 'First page', field: 'firstPage', width: 100},
       {headerName: 'Path', field: 'path', hide: true},
