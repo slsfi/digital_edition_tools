@@ -313,10 +313,7 @@ export class GridFacsimilesComponent implements OnInit {
       // Create a FacsimileDescriptor item from the row data
       this.data.deleteFacsimiles(this.data.projectName, selRows[0].id).subscribe(
         data => {
-          // Get the row node with the id of the edited item
-          const rowNode = this.gridOptionsF.api.getRowNode(this.facsimileEdited.id.toString());
-          // Set the new item row data
-          rowNode.setData(this.createFGridData(this.facsimileEdited));
+          this.getFacsimiles();
         },
         err => { console.log(err); }
       );
