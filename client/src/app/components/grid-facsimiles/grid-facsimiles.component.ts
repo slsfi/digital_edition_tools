@@ -37,11 +37,13 @@ export class GridFacsimilesComponent implements OnInit {
     this.gridOptionsFC = <GridOptions>{
       enableSorting: true,
       rowSelection: 'single',
+      enableColResize: true,
       overlayLoadingTemplate: '<span><div class="spinner"></div></span>'
     };
     this.gridOptionsF = <GridOptions>{
       enableSorting: false,
       rowSelection: 'single',
+      enableColResize: true,
       overlayLoadingTemplate: '<span><div class="spinner"></div></span>'
     };
 
@@ -63,10 +65,10 @@ export class GridFacsimilesComponent implements OnInit {
       {headerName: 'Path', field: 'path', hide: true},
     ];
     this.columnDefsF = [
-      {headerName: 'Title', field: 'title', width: 230},
+      {headerName: 'Collection Title', field: 'title', width: 230},
       {headerName: 'Id', field: 'id', hide: true},
-      {headerName: 'CollectionId', field: 'collectionId', hide: false},
-      {headerName: 'Page', field: 'page', width: 100}
+      {headerName: 'Collection Id', field: 'collectionId', hide: false},
+      {headerName: 'Start Page (?)', field: 'page', width: 150, headerTooltip: 'Actual Facsimile Start Page = (Collection First page + Start Page)'}
     ];
 
   }
@@ -380,7 +382,7 @@ export class GridFacsimilesComponent implements OnInit {
   // Edit a facsimile (called when facsimile dialog is closed)
   editF(dataItem: FacsimileDescriptor) {
     // Send the request to the server
-    this.data.linkFacsimile(this.data.projectName, dataItem).subscribe(
+    this.data.editFacsimile(this.data.projectName, dataItem).subscribe(
       data => {
         // Get the row node with the id of the edited item
         const rowNode = this.gridOptionsF.api.getRowNode(this.facsimileEdited.id.toString());

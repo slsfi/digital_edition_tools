@@ -32,6 +32,7 @@ export class GridPublicationsComponent implements OnInit {
     // Set up the grid
     this.gridOptions = <GridOptions>{
       enableSorting: true,
+      enableColResize: true,
       rowSelection: 'single',
       overlayLoadingTemplate: '<span><div class="spinner"></div></span>'
     };

@@ -29,7 +29,7 @@ export class GridTextsComponent implements OnInit {
 
     // Set up the grid
     this.gridOptions = <GridOptions>{
-      enableSorting: false,
+      enableSorting: true,
       enableColResize: true,
       rowSelection: 'single',
       rowDragManaged: true,

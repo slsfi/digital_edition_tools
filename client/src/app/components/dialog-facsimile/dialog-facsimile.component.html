@@ -1,7 +1,7 @@
 <div>
   <p i18n>{{header}}</p>
   <div class="row margin-bottom">
-    <div i18n>Title: {{dataItem.title}}</div>
+    <div i18n>Collection Title: {{dataItem.title}}</div>
   </div>
   <div class="row margin-bottom">
     <mat-form-field>
@@ -28,7 +28,7 @@
           {{manuscript.name}}
         </mat-option>
       </mat-select>
-    </mat-form-field>   
+    </mat-form-field>
   </div>
   <div class="row">
     <mat-form-field><input matInput i18n-placeholder placeholder="Page" [(ngModel)]="dataItem.page" name="page" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>

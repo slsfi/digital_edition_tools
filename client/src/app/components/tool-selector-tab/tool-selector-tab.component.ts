@@ -44,7 +44,7 @@ export class ToolSelectorTabComponent implements OnInit {
     // Set up the grids
     this.occGridOptions = <GridOptions>{
       enableColResize: true,
-      enableSorting: false,
+      enableSorting: true,
       rowSelection: 'single',
       overlayLoadingTemplate: '<span><div class="spinner"></div></span>',
       overlayNoRowsTemplate: '<span>No occurences to show</span>'

@@ -305,10 +305,10 @@ export class DataService {
       projectName + '/facsimile_collection/' + facsimile.facsimile_collection_id + '/link/', facsimile);
   }
 
-  /*editFacsimile(projectName: string, publication: number, facsimile: FacsimileDescriptor): Observable<any> {
+  editFacsimile(projectName: string, facsimile: FacsimileDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-      '/facsimile_collection/' + facsimile.id + '/edit/', facsimile);
-  }*/
+      '/facsimile_collection/facsimile/edit/', facsimile);
+  }
 
 
   // ---------------------------------------
