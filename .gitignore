@@ -1,1 +1,5 @@
 .vscode
+.env
+folder2publication.txt
+facsimile_collections/
+__pycache__

@@ -5,9 +5,9 @@
 
 export const environment = {
   production: false,
-  version: '0.9.1',
+  version: '1.0.0',
   server_url: 'localhost:5000',
-  api_url: 'http://api.sls.fi',
+  api_url: 'https://api.sls.fi',
   api_url_path: 'digitaledition',
   project_default: 'topelius',
   project_default_id: 10,
