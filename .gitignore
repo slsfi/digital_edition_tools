@@ -1,5 +1,7 @@
 .vscode
 .env
-folder2publication.txt
+folder2publication.txt*
 facsimile_collections/
 __pycache__
+node_modules/
+package-lock.json

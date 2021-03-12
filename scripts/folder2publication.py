@@ -10,25 +10,39 @@ logging.basicConfig(filename="folder2publication.txt",
                 datefmt='%m/%d/%Y %I:%M:%S')
 
 # Get the folder structure, path defined in .env
-paths = getFolderStructure()
+if PUBLICATION_ID is None:
+    paths = getFolderStructure()
+else:
+    paths = getFileList()
 
 previousPublicationName = None
 previousFacsimileCollectionId = None
 # Loop through the files, extract the folders and file names
 for path in paths:
-    fullPath = str(os.sep).join(path)
-    collectionName = path[len(path) - 3]
-    publicationName = path[len(path) - 2]
-    fileName = path[len(path) - 1]
+    if PUBLICATION_ID is None:
+        fullPath = str(os.sep).join(path)
+        collectionName = path[len(path) - 3]
+        publicationName = path[len(path) - 2]
+        fileName = path[len(path) - 1]
+    else:
+        fullPath = path
+        splitPath = str(path).split(os.sep)
+        collectionName = splitPath[len(splitPath) - 3]
+        publicationName = splitPath[len(splitPath) - 2]
+        fileName = splitPath[len(splitPath) - 1]
     # Get the file number (page number) from the filename. 
     # This needs to have a fail over
     fileNumber = re.sub('^0+', '', (re.sub('\D', '', fileName)))
-    
     # Only create a new publication if the publication name changes
     if previousPublicationName is None or previousPublicationName != publicationName:
-        # Create the Publication
-        pubId = createPublication(PUBLICATION_COLLECTION_ID, publicationName, PUBLICATION_STATUS, PUBLICATION_GENRE)
-        logging.info('Added publication id ' + str(pubId) + ": " + publicationName + " - " + fileName)
+        # Check if we already have a publication name
+        if PUBLICATION_ID is None:
+            # Create the Publication
+            pubId = createPublication(PUBLICATION_COLLECTION_ID, publicationName, PUBLICATION_STATUS, PUBLICATION_GENRE)
+            logging.info('Added publication id ' + str(pubId) + ": " + publicationName + " - " + fileName)
+        else:
+            pubId = PUBLICATION_ID
+            logging.info('Using old publication id ' + str(pubId) + ": " + publicationName + " - " + fileName)
         
         # Create the Facsimile Collection
         facsColId = createFacsimileCollection(publicationName, collectionName + " - " + publicationName)

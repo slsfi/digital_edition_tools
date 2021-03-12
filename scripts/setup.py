@@ -5,6 +5,19 @@ import psycopg2
 
 load_dotenv()
 
+# Set global parameters
+if len(sys.argv)>1 and re.search("^[0-9]{1,5}$", sys.argv[1]):
+    PUBLICATION_COLLECTION_ID = sys.argv[1]
+else:
+    print('ERROR: PUBLICATION_COLLECTION_ID needs to be given as first argument')
+    exit()
+    
+    # Set global parameters
+if len(sys.argv)>2 and re.search("^[0-9]{1,5}$", sys.argv[2]):
+    PUBLICATION_ID = sys.argv[2]
+else:
+    PUBLICATION_ID = None
+
 if os.getenv("FOLDER_PATH") is None:
     print('ERROR: FOLDER_PATH needs to be given in .env file')
 else:
@@ -25,11 +38,6 @@ if os.getenv("PUBLICATION_STATUS") is None:
 else:
     PUBLICATION_STATUS = os.getenv("PUBLICATION_STATUS")
     
-if os.getenv("PUBLICATION_COLLECTION_ID") is None:
-    print('ERROR: PUBLICATION_COLLECTION_ID needs to be given in .env file')
-else:
-    PUBLICATION_COLLECTION_ID = os.getenv("PUBLICATION_COLLECTION_ID")
-
 if os.getenv("DB_USER") is None:
     print('ERROR: DB_USER needs to be given in .env file')
     exit()

@@ -168,7 +168,7 @@ export class DataService {
   getPublications(projectName: string, publicationCollection: number): Observable<any> {
     // Send the request to the server
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName +
-      '/publication_collection/' + publicationCollection.toString() + '/publications/name/');
+      '/publication_collection/' + publicationCollection.toString() + '/publications/id/');
   }
 
   getPublication(projectName: string, publication: number): Observable<any> {

@@ -1,3 +1,4 @@
+import glob
 from setup import *
 from shutil import copyfile
 from PIL import Image
@@ -11,6 +12,10 @@ def getFolderStructure():
     return fileList
 
 
+def getFileList():
+    return list(glob.glob(FOLDER_PATH + os.sep + "*." + ORIGINAL_FILETYPE))
+
+
 def createPublication(publicationCollectionId, publicationName, publishedStatus, publicationGenre):
     sql = """ INSERT INTO publication (publication_collection_id, name, published, genre) VALUES(%s, %s, %s, %s) RETURNING id"""
     values_to_add = (publicationCollectionId, publicationName, publishedStatus, publicationGenre)
@@ -20,7 +25,7 @@ def createPublication(publicationCollectionId, publicationName, publishedStatus,
 
 
 def createFacsimileCollection(facsimileCollectionTitle, facsimileCollectionDescription):
-    sql = """ INSERT INTO publication_facsimile_collection(title, number_of_pages, start_page_number, description) VALUES(%s, 1, 0, %s) RETURNING id"""
+    sql = """ INSERT INTO publication_facsimile_collection(title, number_of_pages, start_page_number, description) VALUES(%s, 1, 1, %s) RETURNING id"""
     values_to_add = (facsimileCollectionTitle, facsimileCollectionDescription)
     cursor_new.execute(sql, values_to_add)
     facsColId = cursor_new.fetchone()[0]
