@@ -31,8 +31,10 @@ for path in paths:
         publicationName = splitPath[len(splitPath) - 2]
         fileName = splitPath[len(splitPath) - 1]
     # Get the file number (page number) from the filename. 
-    # This needs to have a fail over
-    fileNumber = re.sub('^0+', '', (re.sub('\D', '', fileName)))
+    # The fileNumber algorithm should have a fail over...
+    fileNumber = fileName.split('_')[-1]
+    # Removes non numeric characters and strips leading zeroes to get file number
+    fileNumber = re.sub('^0+', '', (re.sub('\D', '', fileNumber)))
     # Only create a new publication if the publication name changes
     if previousPublicationName is None or previousPublicationName != publicationName:
         # Check if we already have a publication name
