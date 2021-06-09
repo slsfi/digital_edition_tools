@@ -1,13 +1,13 @@
 <div>
-  <!--<button mat-raised-button (click)="onPopulate()" i18n>Filltest</button>-->
-  <button mat-raised-button (click)="onCreateFromCollection()" i18n>Create from collection...</button>
-  <button mat-raised-button (click)="onLoadFromServer()" i18n>Load...</button>
-  <button mat-raised-button (click)="onSaveToServer()" i18n>Save</button>
+  <!--<button mat-raised-button (click)="onPopulate()" >Filltest</button>-->
+  <button mat-raised-button (click)="onCreateFromCollection()" >Create from collection...</button>
+  <button mat-raised-button (click)="onLoadFromServer()" >Load...</button>
+  <button mat-raised-button (click)="onSaveToServer()" >Save</button>
   <button mat-raised-button (click)="fileInput.click()">
-    <span i18n>Load from computer</span>
+    <span >Load from computer</span>
     <input #fileInput type="file" multiple accept=".json" (change)="onFileInput($event)" style="display:none;" />
   </button>
-  <button mat-raised-button (click)="saveToClient()" i18n>Save to computer</button>
+  <button mat-raised-button (click)="saveToClient()" >Save to computer</button>
 </div>
 <div><p>Opened collection: {{publicationCollectionText}}</p></div>
 <div class="page-container">
@@ -26,28 +26,28 @@
     <form>
 
       <div class="row margin-bottom">
-        <button mat-raised-button (click)="collapseAll()" i18n>Collapse all</button>
-        <button mat-raised-button (click)="expandAll()" i18n>Expand all</button>
-        <button mat-raised-button (click)="eventNewItem()" i18n>New item</button>
+        <button mat-raised-button (click)="collapseAll()" >Collapse all</button>
+        <button mat-raised-button (click)="expandAll()" >Expand all</button>
+        <button mat-raised-button (click)="eventNewItem()" >New item</button>
       </div>
 
-      <div class="box-header margin-bottom" i18n>TOC Item</div>
+      <div class="box-header margin-bottom" >TOC Item</div>
 
       <div class="row">
         <!--<input [(ngModel)]="itemCurrent.type" name="type"/>-->
         <mat-form-field>
-          <mat-select i18n-placeholder placeholder="Type" id="type" [disabled]="isDisabled" required [(ngModel)]="itemCurrent.type" name="type">
+          <mat-select -placeholder placeholder="Type" id="type" [disabled]="isDisabled" required [(ngModel)]="itemCurrent.type" name="type">
             <mat-option *ngFor="let typ of itemCurrent.types; let i = index" [value]="typ.id">{{typ.description}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
       <div class="row">
-        <mat-form-field class="input-wide1"><input matInput i18n-placeholder placeholder="Text" [(ngModel)]="itemCurrent.text" name="text" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" required/></mat-form-field>
+        <mat-form-field class="input-wide1"><input matInput -placeholder placeholder="Text" [(ngModel)]="itemCurrent.text" name="text" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" required/></mat-form-field>
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput i18n-placeholder placeholder="ID" [(ngModel)]="itemCurrent.itemId" name="itemId" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
+        <mat-form-field><input matInput -placeholder placeholder="ID" [(ngModel)]="itemCurrent.itemId" name="itemId" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
       </div>
 
       <div class="row">
@@ -61,18 +61,18 @@
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput i18n-placeholder placeholder="e.g. 1845-02-22" [(ngModel)]="itemCurrent.date" name="date" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
+        <mat-form-field><input matInput -placeholder placeholder="e.g. 1845-02-22" [(ngModel)]="itemCurrent.date" name="date" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput i18n-placeholder placeholder="URL" [(ngModel)]="itemCurrent.url" name="url" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)"/></mat-form-field>
+        <mat-form-field><input matInput -placeholder placeholder="URL" [(ngModel)]="itemCurrent.url" name="url" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)"/></mat-form-field>
       </div>
 
     </form>
     <div>
-      <button mat-raised-button *ngIf="itemCurrent.editItem" (click)="eventUpdateItem()" i18n>Update</button>
-      <button mat-raised-button *ngIf="itemCurrent.editItem" (click)="eventDeleteItem()" i18n>Delete</button>
-      <button mat-raised-button *ngIf="itemCurrent.newItem" (click)="eventAddItem()" i18n>Save</button>
+      <button mat-raised-button *ngIf="itemCurrent.editItem" (click)="eventUpdateItem()" >Update</button>
+      <button mat-raised-button *ngIf="itemCurrent.editItem" (click)="eventDeleteItem()" >Delete</button>
+      <button mat-raised-button *ngIf="itemCurrent.newItem" (click)="eventAddItem()" >Save</button>
     </div>
   </div>
 </div>

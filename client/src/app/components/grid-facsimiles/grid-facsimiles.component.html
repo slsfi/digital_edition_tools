@@ -1,8 +1,8 @@
 <p>
-  <button mat-raised-button (click)="onFCRefreshClick()" title="Refresh"><img src="assets/images/refresh.png" /></button>
-  <button mat-raised-button (click)="onFCAddClick()" title="Add"><img src="assets/images/add.png" /></button>
-  <button mat-raised-button (click)="onFCRemoveClick()" *ngIf="showRemove" title="Remove"><img src="assets/images/remove.png" /></button>
-  <button mat-raised-button (click)="onFCEditClick()" title="Edit"><img src="assets/images/edit.png" /></button>
+  <button  mat-raised-button (click)="onFCRefreshClick()" title="Refresh"><img src="assets/images/refresh.png" /></button>
+  <button  mat-raised-button (click)="onFCAddClick()" title="Add"><img src="assets/images/add.png" /></button>
+  <button  mat-raised-button (click)="onFCRemoveClick()" *ngIf="showRemove && data.publication" title="Remove"><img src="assets/images/remove.png" /></button>
+  <button  mat-raised-button (click)="onFCEditClick()" title="Edit"><img src="assets/images/edit.png" /></button>
 </p>
 <ag-grid-angular
   style="width: 100%; height:350px"
@@ -15,10 +15,10 @@
 </ag-grid-angular>
 <p class="box-header">
   <span>Connected facsimile(s):</span>
-  <button mat-raised-button (click)="onFAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
-  <button mat-raised-button (click)="onFRemoveClick()" *ngIf="showRemove" title="Remove" i18n><img src="assets/images/remove.png" /></button>
-  <button mat-raised-button (click)="onFEditClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
-  <button mat-raised-button (click)="onFDeleteClick()" title="Delete" i18n>-</button>
+  <button *ngIf="data.publication" mat-raised-button (click)="onFAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
+  <button mat-raised-button (click)="onFRemoveClick()" *ngIf="showRemove && data.publication" title="Remove" i18n><img src="assets/images/remove.png" /></button>
+  <button *ngIf="data.publication" mat-raised-button (click)="onFEditClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
+  <button *ngIf="data.publication" mat-raised-button (click)="onFDeleteClick()" title="Delete" i18n>-</button>
 </p>
 <ag-grid-angular
   style="width: 100%; height:160px"

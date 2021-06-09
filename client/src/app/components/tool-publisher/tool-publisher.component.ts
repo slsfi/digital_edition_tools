@@ -4,6 +4,7 @@ import { DataItemDescriptor, DataItemType, DataService } from '../../services/da
 import { DialogGitComponent } from '../dialog-git/dialog-git.component';
 import { GridFacsimilesComponent } from '../grid-facsimiles/grid-facsimiles.component';
 import { GridTextsComponent } from '../grid-texts/grid-texts.component';
+import { GridTagsComponent } from '../grid-tags/grid-tags.component';
 
 @Component({
   selector: 'app-tool-publisher',
@@ -26,9 +27,13 @@ export class ToolPublisherComponent implements OnInit {
   rowDataManuscripts: any = [];
   rowDataVersions: any = [];
   rowDataFacsimiles: any = [];
+  rowDataTerms: any = [];
 
   @ViewChildren(GridTextsComponent)
   gridsTexts: QueryList<GridTextsComponent>;
+
+  @ViewChildren(GridTagsComponent)
+  gridsTags: QueryList<GridTagsComponent>;
 
   @ViewChild(GridFacsimilesComponent)
   private facsimilesComponent: GridFacsimilesComponent;
@@ -104,6 +109,9 @@ export class ToolPublisherComponent implements OnInit {
     );
     // Show the loading overlay of the text grids
     this.gridsTexts.forEach((child) => { child.showLoadingOverlay(); });
+    // Show the loading overlay of the tag grids
+    this.gridsTags.forEach((child) => { child.showLoadingOverlay(); });
+
     // Get versions
     this.data.getVersions(this.data.projectName, this.data.publicationCollection, publication.id).subscribe(
       data => {
@@ -133,6 +141,25 @@ export class ToolPublisherComponent implements OnInit {
           }
         }
         this.rowDataManuscripts = manuscriptsData;
+      },
+      err => { console.log(err); }
+    );
+    // Get Tags/terms
+    this.data.getPublicationTags(this.data.projectName, this.data.publicationCollection, publication.id).subscribe(
+      data => {
+        const termsData = [];
+        if ( data.length > 0 ) {
+          for (let i = 0; i < data.length; i++) {
+            termsData.push({
+              'id': data[i].id,
+              'title': data[i].name,
+              'publication_facsimile_id': data[i].publication_facsimile_id,
+              'publication_facsimile_page': data[i].publication_facsimile_page,
+              'event_id': data[i].event_id
+            });
+          }
+        }
+        this.rowDataTerms = termsData;
       },
       err => { console.log(err); }
     );

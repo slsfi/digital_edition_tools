@@ -37,6 +37,10 @@
     <div class="box">
       <div><app-grid-texts [rowData]="rowDataManuscripts" [dataType]="dataItemTypes.Manuscript"></app-grid-texts></div>
     </div>
+    <div class="box-header" i18n>Terms</div>
+    <div class="box">
+      <div><app-grid-tags [rowData]="rowDataTerms"></app-grid-tags></div>
+    </div>
   </div>
   <div *ngIf="showPublicationGUI" class="container-medium-narrow">
     <div class="box-header" i18n>Facsimiles</div>

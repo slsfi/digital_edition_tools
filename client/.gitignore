@@ -5,6 +5,8 @@
 /dist-server
 /tmp
 /out-tsc
+/client/.vs
+.vs/*
 
 # dependencies
 /node_modules

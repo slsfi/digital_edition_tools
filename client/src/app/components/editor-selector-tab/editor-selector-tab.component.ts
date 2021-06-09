@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { GridOptions, RowNode } from 'ag-grid';
-import { DataService, SubjectDescriptor, LocationDescriptor, DialogData, TagDescriptor, WorkDescriptor } from '../../services/data.service';
+import { DataService, SubjectDescriptor, LocationDescriptor, DialogData, TagDescriptor, WorkDescriptor, DataItemType } from '../../services/data.service';
 import { DialogSubjectComponent } from '../dialog-subject/dialog-subject.component';
 import { DialogLocationComponent } from '../dialog-location/dialog-location.component';
 import { DialogTagComponent } from '../dialog-tag/dialog-tag.component';
@@ -300,19 +300,18 @@ export class EditorSelectorTabComponent implements OnInit {
         const subjectEmpty: SubjectDescriptor = {};
         this.showDataDialog(subjectEmpty);
         break;
-
       case 'locations':
         const locationEmpty: LocationDescriptor = {};
         this.showDataDialog(locationEmpty);
         break;
-        case 'tags':
-          const tagEmpty: TagDescriptor = {};
-          this.showDataDialog(tagEmpty);
-          break;
-          case 'works':
-            const workEmpty: WorkDescriptor = {};
-            this.showDataDialog(workEmpty);
-            break;
+      case 'tags':
+        const tagEmpty: TagDescriptor = {type: DataItemType.Tag};
+        this.showDataDialog(tagEmpty);
+        break;
+      case 'works':
+        const workEmpty: WorkDescriptor = {};
+        this.showDataDialog(workEmpty);
+        break;
     }
   }
 
@@ -330,24 +329,21 @@ export class EditorSelectorTabComponent implements OnInit {
         const subject: SubjectDescriptor = selectedNode.data as SubjectDescriptor;
         this.showDataDialog(subject);
         break;
-
       case 'locations':
         // console.log(selectedNode);
         const location: LocationDescriptor = selectedNode.data as LocationDescriptor;
         this.showDataDialog(location);
         break;
-
-        case 'tags':
-          // console.log(selectedNode);
-          const tag: TagDescriptor = selectedNode.data as TagDescriptor;
-          this.showDataDialog(tag);
-          break;
-
-          case 'works':
-            // console.log(selectedNode);
-            const work: WorkDescriptor = selectedNode.data as WorkDescriptor;
-            this.showDataDialog(work);
-            break;
+      case 'tags':
+        // console.log(selectedNode);
+        const tag: TagDescriptor = selectedNode.data as TagDescriptor;
+        this.showDataDialog(tag);
+        break;
+      case 'works':
+        // console.log(selectedNode);
+        const work: WorkDescriptor = selectedNode.data as WorkDescriptor;
+        this.showDataDialog(work);
+        break;
     }
     /*const dataItem: DataItemDescriptor = {type: this.listLevel, id: selRows[0].id,
       title: selRows[0].title, date: selRows[0].date, published: selRows[0].published, genre: selRows[0].genre};
@@ -387,7 +383,7 @@ export class EditorSelectorTabComponent implements OnInit {
   }
 
   showDataDialog(dataItem: any) {
-    let dialogType = DialogSubjectComponent;
+    let dialogType = null;
     if (this.configuration.type === 'locations') {
       dialogType = DialogLocationComponent;
     }
@@ -396,6 +392,9 @@ export class EditorSelectorTabComponent implements OnInit {
     }
     if (this.configuration.type === 'works') {
       dialogType = DialogWorkComponent;
+    }
+    if (this.configuration.type === 'subjects') {
+      dialogType = DialogSubjectComponent;
     }
     // Show the dialog
     const dialogRef = this.dialog.open(dialogType, {

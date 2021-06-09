@@ -42,20 +42,12 @@ export class ToolTOCComponent implements OnInit {
   constructor(private data: DataService, public dialog: MatDialog) { }
 
   ngOnInit() {
-
     // this.selectedCollection = {type: '', text: '', collectionId: ''};
     this.publicationCollection = {id: 0, title: '', published: 0};
     // Change active tool
     this.data.changeTool('Table of Contents');
     // Create an instance of MenuItem
     this.itemCurrent = new MenuItem();
-    // Create json data for nestable
-    // const jsonMenu = [{'id':1,'url':1,'itemId':'','type':'link','content':'Ljungblommor','text':'Ljungblommor'},
-    // {'id':2,'url':2,'itemId':'','type':'link',
-    // 'content':'En ros','text':'En ros'},{'id':3,'url':3,'itemId':'','type':'heading1','content':'Andra dikter','text':'Andra dikter',
-    // 'children':[{'id':4,'url':4,'itemId':'','type':'link','content':'Våren','text':'Våren'},
-    // {'id':5,'url':5,'itemId':'','type':'link','foo':'bar'
-    // ,'content':'Hösten','text':'Hösten'}]}];
     // Populate the menu
     this.populateMenu([]);
   }

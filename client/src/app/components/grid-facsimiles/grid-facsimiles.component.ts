@@ -63,12 +63,14 @@ export class GridFacsimilesComponent implements OnInit {
       {headerName: 'Pages', field: 'pages', width: 100},
       {headerName: 'First page', field: 'firstPage', width: 100},
       {headerName: 'Path', field: 'path', hide: true},
+      {headerName: 'Priority', field: 'priority', hide: true}
     ];
     this.columnDefsF = [
       {headerName: 'Collection Title', field: 'title', width: 230},
       {headerName: 'Id', field: 'id', hide: true},
       {headerName: 'Collection Id', field: 'collectionId', hide: false},
-      {headerName: 'Start Page (?)', field: 'page', width: 150, headerTooltip: 'Actual Facsimile Start Page = (Collection First page + Start Page)'}
+      {headerName: 'Start Page (?)', field: 'page', width: 150, headerTooltip: 'Actual Facsimile Start Page = (Collection First page + Start Page)'},
+      {headerName: 'Priority', field: 'priority', hide: false}
     ];
 
   }
@@ -285,7 +287,7 @@ export class GridFacsimilesComponent implements OnInit {
     if(selRows.length == 1) {
       // Open an facsimil dialog with empty data
       const dataEmpty: FacsimileDescriptor = {
-        title: selRows[0].title, facsimile_collection_id: selRows[0].id, publication_id: this.data.publication};
+        title: selRows[0].title, facsimile_collection_id: selRows[0].id, publication_id: this.data.publication, priority: selRows[0].priority};
       this.showFacsimileDialog(dataEmpty);
     }
   }
@@ -298,7 +300,7 @@ export class GridFacsimilesComponent implements OnInit {
     if(selRows.length === 1) {
       // Create a FacsimileDescriptor item from the row data
       const dataItem: FacsimileDescriptor = {
-        id: selRows[0].id, facsimile_collection_id: selRows[0].collectionId, title: selRows[0].title, page: selRows[0].page
+        id: selRows[0].id, facsimile_collection_id: selRows[0].collectionId, title: selRows[0].title, page: selRows[0].page, priority: selRows[0].priority
       };
       // Show the dialog
       this.showFacsimileDialog(dataItem);
@@ -396,7 +398,7 @@ export class GridFacsimilesComponent implements OnInit {
   // Create facsimile grid data row (when row added or edited)
   createFGridData(dataItem: FacsimileDescriptor) {
     const newData: any = {'id': dataItem.id, 'title': dataItem.title, 'page': dataItem.page,
-     'collectionId': dataItem.facsimile_collection_id};
+     'collectionId': dataItem.facsimile_collection_id, 'priority': dataItem.priority};
     return newData;
   }
 
@@ -411,7 +413,7 @@ export class GridFacsimilesComponent implements OnInit {
         const fData = [];
         for (let i = 0; i < data.length; i++) {
           fData.push( {'title': data[i].title, 'id': data[i].id,
-           'collectionId': data[i].publication_facsimile_collection_id, 'page': data[i].page_nr} );
+           'collectionId': data[i].publication_facsimile_collection_id, 'page': data[i].page_nr, 'priority': data[i].priority} );
         }
         // Set the new grid data
         this.rowDataF = fData;

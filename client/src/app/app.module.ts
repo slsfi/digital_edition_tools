@@ -42,6 +42,7 @@ import { DialogDataComponent } from './components/dialog-data/dialog-data.compon
 import { DialogPublicationCollectionComponent } from './components/dialog-publication-collection/dialog-publication-collection.component';
 import { GridFacsimilesComponent } from './components/grid-facsimiles/grid-facsimiles.component';
 import { GridTextsComponent } from './components/grid-texts/grid-texts.component';
+import { GridTagsComponent } from './components/grid-tags/grid-tags.component';
 import { DialogFacsimileCollectionComponent } from './components/dialog-facsimile-collection/dialog-facsimile-collection.component';
 import { DialogFacsimileComponent } from './components/dialog-facsimile/dialog-facsimile.component';
 import { DialogLocationComponent } from './components/dialog-location/dialog-location.component';
@@ -99,6 +100,7 @@ const appRoutes: Routes = [
     DialogPublicationCollectionComponent,
     GridFacsimilesComponent,
     GridTextsComponent,
+    GridTagsComponent,
     DialogFacsimileCollectionComponent,
     DialogFacsimileComponent,
     DialogLocationComponent,

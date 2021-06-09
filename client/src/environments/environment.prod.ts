@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   version: '1.0.0',
   server_url: 'localhost:5000',
-  api_url: 'https://api.sls.fi',
+  api_url: 'https://testa-vonwright.sls.fi:8000',
   api_url_path: 'digitaledition',
   project_default: 'topelius',
   project_default_id: 10,

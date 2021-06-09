@@ -1,8 +1,7 @@
 <p>
   <button *ngIf="data.publication" mat-raised-button (click)="onAddClick()" title="Add" i18n><img src="assets/images/add.png" /></button>
-  <button mat-raised-button (click)="onRemoveClick()" *ngIf="showRemove && data.publication" title="Remove" i18n><img src="assets/images/remove.png" /></button>
+  <button *ngIf="data.publication" mat-raised-button (click)="onRemoveClick()" title="Remove" i18n><img src="assets/images/remove.png" /></button>
   <button *ngIf="data.publication" mat-raised-button (click)="onEditClick()" title="Edit" i18n><img src="assets/images/edit.png" /></button>
-  <button *ngIf="data.publication" mat-raised-button (click)="onLinkFileClick()" title="Link file" i18n><img src="assets/images/file.png" /></button>
 </p>
 <ag-grid-angular
   style="width: 100%; height:160px"

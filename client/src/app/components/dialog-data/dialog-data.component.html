@@ -1,7 +1,19 @@
 <div>
   <p i18n>{{header}}</p>
-  <div class="row">
-    <mat-form-field class="input-wide2"><input matInput i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/></mat-form-field>
+  <div class="row" *ngIf="dataItem.id !== undefined">
+    <mat-form-field class="input-wide2">
+      <input *ngIf="!showFacsimimilePage" matInput i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/>
+      <input *ngIf="showFacsimimilePage" matInput disabled i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/>
+    </mat-form-field>
+  </div>
+  <div class="row" *ngIf="tags.length>0">
+    <mat-form-field class="input-wide2">
+      <mat-label>Terms</mat-label>
+      <mat-select [(value)]="dataItem['tag_id']">
+        <mat-option>None</mat-option>
+        <mat-option *ngFor="let tag of tags" [value]="tag.id">{{tag.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <div class="row" *ngIf="showGenre">
     <mat-form-field>
@@ -24,6 +36,11 @@
           {{publishedLevel.name}}
         </mat-option>
       </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row" *ngIf="showFacsimimilePage">
+    <mat-form-field class="input-wide2">
+      <input matInput i18n-placeholder placeholder="Facsimile page" [(ngModel)]="dataItem.publication_facsimile_page" name="publication_facsimile_page" type="number" (keyup)="onKeyUp($event)" required/>
     </mat-form-field>
   </div>
   <div class="row">

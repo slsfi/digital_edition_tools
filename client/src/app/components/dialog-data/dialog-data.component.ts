@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DataItemType, DataItemDescriptor } from '../../services/data.service';
+import { DataItemType, DataItemDescriptor, DataService } from '../../services/data.service';
 import { environment } from '../../../environments/environment.prod';
 
 @Component({
@@ -12,13 +12,33 @@ export class DialogDataComponent implements OnInit {
 
   header: string = '';
   genres = environment.genres;
+  tags: Array<Object> = [];
   publishedLevels = environment.published_levels;
   showGenre: boolean = false;
   showDate: boolean = false;
   showPublished: boolean = true;
+  showFacsimimilePage: boolean = false;
   dataItemEmpty: DataItemDescriptor = {} as any;
 
-  constructor( public dialogRef: MatDialogRef<DialogDataComponent>, @Inject(MAT_DIALOG_DATA) public dataItem: DataItemDescriptor ) {
+  constructor( private data: DataService, public dialogRef: MatDialogRef<DialogDataComponent>, @Inject(MAT_DIALOG_DATA) public dataItem: DataItemDescriptor ) {
+
+    // get all tags
+    if( this.dataItem.type === DataItemType.Tag && this.dataItem.id === undefined) {
+      this.data.getProjectTags(this.data.projectName).subscribe(
+        data => {
+           this.tags = data;
+           this.tags.forEach((tag, index, tags)=>{
+            if (tag['project_id'] !== this.data.projectId) {
+               // remove tags for other projects
+               tags.splice(index, 1);
+            }
+           });
+        },
+        err => { console.log(err); }
+      );
+    }
+
+
     // Build the dialog header
     // First check input data if creating a project or editing one
     if(this.dataItem.id !== undefined)
@@ -43,6 +63,11 @@ export class DialogDataComponent implements OnInit {
         break;
       case DataItemType.Manuscript:
         this.header += 'Manuscript';
+        break;
+      case DataItemType.Tag:
+        this.header += 'Term';
+        this.showPublished = false;
+        this.showFacsimimilePage = true;
         break;
     }
   }

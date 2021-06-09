@@ -5,7 +5,7 @@
   </div>
   <div class="row margin-bottom">
     <mat-form-field>
-      <mat-select placeholder="Type" [(ngModel)]="dataItem.type" required>
+      <mat-select placeholder="Type" [(ngModel)]="dataItem.type">
         <mat-option value="{{facsimileType.Publication}}">Reading Text</mat-option>
         <mat-option value="{{facsimileType.Version}}">Version</mat-option>
         <mat-option value="{{facsimileType.Manuscript}}">Manuscript</mat-option>
@@ -32,6 +32,9 @@
   </div>
   <div class="row">
     <mat-form-field><input matInput i18n-placeholder placeholder="Page" [(ngModel)]="dataItem.page" name="page" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field><input matInput i18n-placeholder placeholder="Priority" [(ngModel)]="dataItem.priority" name="priority" type="text" (keyup)="onKeyUp($event)"/></mat-form-field>
   </div>
   <div class="row">
     <button mat-raised-button (click)="onOKClick()" i18n>OK</button>

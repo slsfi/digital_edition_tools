@@ -343,6 +343,17 @@ export class DataService {
       projectName + '/subjects/' + subject.id.toString() + '/edit/', subject);
   }
 
+  /**
+   *
+   * TAGS / TERMS
+   *
+   * @returns
+   */
+
+  getProjectTags(projectName: string): Observable<any> {
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' + projectName + '/tags');
+  }
+
   getTags(): Observable<any> {
     return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/tags/');
   }
@@ -355,6 +366,32 @@ export class DataService {
   addTag(projectName: string, tag: TagDescriptor): Observable<any> {
     return this.http.post<any>(environment.api_url + '/' + this.api_url_path + '/' +
       projectName + '/tags/new/', tag);
+  }
+
+  getPublicationTags(projectName: string, publicationCollection: number, publication: number): Observable<any> {
+    // Send the request to the server
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/' +
+      projectName + '/publication/' + publication.toString() + '/tags/');
+  }
+
+
+  getTagOccurrences(): Observable<any> {
+    return this.http.get<any>(environment.api_url + '/' + this.api_url_path + '/tags/');
+  }
+
+  editTagOccurrence(projectName: string, tag_occ: TagDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path +
+    '/event/' + tag_occ.id.toString() + '/occurrences/edit/', tag_occ);
+  }
+
+  addTagOccurrence(projectName: string, tag: TagDescriptor): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path +
+    '/event/'+ tag['publication_id'] +'/occurrences/add/', tag);
+  }
+
+  deleteTagOccurrence(projectName: string, tag_occ_id: number): Observable<any> {
+    return this.http.post<any>(environment.api_url + '/' + this.api_url_path +
+    '/event/' + tag_occ_id.toString() + '/occurrences/delete/', tag_occ_id);
   }
 
   getWorkManifestations(): Observable<any> {
@@ -462,7 +499,8 @@ export enum DataItemType {
   Publication,
   Version,
   Manuscript,
-  Comments
+  Comments,
+  Tag
 }
 
 export interface DataItemDescriptor {
@@ -476,6 +514,8 @@ export interface DataItemDescriptor {
   filename?: string;
   sort_order?: number;
   data?: any;
+  publication_facsimile_page?: number;
+  event_id?: number;
 }
 
 export interface LocationDescriptor {
@@ -497,14 +537,17 @@ export interface LocationDescriptor {
 
 
 export interface TagDescriptor {
+  type?: DataItemType;
   id?: number;
+  event_id?: number;
   legacy_id?: string;
   project_id?: number;
   date_created?: string;
   date_modified?: string;
   deleted?: number;
   name?: string;
-  type?: string;
+  sort_order?: number;
+  publication_facsimile_page?: number;
 }
 
 export interface WorkDescriptor {
@@ -569,6 +612,7 @@ export interface FacsimileDescriptor {
   title?: string;
   page?: number;
   sort_order?: number;
+  priority?: number;
 }
 
 export interface PublicationCollectionDescriptor {
