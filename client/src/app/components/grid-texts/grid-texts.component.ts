@@ -25,7 +25,7 @@ export class GridTextsComponent implements OnInit {
   @Output() removeClick: EventEmitter<ChildEvent> = new EventEmitter<ChildEvent>();
   @Output() linkFileClick: EventEmitter<ChildEvent> = new EventEmitter<ChildEvent>();
 
-  constructor(private data: DataService, public dialog: MatDialog) {
+  constructor(public data: DataService, public dialog: MatDialog) {
 
     // Set up the grid
     this.gridOptions = <GridOptions>{

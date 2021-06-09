@@ -31,7 +31,7 @@ export class GridFacsimilesComponent implements OnInit {
   rowDataF: any = [];
   // @Output() addClick: EventEmitter<ChildEvent> = new EventEmitter<ChildEvent>();
 
-  constructor(private data: DataService, public dialog: MatDialog) {
+  constructor(public data: DataService, public dialog: MatDialog) {
 
     // Set up the facsimile grids
     this.gridOptionsFC = <GridOptions>{

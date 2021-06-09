@@ -9,6 +9,8 @@ import { DocumentDescriptor } from '../../services/data.service';
 })
 export class DialogGitComponent implements OnInit {
 
+  public xml: any;
+
   constructor( public dialogRef: MatDialogRef<DialogGitComponent>, @Inject(MAT_DIALOG_DATA) public data: DocumentDescriptor) {
   }
 

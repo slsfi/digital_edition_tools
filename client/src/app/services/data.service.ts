@@ -548,6 +548,7 @@ export interface TagDescriptor {
   name?: string;
   sort_order?: number;
   publication_facsimile_page?: number;
+  description?: string;
 }
 
 export interface WorkDescriptor {

@@ -2,7 +2,7 @@
   <!--<button mat-raised-button (click)="onPopulate()" >Filltest</button>-->
   <button mat-raised-button (click)="onCreateFromCollection()" >Create from collection...</button>
   <button mat-raised-button (click)="onLoadFromServer()" >Load...</button>
-  <button mat-raised-button (click)="onSaveToServer()" >Save</button>
+  <button mat-raised-button (click)="onSaveToServer($event)" >Save</button>
   <button mat-raised-button (click)="fileInput.click()">
     <span >Load from computer</span>
     <input #fileInput type="file" multiple accept=".json" (change)="onFileInput($event)" style="display:none;" />
