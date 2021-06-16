@@ -1,6 +1,6 @@
 <div>
   <p i18n>{{header}}</p>
-  <div class="row" *ngIf="dataItem.id !== undefined">
+  <div class="row">
     <mat-form-field class="input-wide2">
       <input *ngIf="!showFacsimimilePage" matInput i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/>
       <input *ngIf="showFacsimimilePage" matInput disabled i18n-placeholder placeholder="Title" [(ngModel)]="dataItem.title" name="title" type="text" (keyup)="onKeyUp($event)" required/>

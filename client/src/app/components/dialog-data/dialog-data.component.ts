@@ -38,6 +38,7 @@ export class DialogDataComponent implements OnInit {
       );
     }
 
+    this.showFacsimimilePage = false;
 
     // Build the dialog header
     // First check input data if creating a project or editing one

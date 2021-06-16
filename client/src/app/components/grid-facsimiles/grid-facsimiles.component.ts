@@ -59,10 +59,11 @@ export class GridFacsimilesComponent implements OnInit {
     this.columnDefsFC = [
       {headerName: 'Title', field: 'title', width: 230},
       {headerName: 'Description', field: 'description', hide: true},
-      {headerName: 'Id', field: 'id', hide: false},
-      {headerName: 'Pages', field: 'pages', width: 100},
-      {headerName: 'First page', field: 'firstPage', width: 100},
+      {headerName: 'Id', field: 'id', hide: false, width: 70},
+      {headerName: 'Pages', field: 'pages', width: 70},
+      {headerName: 'First page', field: 'firstPage', width: 70},
       {headerName: 'Path', field: 'path', hide: true},
+      {headerName: 'External URL', field: 'external_url', hide: false},
       {headerName: 'Priority', field: 'priority', hide: true}
     ];
     this.columnDefsF = [
@@ -111,7 +112,7 @@ export class GridFacsimilesComponent implements OnInit {
       // Create a FacsimileCollectionDescriptor item from the row data
       const dataItem: FacsimileCollectionDescriptor = {
         id: selRows[0].id, title: selRows[0].title, description: selRows[0].description, numberOfPages: selRows[0].pages,
-         startPageNumber: selRows[0].firstPage, folderPath: selRows[0].path};
+         startPageNumber: selRows[0].firstPage, folderPath: selRows[0].path, externalUrl: selRows[0].externalUrl};
       // Show the dialog
       this.showFacsimileCollectionDialog(dataItem);
     } else {
@@ -200,7 +201,7 @@ export class GridFacsimilesComponent implements OnInit {
     const fcData = [];
     for (let i = 0; i < data.length; i++) {
       fcData.push( {'title': data[i].title, 'description': data[i].description, 'id': data[i].id,
-       'pages': data[i].number_of_pages, 'firstPage': data[i].start_page_number, 'path': data[i].folder_path} );
+       'pages': data[i].number_of_pages, 'firstPage': data[i].start_page_number, 'path': data[i].folder_path, 'external_url': data[i].external_url} );
     }
     // Set the new grid data
     this.rowDataFC = fcData;
@@ -271,7 +272,7 @@ export class GridFacsimilesComponent implements OnInit {
   // Create facsimile collection grid data row (when row added or edited)
   createFCGridData(dataItem: FacsimileCollectionDescriptor) {
     const newData: any = {'id': dataItem.id, 'title': dataItem.title, 'description': dataItem.description,
-    'pages': dataItem.numberOfPages, 'firstPage': dataItem.startPageNumber, 'path': dataItem.folderPath};
+    'pages': dataItem.numberOfPages, 'firstPage': dataItem.startPageNumber, 'path': dataItem.folderPath, 'external_url': dataItem.externalUrl};
     return newData;
   }
 

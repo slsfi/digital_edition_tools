@@ -601,6 +601,7 @@ export interface FacsimileCollectionDescriptor {
   folderPath?: string;
   numberOfPages?: number;
   startPageNumber?: number;
+  externalUrl?: string;
 }
 
 export interface FacsimileDescriptor {
