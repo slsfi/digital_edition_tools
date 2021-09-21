@@ -1,5 +1,4 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {GridColumnStatusComponent} from '../grid-column-status/grid-column-status.component';
 import { DocumentDescriptor, DataService } from '../../services/data.service';
 
 import {GridOptions, RowNode} from 'ag-grid';

@@ -36,18 +36,18 @@
       <div class="row">
         <!--<input [(ngModel)]="itemCurrent.type" name="type"/>-->
         <mat-form-field>
-          <mat-select -placeholder placeholder="Type" id="type" [disabled]="isDisabled" required [(ngModel)]="itemCurrent.type" name="type">
+          <mat-select placeholder="Type" id="type" [disabled]="isDisabled" required [(ngModel)]="itemCurrent.type" name="type">
             <mat-option *ngFor="let typ of itemCurrent.types; let i = index" [value]="typ.id">{{typ.description}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
       <div class="row">
-        <mat-form-field class="input-wide1"><input matInput -placeholder placeholder="Text" [(ngModel)]="itemCurrent.text" name="text" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" required/></mat-form-field>
+        <mat-form-field class="input-wide1"><input matInput placeholder="Text" [(ngModel)]="itemCurrent.text" name="text" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" required/></mat-form-field>
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput -placeholder placeholder="ID" [(ngModel)]="itemCurrent.itemId" name="itemId" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
+        <mat-form-field><input matInput placeholder="ID" [(ngModel)]="itemCurrent.itemId" name="itemId" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
       </div>
 
       <div class="row">
@@ -61,11 +61,11 @@
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput -placeholder placeholder="e.g. 1845-02-22" [(ngModel)]="itemCurrent.date" name="date" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
+        <mat-form-field><input matInput placeholder="e.g. 1845-02-22" [(ngModel)]="itemCurrent.date" name="date" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)" /></mat-form-field>
       </div>
 
       <div class="row">
-        <mat-form-field><input matInput -placeholder placeholder="URL" [(ngModel)]="itemCurrent.url" name="url" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)"/></mat-form-field>
+        <mat-form-field><input matInput placeholder="URL" [(ngModel)]="itemCurrent.url" name="url" type="text" [disabled]="isDisabled" (keyup)="onKeyUp($event)"/></mat-form-field>
       </div>
 
     </form>
