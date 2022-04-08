@@ -16,6 +16,14 @@ def getFileList():
     return list(glob.glob(FOLDER_PATH + os.sep + "*." + ORIGINAL_FILETYPE))
 
 
+def createCollection(collectionName, publishedStatus):
+    sql = """ INSERT INTO publication_collection (name, published, project_id) VALUES(%s, %s, %s) RETURNING id"""
+    values_to_add = (collectionName, publishedStatus, PROJECT_ID)
+    cursor_new.execute(sql, values_to_add)
+    colId = cursor_new.fetchone()[0]
+    return colId
+
+
 def createPublication(publicationCollectionId, publicationName, publishedStatus, publicationGenre):
     sql = """ INSERT INTO publication (publication_collection_id, name, published, genre) VALUES(%s, %s, %s, %s) RETURNING id"""
     values_to_add = (publicationCollectionId, publicationName, publishedStatus, publicationGenre)
