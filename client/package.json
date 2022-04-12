@@ -27,7 +27,7 @@
     "@angular/platform-browser-dynamic": "^5.2.0",
     "@angular/router": "^5.2.0",
     "@types/dropzone": "^5.0.4",
-    "@types/jquery": "^3.3.1",
+    "@types/jquery": "^3.5.6",
     "ag-grid": "^17.0.0",
     "ag-grid-angular": "^17.0.0",
     "angular-ui-grid": "^4.4.6",
