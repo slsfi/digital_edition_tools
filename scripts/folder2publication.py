@@ -27,7 +27,7 @@ for path in paths:
         # If we want to create a new publication per file (e.g. Söderhom)
         if PER_FILE_PUBLICATION:
             collectionName = path[len(path) - 2]
-            publicationName = str(fileName).split('.')[0]
+            publicationName = str(fileName).rsplit('.', 1)[0]
         else:
             collectionName = path[len(path) - 3]
             publicationName = path[len(path) - 2]
@@ -40,8 +40,8 @@ for path in paths:
     
     if PUBLICATION_COLLECTION_ID is None and (previousCollectionName is None or previousCollectionName != collectionName):
         # Create collection, use the same name as for publication
-        colId = createCollection(publicationName, PUBLICATION_STATUS)
-        logging.info('Added collection id ' + str(colId) + ": " + publicationName + " - " + fileName)
+        colId = createCollection(collectionName, PUBLICATION_STATUS)
+        logging.info('Added collection id ' + str(colId) + ": " + collectionName + " - " + fileName)
         previousCollectionName = collectionName
         previousCollectionId = colId
     else:

@@ -64,6 +64,8 @@ def createFacsimileCollectionFolder(facsimileCollectionId):
 
 def moveJPGToFacsimileCollectionFolder(originalPath, facsimileCollectionId, fileNumber):
     image = Image.open(str(originalPath))
+    if image.mode in ("RGBA", "P"):
+        image = image.convert("RGB")
     image.save(str(originalPath).replace('.tif', '.jpg'))
     copyfile( str(originalPath).replace('.tif', '.jpg'), 'facsimile_collections/' + str(facsimileCollectionId) + '/1/' + fileNumber + '.jpg')
     image = Image.open('facsimile_collections/' + str(facsimileCollectionId) + '/1/' + fileNumber + '.jpg')
